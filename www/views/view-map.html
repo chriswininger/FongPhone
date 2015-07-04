@@ -1,0 +1,10 @@
+<svg id="phongUINoteMap" class="ui-display-area">
+    <rect ng-y="{{ ($index*20+5) - windowHeight*Math.floor(($index*20+5)/windowHeight);  }}",
+          ng-x="{{ (windowHeight > ($index*20+5)) ? 0 : 25 }}",
+          ng-click="noteClick($index)"
+          class="map-note {{ note.on ? 'map-note-on' : 'map-note-off' }}" width="20px" height="20px" ng-repeat="note in NoteMap"/>
+    <text ng-y="{{ ($index*20+17) - windowHeight*Math.floor(($index*20+17)/windowHeight); }}"
+          ng-x="{{ (windowHeight > ($index*20+5) ? 0 : 25) + 5 }}",
+          ng-click="noteClick($index)"
+          font-size="11" fill="black" ng-repeat="note in NoteMap">{{note.label}}</text>
+</svg>

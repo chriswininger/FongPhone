@@ -1,0 +1,88 @@
+var gulp = require('gulp');
+var fs = require('fs');
+var _ = require('lodash');
+var path = require('path');
+var recursive = require('recursive-readdir');
+var async = require('async');
+var exec = require('child_process').exec;
+
+gulp.task('make:manifest', makeManifest);
+gulp.task('initialize', initialize);
+
+var clientDependencies = [
+	'angularjs',
+	'angular-animate',
+	'angular-route',
+	'async',
+	'jquery',
+	'lodash'
+];
+function initialize (complete) {
+	async.waterfall([
+		function _installDependencies(next) {
+			console.log('installing dependencies');
+			async.each(clientDependencies, function(dep, _next) {
+				console.log('installing ' + dep);
+				exec('bower install ' + dep, function (err, stdout, stderr) {
+					if (err || stderr) {
+						console.error(stderr);
+						console.error(err);
+						return _next(err + ' -- ' + stderr);
+					}
+
+					console.log(stdout);
+					_next();
+				});
+			}, next)
+		},
+		function _addCordovaModules(next) {
+			console.log('add module crosswalk');
+			next();
+		}
+	], function _complete() {
+		console.log('initialization complete');
+		complete();
+	});
+}
+
+function makeManifest () {
+	console.log('building manifest file');
+	var manifestPath = './public/application.manifest';
+
+	async.waterfall([
+		function _getFileList(next) {
+			console.log('building file list');
+			var lstFiles = '';
+			recursive('./public', ['application.manifest'], function (err, files) {
+				if (err) return next(err)
+				_.each(files, function (file) {
+					lstFiles += file.replace('public/','') + '\n';
+				});
+
+				next(null, lstFiles);
+			});
+		},
+		function _removeExistingManifest(lstFiles, next) {
+			console.log('clearing existing manifest');
+			fs.unlink(manifestPath, function () {
+				next(null, lstFiles);
+			});
+		},
+		function _writeFile(lstFiles, next) {
+			console.log('writing new manifest');
+			var manifest = [
+				'CACHE MANIFEST',
+				'# timestamp ' + (new Date().getTime()),
+				'CACHE:',
+				lstFiles,
+				'NETWORK:',
+				'*'
+			].join('\n');
+
+			fs.writeFile(manifestPath, manifest, next);
+		}
+	], function (err) {
+		if (err) return console.error(err);
+		console.log('task complete');
+	});
+}
