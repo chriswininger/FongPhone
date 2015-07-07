@@ -13,4 +13,5 @@ www/js/lib/angular-animate
 www/js/lib/async
 www/js/lib/jquery
 www/js/lib/lodash
+www/js/lib/hammer.js
 .idea/

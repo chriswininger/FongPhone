@@ -23,33 +23,38 @@
 
     var $class = PhonePhong.UI.prototype;
 
-    var oscTouchOnOff1,
-        oscTouchOnOff2,
-        oscTouchFade1,
+    var oscTouchFade1,
         oscTouchFade2,
         oscTouch1,
         oscTouch2,
-        backgroundPad;
+        backgroundPad,
+		uiPadSwipeDown,
+		hammeruiPadSwipeDown;
 
     var oscTouchFade1Val = 0, oscTouchFade2Val = 0, lastPinchDist = 0;
 
     $class.createComponents = function () {
         $('#phongUIGrid').height(window.innerHeight);
-        oscTouchOnOff1 = document.getElementById('oscTouchOnOff1');
-        oscTouchOnOff2 = document.getElementById('oscTouchOnOff2');
-        oscTouchFade1 = document.getElementById('oscTouchFade1');
+        uiPadSwipeDown = document.getElementById('uiPadSwipeDown');
+		oscTouchFade1 = document.getElementById('oscTouchFade1');
         oscTouchFade2 = document.getElementById('oscTouchFade2');
         oscTouch1 = document.getElementById('oscTouch1'),
         oscTouch2 = document.getElementById('oscTouch2'),
         backgroundPad = document.getElementById('phongUIGrid');
 
-        oscTouchOnOff1.setAttribute('y', window.innerHeight - oscTouchOnOff1.getAttribute('height'));
-        oscTouchOnOff2.setAttribute('y', window.innerHeight - oscTouchOnOff2.getAttribute('height'));
+		uiPadSwipeDown.setAttribute('y', window.innerHeight - uiPadSwipeDown.getAttribute('height'));
+		hammeruiPadSwipeDown = new Hammer(uiPadSwipeDown, { direction: Hammer.DIRECTION_VERTICAL });
     };
 
     $class.listen = function () {
         var self = this;
         var osc1PulseOn = true, osc2PulseOn = true;
+
+		hammeruiPadSwipeDown.on('pan', function(ev) {
+			if (ev.isFinal && ev.velocityY >= 0.5) {
+				window.location = '/#/note-map'
+			}
+		});
 
         // Changes wave form
         $(oscTouch1).on('taphold', _handleLongTouch);
@@ -66,10 +71,10 @@
         oscTouchFade1.addEventListener('touchmove', _handleFadeMove, false);
         oscTouchFade2.addEventListener('touchmove', _handleFadeMove, false);
         // handles on off buttons
-        oscTouchOnOff1.addEventListener('touchstart', _handleOff);
-        oscTouchOnOff1.addEventListener('touchend', _handleOn);
-        oscTouchOnOff2.addEventListener('touchstart', _handleOff);
-        oscTouchOnOff2.addEventListener('touchend', _handleOn);
+        //oscTouchOnOff1.addEventListener('touchstart', _handleOff);
+       // oscTouchOnOff1.addEventListener('touchend', _handleOn);
+       // oscTouchOnOff2.addEventListener('touchstart', _handleOff);
+       // oscTouchOnOff2.addEventListener('touchend', _handleOn);
         // handle pad touch
         backgroundPad.addEventListener('touchstart', _handleBackGroundTouchStart);
         backgroundPad.addEventListener('touchend', _handleBackGroundTouchEnd);
@@ -86,23 +91,6 @@
             }
         }
 
-        function _handleOff (event) {
-            if (event.target === oscTouchOnOff1) {
-                self.board.osc1Off();
-            } else if (event.target === oscTouchOnOff2) {
-                self.board.osc2Off();
-            }
-            event.preventDefault();
-        }
-
-        function _handleOn (event) {
-            if (event.target === oscTouchOnOff1) {
-                self.board.osc1On();
-            } else if (event.target === oscTouchOnOff2) {
-                self.board.osc2On();
-            }
-            event.preventDefault();
-        }
         var waves = ['sine', 'square', 'triangle', 'sawtooth'];
         var waveIntOsc1 = 0, waveIntOsc2 = 0;
         function _handleLongTouch (event) {

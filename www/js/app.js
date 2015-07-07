@@ -13,8 +13,13 @@
 		secondaryOffsetMax: 8,
 		secondaryOffset: 1.0
 	};
+	var isCordova =  (document.URL.indexOf( 'http://' ) === -1 &&
+		document.URL.indexOf( 'https://' ) === -1);
 
-	document.addEventListener('deviceready', _deviceRead, false);
+	if (isCordova)
+		document.addEventListener('deviceready', _deviceReady, false);
+	else
+		$(_deviceReady);
 
 	var logicBoard = new PhonePhong.BoardLogic(new AudioContext(), defaults);
 
@@ -50,7 +55,7 @@
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
 
-	function _deviceRead(id) {
+	function _deviceReady(id) {
 		console.log('device ready');
 		var parentElement = document.getElementById(id);
 		var domElement = document.querySelector('body');

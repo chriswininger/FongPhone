@@ -4,6 +4,7 @@
     "lodash": "*",
     "recursive-readdir": "*",
     "async": "*",
-    "bower": "*"
+    "bower": "*",
+    "express": "*"
   }
 }
