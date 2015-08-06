@@ -60,6 +60,5 @@
 		var parentElement = document.getElementById(id);
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
-
 	}
 })();

@@ -44,6 +44,7 @@
 
 		uiPadSwipeDown.setAttribute('y', window.innerHeight - uiPadSwipeDown.getAttribute('height'));
 		hammeruiPadSwipeDown = new Hammer(uiPadSwipeDown, { direction: Hammer.DIRECTION_VERTICAL });
+        hammeruiPadSwipeDown.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
     };
 
     $class.listen = function () {
@@ -51,9 +52,12 @@
         var osc1PulseOn = true, osc2PulseOn = true;
 
 		hammeruiPadSwipeDown.on('pan', function(ev) {
-			if (ev.isFinal && ev.velocityY >= 0.5) {
+            if (ev.isFinal) {
+                window.location = '#/note-map'
+            }
+			/*if (ev.isFinal && ev.velocityY >= 0.5) {
 				window.location = '/#/note-map'
-			}
+			}*/
 		});
 
         // Changes wave form
