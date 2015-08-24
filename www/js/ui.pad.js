@@ -171,11 +171,16 @@
                 var touch2x = parseFloat(oscTouch2.getAttribute('cx'))
                 var touch2r = parseFloat(oscTouch2.getAttribute('r'));
                 // calculate frequency
-                var freq = map(touch.pageY, (r/2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
-                // ?? freq2 map(touch.pageY, (r/2), window.innerHeight - event.target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-                //var note = PhonePhong.NoteMap[Math.round(map(touch.pageY, (r/2), window.innerHeight - r, 0, (PhonePhong.NoteMap.length - 1)))];
-                //if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length-1];
-                //var freq = !!note ? note.freq : 440;
+                var freq;
+                if (!window.PhonePhong.NoteMapOn) {
+                    freq = map(touch.pageY, (r / 2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
+                } else {
+                    // ?? freq2 map(touch.pageY, (r/2), window.innerHeight - event.target.getAttribute('height'), 0, self.board.osc1MaxFreq)
+                    var note = PhonePhong.NoteMap[Math.round(map(touch.pageY, (r/2), window.innerHeight - r, 0, (PhonePhong.NoteMap.length - 1)))];
+                    if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length-1];
+                    freq = note.freq;
+                }
+
                 if (freq<0)freq=0;
 
                 var fadeUIElement, fadeUIOffset;

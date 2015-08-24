@@ -31,6 +31,7 @@ body {
     margin:0px;
     padding:0px;
     text-transform:uppercase;
+    background-color: darkslategray;
     width:100%;
 }
 
@@ -115,12 +116,25 @@ h1 {
 	width: 100%;
 }
 
-.map-note {
-	fill: #f17f25;
-	stroke-width: 3;
-	stroke: rgb(0, 0, 0);
+table, th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 5px;
 }
 
-.map-note.map-note-off {
+table.ui-map-table {
+    width: 100%;
+}
+
+.map-note, td.ui-map-note-map-toggle {
+    background-color: #f17f25;
+    font-size: x-large;
+}
+
+td.ui-map-note-map-toggle {
+    background-color: #7696f1;
+}
+
+.ui-map-note-map-toggle.map-note-off, .map-note.map-note-off {
 	opacity: 0.6;
 }

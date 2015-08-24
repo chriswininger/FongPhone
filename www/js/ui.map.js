@@ -1,25 +1,5 @@
 (function (){
-    window.PhonePhong.UI.NoteMap = function ($scope, $window) {
-        $scope.NoteMap = AvailableNotes;
-        $scope.windowHeight = $window.innerHeight;
-        $scope.Math = {};
-        $scope.Math.floor = Math.floor;
-        $scope.noteClick = function (index) {
-            $scope.NoteMap[index].on = !$scope.NoteMap[index].on;
-            // update mapped notes
-            window.PhonePhong.NoteMap = buildMap(AvailableNotes);
-        }
-    };
-
-    function buildMap (notes) {
-        var rtn = [];
-        notes.forEach(function (note) {
-            if (note.on) rtn.push(note);
-        });
-        return rtn;
-    }
-
-    var AvailableNotes = [
+    var _availableNotes = [
         { label: 'c', freq: '4186.01', on: false },
         { label: 'b', freq: '3951.07', on: true },
         { label: 'a#', freq:'3729.31', on: true },
@@ -62,7 +42,60 @@
         { label: 'a', freq: '440.000', on: true }
     ];
 
-    window.PhonePhong.NoteMap = buildMap(AvailableNotes);
+    var rowSize = 4;
+
+    window.PhonePhong.UI.NoteMap = function ($scope, $window) {
+        //$scope.NoteMap = _availableNotes;
+        $scope.windowHeight = $window.innerHeight;
+        $scope.Math = {};
+        $scope.Math.floor = Math.floor;
+        $scope.NoteMapOn = window.PhonePhong.NoteMapOn;
+        $scope.noteClick = function (row, col) {
+            $scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
+            // update mapped notes
+            window.PhonePhong.NoteMap = buildMap(_availableNotes);
+        };
+        $scope.toggleClick = function() {
+            window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
+        };
+        $scope.availableNotesByRow = [];
+
+        var currentRow = [];
+        for (var i = 0; i < _availableNotes.length; i++) {
+            if (currentRow.length < rowSize) {
+                currentRow.push(_availableNotes[i]);
+            } else {
+                $scope.availableNotesByRow.push(currentRow);
+                currentRow = [_availableNotes[i]];
+            }
+
+            // take care of partially filled row at end
+            if (i === (_availableNotes.length -1) && currentRow.length > 0) {
+                $scope.availableNotesByRow.push(currentRow);
+            }
+        }
+
+        // position swipe pad for page switching
+        var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
+        mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
+        var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, { direction: Hammer.DIRECTION_VERTICAL });
+        hammeruiPadSwipeDown.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+        hammeruiPadSwipeDown.on('pan', function(ev) {
+            if (ev.isFinal) {
+                window.location = '#/';
+            }
+        });
+    };
+
+    function buildMap (notes) {
+        var rtn = [];
+        notes.forEach(function (note) {
+            if (note.on) rtn.push(note);
+        });
+        return rtn;
+    }
+
+    window.PhonePhong.NoteMap = buildMap(_availableNotes);
 })();
 
 
