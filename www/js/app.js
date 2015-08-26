@@ -45,15 +45,19 @@
 		}).when('/note-map', {
 			templateUrl: 'views/view-map.html',
 			controller: 'noteMapController'
+		}).when('/help', {
+			templateUrl: 'views/view-help.html',
+			controller: 'helpController'
 		});
 	});
 
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		var padUI = new PhonePhong.UI(logicBoard);
+		var padUI = new PhonePhong.UI.Pad(logicBoard);
 		$scope.pageClass = 'view-pad';
 	}]);
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
+	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
 
 	function _deviceReady(id) {
 		console.log('device ready');

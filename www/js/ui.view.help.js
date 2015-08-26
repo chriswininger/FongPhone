@@ -1,0 +1,1 @@
+window.PhonePhong.UI.HelpView = function ($scope, $window) { }

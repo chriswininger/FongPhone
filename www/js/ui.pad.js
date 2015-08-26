@@ -9,8 +9,7 @@
  * @type {{}|*|Window.PhonePhong}
  */
 (function () {
-    window.PhonePhong = window.PhonePhong || {};
-    window.PhonePhong.UI = function (board) {
+    window.PhonePhong.UI.Pad = function (board) {
         var self = this;
         this.board = board;
 
@@ -21,44 +20,33 @@
 
     };
 
-    var $class = PhonePhong.UI.prototype;
+    var $class = PhonePhong.UI.Pad.prototype;
 
     var oscTouchFade1,
         oscTouchFade2,
         oscTouch1,
         oscTouch2,
         backgroundPad,
-		uiPadSwipeDown,
-		hammeruiPadSwipeDown;
+		uiPadSwipeDown;
 
     var oscTouchFade1Val = 0, oscTouchFade2Val = 0, lastPinchDist = 0;
 
     $class.createComponents = function () {
         $('#phongUIGrid').height(window.innerHeight);
-        uiPadSwipeDown = document.getElementById('uiPadSwipeDown');
-		oscTouchFade1 = document.getElementById('oscTouchFade1');
+        window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
+        window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/help', Hammer.DIRECTION_DOWN);
+        oscTouchFade1 = document.getElementById('oscTouchFade1');
         oscTouchFade2 = document.getElementById('oscTouchFade2');
         oscTouch1 = document.getElementById('oscTouch1'),
         oscTouch2 = document.getElementById('oscTouch2'),
         backgroundPad = document.getElementById('phongUIGrid');
 
-		uiPadSwipeDown.setAttribute('y', window.innerHeight - uiPadSwipeDown.getAttribute('height'));
-		hammeruiPadSwipeDown = new Hammer(uiPadSwipeDown, { direction: Hammer.DIRECTION_VERTICAL });
-        hammeruiPadSwipeDown.get('swipe').set({ direction: Hammer.DIRECTION_VERTICAL });
+        document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
     };
 
     $class.listen = function () {
         var self = this;
         var osc1PulseOn = true, osc2PulseOn = true;
-
-		hammeruiPadSwipeDown.on('pan', function(ev) {
-            if (ev.isFinal) {
-                window.location = '#/note-map'
-            }
-			/*if (ev.isFinal && ev.velocityY >= 0.5) {
-				window.location = '/#/note-map'
-			}*/
-		});
 
         // Changes wave form
         $(oscTouch1).on('taphold', _handleLongTouch);
