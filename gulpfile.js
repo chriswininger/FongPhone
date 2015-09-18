@@ -15,7 +15,10 @@ var clientDependencies = [
 	'angular-route',
 	'async',
 	'jquery',
-	'lodash'
+	'lodash',
+	'hammerjs',
+	'jquery-mobile',
+	'jquery-touch-events
 ];
 function initialize (complete) {
 	async.waterfall([
