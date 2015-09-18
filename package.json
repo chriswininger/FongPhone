@@ -1,4 +1,7 @@
 {
+  "name": "Fong Phone",
+  "description": "A mobile app for live audio performance and all around weirdness",
+  "version": "0.0.1",
   "devDependencies": {
     "gulp": "^3.9.0",
     "lodash": "3.10.x",
