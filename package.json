@@ -1,10 +1,9 @@
 {
   "devDependencies": {
     "gulp": "^3.9.0",
-    "lodash": "*",
-    "recursive-readdir": "*",
-    "async": "*",
-    "bower": "*",
-    "express": "*"
+    "lodash": "3.10.x",
+    "recursive-readdir": "1.2.x",
+    "async": "1.4.x",
+    "express": "4.13.1"
   }
 }
