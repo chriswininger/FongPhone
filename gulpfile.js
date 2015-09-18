@@ -17,8 +17,7 @@ var clientDependencies = [
 	'jquery',
 	'lodash',
 	'hammerjs',
-	'jquery-mobile',
-	'jquery-touch-events
+	'jquery-touch-events'
 ];
 function initialize (complete) {
 	async.waterfall([
