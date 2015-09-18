@@ -10,14 +10,14 @@ gulp.task('make:manifest', makeManifest);
 gulp.task('initialize', initialize);
 
 var clientDependencies = [
-	'angularjs',
-	'angular-animate',
-	'angular-route',
-	'async',
-	'jquery',
-	'lodash',
-	'hammerjs',
-	'jquery-touch-events'
+	'angularjs#1.4.x',
+	'angular-animate#1.4.x',
+	'angular-route#1.4.x',
+	'async#1.4.x',
+	'jquery#2.1.x',
+	'lodash#3.10.x',
+	'hammerjs#2.0.x',
+	'jquery-touch-events#1.0.x'
 ];
 function initialize (complete) {
 	async.waterfall([
