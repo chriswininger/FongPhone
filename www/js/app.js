@@ -21,6 +21,11 @@
 	else
 		$(_deviceReady);
 
+	if (typeof AudioContext === 'undefined') {
+		if (typeof webkitAudioContext !== 'undefined')
+			window.AudioContext = webkitAudioContext;
+	}
+
 	var logicBoard = new PhonePhong.BoardLogic(new AudioContext(), defaults);
 
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function() {
