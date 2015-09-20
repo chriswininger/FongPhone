@@ -31,7 +31,7 @@ body {
     margin:0px;
     padding:0px;
     text-transform:uppercase;
-    background-color: darkslategray;
+    background-color: #f9e7e7;
     width:100%;
 }
 
@@ -111,7 +111,7 @@ h1 {
 }
 
 .ui-display-area {
-	background-color: darkslategray;
+    background-color: #f9e7e7;
 	height: 800px;
 	width: 100%;
 }
@@ -127,12 +127,12 @@ table.ui-map-table {
 }
 
 .map-note, td.ui-map-note-map-toggle {
-    background-color: #f17f25;
+    background-color: #ffffff;
     font-size: x-large;
 }
 
 td.ui-map-note-map-toggle {
-    background-color: #7696f1;
+    background-color: #ffffff;
 }
 
 .ui-map-note-map-toggle.map-note-off, .map-note.map-note-off {
