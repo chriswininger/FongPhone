@@ -157,14 +157,29 @@ var globalBoard;
                 }
             }
 
+            var offsetX, offsetY;
             function _handleOSCTouchMove(event) {
                 // If there's exactly one finger inside this element
                 if (event.targetTouches.length == 1) {
                     var touch = event.targetTouches[0];
+                    
+                    //turning this off should be an advanced feature
+                    if (!offsetX && touch.pageX != event.target.getAttribute('cx'))
+                    {
+                        offsetX = touch.pageX - event.target.getAttribute('cx');
+                    }
+                    if (!offsetY && touch.pageY != oscTouch1.getAttribute('cy'))
+                    {
+                        offsetY = touch.pageY - event.target.getAttribute('cy');
+                    }
+                    
+                    log(touch.pageX + " " + event.target.getAttribute('cx') + " " + offsetX + " " + offsetY + " " + event.target.id);
+                    
+                    //alert(offsetX);
 
                     // Place element where the finger is
-                    event.target.setAttribute('cx', touch.pageX);
-                    event.target.setAttribute('cy', touch.pageY);
+                    event.target.setAttribute('cx', touch.pageX - offsetX);
+                    event.target.setAttribute('cy', touch.pageY - offsetY);
                     $(event.target).attr('class', 'selectedFong');
                                         
                     // get attributes from ui
@@ -208,8 +223,8 @@ var globalBoard;
                         fadeUIElement = oscTouchFade2;                                                
                     }
                     // update position of fade elements reletive to main touch element
-                    fadeUIElement.setAttribute('cx', touch.pageX - fadeUIOffset);
-                    fadeUIElement.setAttribute('cy', touch.pageY);
+                    fadeUIElement.setAttribute('cx', event.target.getAttribute('cx') - fadeUIOffset);
+                    fadeUIElement.setAttribute('cy', event.target.getAttribute('cy'));
                     // update offsets
                     var primaryOffset = map(touch1x, (touch1r / 2), window.innerWidth - touch1r, 0, self.board.primaryOffsetMax);
                     if (primaryOffset < 0) primaryOffset = 0;
@@ -250,6 +265,8 @@ var globalBoard;
             function _handleOSCTouchEnd(event) {
                 lastPinchDist = 0;
                 $(event.target).attr('class', 'fong');
+                offsetX = null;
+                offsetY = null;
             }
 
             function _handleFadeMove(event) {
