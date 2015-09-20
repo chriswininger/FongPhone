@@ -136,8 +136,7 @@ $class.setOsc2Vol = function (vol) {
 };
 
 $class.setOsc1FilterFreq = function (freq) {
-    this.filter1.frequency.value = freq;
-    $('#log').html(this.filter1.frequency.value);
+    this.filter1.frequency.value = freq;    
 };
 
 $class.setOsc2FilterFreq = function (freq) {
