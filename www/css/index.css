@@ -138,3 +138,14 @@ td.ui-map-note-map-toggle {
 .ui-map-note-map-toggle.map-note-off, .map-note.map-note-off {
 	opacity: 0.6;
 }
+
+.fong {
+    opacity:.5;
+}
+
+.selectedFong {
+    opacity:0.8;
+    stroke:black;
+    stroke-width:1;    
+    stroke-opacity:0.5;
+}

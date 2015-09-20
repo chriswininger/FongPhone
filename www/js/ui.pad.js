@@ -165,6 +165,8 @@ var globalBoard;
                     // Place element where the finger is
                     event.target.setAttribute('cx', touch.pageX);
                     event.target.setAttribute('cy', touch.pageY);
+                    $(event.target).attr('class', 'selectedFong');
+                                        
                     // get attributes from ui
                     var r = parseInt(event.target.getAttribute('r'));
                     var touch1x = parseFloat(oscTouch1.getAttribute('cx'))
@@ -202,7 +204,7 @@ var globalBoard;
                         self.board.setOsc2Freq(freq);
                         self.board.setOsc2FilterFreq(ffreq);
                         fadeUIOffset = oscTouchFade2Val;
-                        fadeUIElement = oscTouchFade2;
+                        fadeUIElement = oscTouchFade2;                                                
                     }
                     // update position of fade elements reletive to main touch element
                     fadeUIElement.setAttribute('cx', touch.pageX - fadeUIOffset);
@@ -246,6 +248,7 @@ var globalBoard;
 
             function _handleOSCTouchEnd(event) {
                 lastPinchDist = 0;
+                $(event.target).attr('class', 'fong');
             }
 
             function _handleFadeMove(event) {
