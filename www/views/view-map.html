@@ -1,12 +1,12 @@
 <table class="ui-map-table">
     <tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
         <td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)">{{ x[0].label }}</td>
-        <td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
+        <!--<td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
         <td class="ui-map-column map-note {{ x[2].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,2)">{{ x[2].label }}</td>
-        <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>
+        <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>-->
     </tr>
     <tr>
-        <td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleClick()">
+        <td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="1" ng-click="toggleClick()">
             Note Map {{ NoteMapOn ? 'On' : 'Off' }}
         </td>
     </tr>
