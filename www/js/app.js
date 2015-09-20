@@ -89,3 +89,8 @@
         alert(err.message);
     }
 })();
+
+function log(message)
+{
+    $('#log').html(message);
+}
