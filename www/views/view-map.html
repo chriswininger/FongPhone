@@ -27,6 +27,20 @@
 			mixolydian
 		</td>
 	</tr>
+		<tr>
+		<td class="ui-map-note-map-scale {{ IsSelectedScale('chromatic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+			chromatic
+		</td>
+		<td class="ui-map-note-map-scale {{ IsSelectedScale('blues') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+			blues
+		</td>
+		<td class="ui-map-note-map-scale {{ IsSelectedScale('majorpentatonic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+			majorpentatonic
+		</td>
+		<td class="ui-map-note-map-scale {{ IsSelectedScale('minorpentatonic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+			minorpentatonic
+		</td>
+	</tr>
 	<tr>
 		<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a3') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
 			a3
