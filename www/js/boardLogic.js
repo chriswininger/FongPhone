@@ -1,81 +1,77 @@
 window.PhonePhong = window.PhonePhong || {};
 window.PhonePhong.BoardLogic = function (audCtx, opts) {
-    try {
-        // instantiate audio sources
-        this.audCtx = audCtx;
-        this.mainVol = audCtx.createGain();
+    // instantiate audio sources
+    this.audCtx = audCtx;
+    this.mainVol = audCtx.createGain();
 
-        this.osc1 = audCtx.createOscillator();
-        this.osc2 = audCtx.createOscillator();
-        this.osc1.type = 'sine';
-        this.osc2.type = 'sine';
-        //osc2.frequency.value = 1000;
+    this.osc1 = audCtx.createOscillator();
+    this.osc2 = audCtx.createOscillator();
+    this.osc1.type = 'sine';
+    this.osc2.type = 'sine';
+    //osc2.frequency.value = 1000;
 
-        this.osc1PanCtrl = audCtx.createPanner();
-        this.osc1PanCtrl.panningModel = "equalpower";
-        this.osc1PanCtrl.setPosition(0, 0, 0);
+    this.osc1PanCtrl = audCtx.createPanner();
+    this.osc1PanCtrl.panningModel = "equalpower";
+    this.osc1PanCtrl.setPosition(0, 0, 0);
 
-        this.osc2PanCtrl = audCtx.createPanner();
-        this.osc2PanCtrl.panningModel = "equalpower";
-        this.osc2PanCtrl.setPosition(0, 0, 0);
+    this.osc2PanCtrl = audCtx.createPanner();
+    this.osc2PanCtrl.panningModel = "equalpower";
+    this.osc2PanCtrl.setPosition(0, 0, 0);
 
-        this.oscVol1 = audCtx.createGain();
-        this.oscVol2 = audCtx.createGain();
+    this.oscVol1 = audCtx.createGain();
+    this.oscVol2 = audCtx.createGain();
 
-        this.oscVolOffset1 = audCtx.createGain();
-        this.oscVolOffset2 = audCtx.createGain();
-        this.oscVolOffset2.gain.value = this.oscVolOffset1.gain.value = 1.0;
-        // initialize default settings
-        //this.mainVol.gain.value = 0.5;
-        //this.oscVol1.gain.value = 0.9949676394462585;
-        //this.oscVol2.gain.value = 0.9949676394462585;
+    this.oscVolOffset1 = audCtx.createGain();
+    this.oscVolOffset2 = audCtx.createGain();
+    this.oscVolOffset2.gain.value = this.oscVolOffset1.gain.value = 1.0;
+    // initialize default settings
+    //this.mainVol.gain.value = 0.5;
+    //this.oscVol1.gain.value = 0.9949676394462585;
+    //this.oscVol2.gain.value = 0.9949676394462585;
 
-        this.osc1GainCtrl = audCtx.createOscillator();
-        this.osc2GainCtrl = audCtx.createOscillator();
-        //this.osc1GainCtrl.frequency.value = 0.25;
-        //this.osc2GainCtrl.frequency.value = 1.0;
-        this.osc1GainCtrl.type = 'square';
-        this.osc2GainCtrl.type = 'square';
+    this.osc1GainCtrl = audCtx.createOscillator();
+    this.osc2GainCtrl = audCtx.createOscillator();
+    //this.osc1GainCtrl.frequency.value = 0.25;
+    //this.osc2GainCtrl.frequency.value = 1.0;
+    this.osc1GainCtrl.type = 'square';
+    this.osc2GainCtrl.type = 'square';
 
-        this.osc1GainCtrl.connect(this.oscVol1.gain);
-        this.osc2GainCtrl.connect(this.oscVol2.gain);
+    this.osc1GainCtrl.connect(this.oscVol1.gain);
+    this.osc2GainCtrl.connect(this.oscVol2.gain);
 
-        this.filter1 = this.audCtx.createBiquadFilter();
-        this.filter2 = this.audCtx.createBiquadFilter();
+    this.filter1 = this.audCtx.createBiquadFilter();
+    this.filter2 = this.audCtx.createBiquadFilter();
 
-        this.filter1.type = 'lowpass'; // In this case it's a lowshelf filter
-        this.filter1.frequency.value = 200;
-        this.filter1.Q.value = 50;
-        this.filter1.gain.value = 1;
+    this.filter1.type = 'lowpass'; // In this case it's a lowshelf filter
+    this.filter1.frequency.value = 200;
+    this.filter1.Q.value = 50;
+    this.filter1.gain.value = 1;
 
-        this.filter2.type = 'lowpass'; // In this case it's a lowshelf filter
-        this.filter2.frequency.value = 250;
-        this.filter2.Q.value = 50;
-        this.filter2.gain.value = 1;
+    this.filter2.type = 'lowpass'; // In this case it's a lowshelf filter
+    this.filter2.frequency.value = 250;
+    this.filter2.Q.value = 50;
+    this.filter2.gain.value = 1;
 
-        this.osc1.connect(this.filter1);
-        this.filter1.connect(this.oscVol1);
-        this.oscVol1.connect(this.oscVolOffset1);
-        this.oscVolOffset1.connect(this.osc1PanCtrl);
-        this.osc1PanCtrl.connect(this.mainVol);
+    this.osc1.connect(this.filter1);
+    this.filter1.connect(this.oscVol1);
+    this.oscVol1.connect(this.oscVolOffset1);
+    this.oscVolOffset1.connect(this.osc1PanCtrl);
+    this.osc1PanCtrl.connect(this.mainVol);
 
-        this.osc2.connect(this.filter2);
-        this.filter2.connect(this.oscVol2);
-        this.oscVol2.connect(this.oscVolOffset2);
-        this.oscVolOffset2.connect(this.osc2PanCtrl);
-        this.osc2PanCtrl.connect(this.mainVol);
+    this.osc2.connect(this.filter2);
+    this.filter2.connect(this.oscVol2);
+    this.oscVol2.connect(this.oscVolOffset2);
+    this.oscVolOffset2.connect(this.osc2PanCtrl);
+    this.osc2PanCtrl.connect(this.mainVol);
 
-        this.mainVol.connect(this.audCtx.destination);
+    this.mainVol.connect(this.audCtx.destination);
 
-        // defaults
-        this.updateBoard(opts);
-        //this.mainTimeOffset = 1000;
-        //this.secondaryOffset = 2;
+    // defaults
+    this.updateBoard(opts);
+    //this.mainTimeOffset = 1000;
+    //this.secondaryOffset = 2;
 
-        this.init();
-    } catch (err) {
-        alert(err.message + "<br />" + err.stack);
-    }
+    this.init();
 };
 
 var $class = PhonePhong.BoardLogic.prototype;
@@ -92,6 +88,8 @@ $class.init = function () {
 var timeOutCnt = 0;
 var loopRunning = false;
 //var len = 100;
+
+// TODO (Inactive Code) -- Delete
 $class.primaryLoop = function () {
     //if (loopRunning) return;
     loopRunning = true;
@@ -117,6 +115,17 @@ $class.primaryLoop = function () {
     async.each(pulses, _pulse, function () {
         loopRunning = false;
     });
+
+    // --- private functions ---
+    function _pulse(opts, complete) {
+        //opts.osc.stop();
+        //opts.osc.start(opts.len);
+        opts.gain.value = 0;
+        setTimeout(function () {
+            opts.gain.value = opts.currVol;
+            complete();
+        }, opts.len);
+    }
 };
 
 $class.setMainVol = function (vol) {
@@ -213,7 +222,6 @@ $class.setSecondaryFade = function (val) {
 };
 
 $class.updateBoard = function (values) {
-
     this.setOsc1Vol(values.osc1Vol);
     this.setOsc2Vol(values.osc2Vol);
     this.setOsc1Freq(values.osc1Freq);
@@ -228,14 +236,3 @@ $class.updateBoard = function (values) {
     this.primaryOffsetMax = values.primaryOffsetMax;
     this.secondaryOffsetMax = values.secondaryOffsetMax;
 };
-
-// --- private functions ---
-function _pulse(opts, complete) {
-    //opts.osc.stop();
-    //opts.osc.start(opts.len);
-    opts.gain.value = 0;
-    setTimeout(function () {
-        opts.gain.value = opts.currVol;
-        complete();
-    }, opts.len);
-}
