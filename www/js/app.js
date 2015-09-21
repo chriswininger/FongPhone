@@ -13,30 +13,36 @@
 		secondaryOffsetMax: 8,
 		secondaryOffset: 1.0
 	};
-	var isCordova =  (document.URL.indexOf( 'http://' ) === -1 &&
-		document.URL.indexOf( 'https://' ) === -1);
+	var isCordova = (document.URL.indexOf('http://') === -1 &&
+		document.URL.indexOf('https://') === -1);
 
 	if (isCordova)
 		document.addEventListener('deviceready', _deviceReady, false);
 	else
 		$(_deviceReady);
 
-	if (typeof AudioContext === 'undefined') {
-		if (typeof webkitAudioContext !== 'undefined')
-			window.AudioContext = webkitAudioContext;
+	var context;
+	if (typeof AudioContext !== "undefined") {
+		context = new AudioContext();
+	} else if (typeof webkitAudioContext !== "undefined") {
+		context = new webkitAudioContext();
+	} else {
+		conole.error(new Error('AudioContext not supported.'));
 	}
 
-	var logicBoard = new PhonePhong.BoardLogic(new AudioContext(), defaults);
+	var logicBoard = new PhonePhong.BoardLogic(context, defaults);
+	// TODO -- Namepsace all globals
+	globalBoard = logicBoard;
 
-	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function() {
-		return function(scope, element, attrs) {
-			scope.$watch(attrs.ngY, function(value) {
+	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function () {
+		return function (scope, element, attrs) {
+			scope.$watch(attrs.ngY, function (value) {
 				element.attr('y', value);
 			});
 		};
-	}).directive('ngX', function() {
-		return function(scope, element, attrs) {
-			scope.$watch(attrs.ngX, function(value) {
+	}).directive('ngX', function () {
+		return function (scope, element, attrs) {
+			scope.$watch(attrs.ngX, function (value) {
 				element.attr('x', value);
 			});
 		};
@@ -70,4 +76,11 @@
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 	}
+	console.log('ending...');
 })();
+
+// TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)
+function log(message)
+{
+	$('#log').html(message);
+}
