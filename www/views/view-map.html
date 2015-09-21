@@ -6,10 +6,10 @@
         <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>-->
 	</tr>
 	<tr>
-		<td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="1" ng-click="toggleNoteMapClick()" colspan="2">
+		<td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleNoteMapClick()">
 			Osc Note Map {{ NoteMapOn ? 'On' : 'Off' }}
 		</td>
-		<td class="ui-map-note-map-toggle {{ FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="1" ng-click="toggleFilterNoteMapClick()" colspan="2">
+		<td class="ui-map-note-map-toggle {{ FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
 			Filter Note Map {{ FilterNoteMapOn ? 'On' : 'Off' }}
 		</td>
 	</tr>
