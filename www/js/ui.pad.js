@@ -173,7 +173,7 @@ var globalBoard;
                         offsetY = touch.pageY - event.target.getAttribute('cy');
                     }
                     
-                    log(touch.pageX + " " + event.target.getAttribute('cx') + " " + offsetX + " " + offsetY + " " + event.target.id);
+                    //log(touch.pageX + " " + event.target.getAttribute('cx') + " " + offsetX + " " + offsetY + " " + event.target.id);
                     
                     //alert(offsetX);
 
@@ -192,7 +192,7 @@ var globalBoard;
                     var freq, ffreq;
                     if (!window.PhonePhong.NoteMapOn) {
                         freq = map(touch.pageY / 2, (r / 2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
-                        ffreq = map(touch.pageX / 2, (r / 2), window.innerWidth - r, 0, self.board.osc1MaxFreq);
+                        
                     } else {
                         // ?? freq2 map(touch.pageY, (r/2), window.innerHeight - event.target.getAttribute('height'), 0, self.board.osc1MaxFreq)
                         var noteNumber = parseInt(touch.pageY * PhonePhong.NoteMap.length / window.innerHeight);
@@ -200,11 +200,18 @@ var globalBoard;
                         if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
                         freq = note.freq;
 
-                        var fnoteNumber = parseInt(touch.pageX * PhonePhong.NoteMap.length / window.innerWidth);
+                        
+                    }
+					
+					if (!window.PhonePhong.FilterNoteMapOn) {
+						ffreq = map(touch.pageX / 2, (r / 2), window.innerWidth - r, 0, self.board.osc1MaxFreq);
+					} else {
+						var fnoteNumber = parseInt(touch.pageX * PhonePhong.NoteMap.length / window.innerWidth);
                         var fnote = PhonePhong.NoteMap[fnoteNumber];
                         if (!fnote) fnote = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
                         ffreq = fnote.freq;
-                    }
+					}
+					log(freq + " " + ffreq);
 
                     if (freq < 0) freq = 0;
                     if (ffreq < 100) ffreq = 100;

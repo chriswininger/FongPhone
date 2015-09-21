@@ -149,3 +149,7 @@ td.ui-map-note-map-toggle {
     stroke-width:1;    
     stroke-opacity:0.5;
 }
+
+.selectedScale {
+	background-color: white;
+}
