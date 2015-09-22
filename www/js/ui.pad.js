@@ -12,6 +12,7 @@
     window.PhonePhong.UI.Pad = function (board) {
         var self = this;
         this.board = board;
+        this.state = {};
 
 		// make changes to dom to create ui
 		self.createComponents();
@@ -147,11 +148,15 @@
         function _handleOSCTouchMove  (event) {
             // If there's exactly one finger inside this element
             if (event.targetTouches.length == 1) {
+                self.state[event.target.id] = self.state[event.target.id] || {};
                 var touch = event.targetTouches[0];
 
                 // Place element where the finger is
                 event.target.setAttribute('cx', touch.pageX);
                 event.target.setAttribute('cy', touch.pageY);
+                self.state[event.target.id].cx = touch.pageX;
+                self.state[event.target.id].cy = touch.pageY;
+
                 // get attributes from ui
                 var r = parseInt(event.target.getAttribute('r'));
                 var touch1x = parseFloat(oscTouch1.getAttribute('cx'))

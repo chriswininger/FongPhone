@@ -56,8 +56,9 @@
 		});
 	});
 
+	var padUI;
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		var padUI = new PhonePhong.UI.Pad(logicBoard);
+		padUI = new PhonePhong.UI.Pad(logicBoard);
 		$scope.pageClass = 'view-pad';
 	}]);
 
@@ -65,7 +66,23 @@
 	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
 
 	function _deviceReady(id) {
-		console.log('device ready');
+		// Device ready
+
+		// wire cordova events
+		document.addEventListener("pause", function() {
+			localforage.setItem('pad_state', JSON.stringify(padUI.state), function(err) {
+				if (err) console.error(err);
+			});
+		}, false);
+
+		document.addEventListener("resume", function() {
+			localforage.getItem('pad_state', function(err, state) {
+				if (err) return console.error(err);
+				console.log(JSON.stringify(state, null, 4));
+			});
+		}, false);
+
+		// bootstrap angular and load app
 		var parentElement = document.getElementById(id);
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
