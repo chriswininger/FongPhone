@@ -70,7 +70,7 @@
 
 		// wire cordova events
 		document.addEventListener("pause", function() {
-			localforage.setItem('pad_state', JSON.stringify(padUI.state), function(err) {
+			localforage.setItem('pad_state', padUI.state, function(err) {
 				if (err) console.error(err);
 			});
 		}, false);
