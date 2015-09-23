@@ -18,7 +18,8 @@ var clientDependencies = [
 	'lodash#3.10.x',
 	'hammerjs#2.0.x',
 	'jquery-touch-events#1.0.x',
-    'teoria'
+    'teoria',
+	'localforage#1.2.x'
 ];
 function initialize (complete) {
 	async.waterfall([
