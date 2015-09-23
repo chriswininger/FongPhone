@@ -26,6 +26,9 @@
 		this.oscTouchFade1Val = 0;
 		this.oscTouchFade2Val = 0;
 		this.lastPinchDist = 0;
+
+		this.longTouchChangesWave = false;
+		this.longTouchSelectsFong = true;
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
@@ -42,7 +45,7 @@
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
-		listen: function() {
+		listen: function () {
 			var self = this;
 
 			// Changes wave form
@@ -63,26 +66,42 @@
 			self.backgroundPad.addEventListener('touchend', _handleBackGroundTouchEnd);
 
 			var _touches = {};
+
 			function _handleBackGroundTouchStart(event) {
 				if (event.target !== self.backgroundPad) return;
+				//log("_handleBackGroundTouchStart");
 				for (var i = 0; i < event.targetTouches.length; i++) {
 					var touch = event.targetTouches[i];
-					// TODO (CAW) could get tricky when oscillators are close together
-					if (isTouchAroundOsc(self.oscTouch1, touch) || isTouchAroundOsc(self.oscTouch2, touch)) {
-						var dist1 = getTouchDist(self.oscTouch1, touch),
-							dist2 = getTouchDist(self.oscTouch2, touch);
-						if (dist1 <= dist2) {
-							console.log('!!! Turn it off osc1');
-							self.board.osc1Off();
-							_touches[touch.identifier] = {
-								on: _.bind(self.board.osc1On, self.board)
-							};
-						} else {
-							console.log('!!! Turn it off osc2');
-							self.board.osc2Off();
-							_touches[touch.identifier] = {
-								on: _.bind(self.board.osc2On, self.board)
-							};
+					//log("_handleBackGroundTouchStart looping");
+					if (!self.longTouchSelectsFong) {
+						// TODO (CAW) could get tricky when oscillators are close together
+						if (isTouchAroundOsc(self.oscTouch1, touch) || isTouchAroundOsc(self.oscTouch2, touch)) {
+							var dist1 = getTouchDist(self.oscTouch1, touch),
+								dist2 = getTouchDist(self.oscTouch2, touch);
+							if (dist1 <= dist2) {
+								console.log('!!! Turn it off osc1');
+								self.board.osc1Off();
+								_touches[touch.identifier] = {
+									on: _.bind(self.board.osc1On, self.board)
+								};
+							} else {
+								console.log('!!! Turn it off osc2');
+								self.board.osc2Off();
+								_touches[touch.identifier] = {
+									on: _.bind(self.board.osc2On, self.board)
+								};
+							}
+						}
+					} else {
+						//log("checking longTouchedOsc");
+						if (self.longTouchedOsc) {
+							//log("longTouchedOsc not null");
+							offsetX = 0;
+							offsetY = 0;
+							var touch = event.targetTouches[0];
+							updateOsc(self.longTouchedOsc, touch.pageX, touch.pageY);
+							offsetX = null;
+							offsetY = null;
 						}
 					}
 				}
@@ -97,82 +116,89 @@
 				}
 			}
 
+			function updateOsc(target, x, y) {
+				//turning this off should be an advanced feature
+				if (offsetX == null && x != target.getAttribute('cx')) {
+					offsetX = x - target.getAttribute('cx');
+				}
+				if (offsetY == null && y != self.oscTouch1.getAttribute('cy')) {
+					offsetY = y - target.getAttribute('cy');
+				}
+
+				// Place element where the finger is
+				target.setAttribute('cx', x - offsetX);
+				target.setAttribute('cy', y - offsetY);
+				$(target).attr('class', 'selectedFong');
+				
+				//log(x + " " + y + " " + offsetX + " " + offsetY);
+
+				// get attributes from ui
+				var r = parseInt(target.getAttribute('r'));
+				var touch1x = parseFloat(self.oscTouch1.getAttribute('cx'))
+				var touch1r = parseFloat(self.oscTouch1.getAttribute('r'));
+				var touch2x = parseFloat(self.oscTouch2.getAttribute('cx'))
+				var touch2r = parseFloat(self.oscTouch2.getAttribute('r'));
+				// calculate frequency
+				var freq, ffreq;
+				if (!window.PhonePhong.NoteMapOn) {
+					freq = map(y / 2, (r / 2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
+
+				} else {
+					// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
+					var noteNumber = parseInt(y * PhonePhong.NoteMap.length / window.innerHeight);
+					var note = PhonePhong.NoteMap[noteNumber];
+					if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+					freq = note.freq;
+
+
+				}
+
+				if (!window.PhonePhong.FilterNoteMapOn) {
+					ffreq = map(x / 2, (r / 2), window.innerWidth - r, 0, self.board.osc1MaxFreq);
+				} else {
+					var fnoteNumber = parseInt(x * PhonePhong.NoteMap.length / window.innerWidth);
+					var fnote = PhonePhong.NoteMap[fnoteNumber];
+					if (!fnote) fnote = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+					ffreq = fnote.freq;
+				}
+				
+				log(freq + " " + ffreq);
+
+				if (freq < 0) freq = 0;
+				if (ffreq < 100) ffreq = 100;
+
+				var fadeUIElement, fadeUIOffset;
+				if (target.id === self.oscTouch1.id) {
+					// update frequency
+					self.board.setOsc1Freq(freq);
+					self.board.setOsc1FilterFreq(ffreq);
+					fadeUIElement = self.oscTouchFade1;
+					fadeUIOffset = self.oscTouchFade1Val;
+				} else if (target.id === self.oscTouch2.id) {
+					self.board.setOsc2Freq(freq);
+					self.board.setOsc2FilterFreq(ffreq);
+					fadeUIOffset = self.oscTouchFade2Val;
+					fadeUIElement = self.oscTouchFade2;
+				}
+				// update position of fade elements reletive to main touch element
+				fadeUIElement.setAttribute('cx', target.getAttribute('cx') - fadeUIOffset);
+				fadeUIElement.setAttribute('cy', target.getAttribute('cy'));
+				// update offsets
+				var primaryOffset = map(touch1x, (touch1r / 2), window.innerWidth - touch1r, 0, self.board.primaryOffsetMax);
+				if (primaryOffset < 0) primaryOffset = 0;
+				self.board.setPrimaryOffset(primaryOffset);
+				self.board.setSecondaryOffset(map(touch2x, (touch2r / 2), window.innerWidth - touch2r, 0, self.board.secondaryOffsetMax) * self.board.mainTimeOffset);
+
+			}
+
 			var offsetX, offsetY;
+
 			function _handleOSCTouchMove(event) {
 				// If there's exactly one finger inside this element
 				if (event.targetTouches.length == 1) {
 					var touch = event.targetTouches[0];
 
-					//turning this off should be an advanced feature
-					if (!offsetX && touch.pageX != event.target.getAttribute('cx'))
-					{
-						offsetX = touch.pageX - event.target.getAttribute('cx');
-					}
-					if (!offsetY && touch.pageY != self.oscTouch1.getAttribute('cy'))
-					{
-						offsetY = touch.pageY - event.target.getAttribute('cy');
-					}
-
-					// Place element where the finger is
-					event.target.setAttribute('cx', touch.pageX - offsetX);
-					event.target.setAttribute('cy', touch.pageY - offsetY);
-					$(event.target).attr('class', 'selectedFong');
-
-					// get attributes from ui
-					var r = parseInt(event.target.getAttribute('r'));
-					var touch1x = parseFloat(self.oscTouch1.getAttribute('cx'))
-					var touch1r = parseFloat(self.oscTouch1.getAttribute('r'));
-					var touch2x = parseFloat(self.oscTouch2.getAttribute('cx'))
-					var touch2r = parseFloat(self.oscTouch2.getAttribute('r'));
-					// calculate frequency
-					var freq, ffreq;
-					if (!window.PhonePhong.NoteMapOn) {
-						freq = map(touch.pageY / 2, (r / 2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
-
-					} else {
-						// ?? freq2 map(touch.pageY, (r/2), window.innerHeight - event.target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-						var noteNumber = parseInt(touch.pageY * PhonePhong.NoteMap.length / window.innerHeight);
-						var note = PhonePhong.NoteMap[noteNumber];
-						if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
-						freq = note.freq;
-
-
-					}
-
-					if (!window.PhonePhong.FilterNoteMapOn) {
-						ffreq = map(touch.pageX / 2, (r / 2), window.innerWidth - r, 0, self.board.osc1MaxFreq);
-					} else {
-						var fnoteNumber = parseInt(touch.pageX * PhonePhong.NoteMap.length / window.innerWidth);
-						var fnote = PhonePhong.NoteMap[fnoteNumber];
-						if (!fnote) fnote = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
-						ffreq = fnote.freq;
-					}
-					log(freq + " " + ffreq);
-
-					if (freq < 0) freq = 0;
-					if (ffreq < 100) ffreq = 100;
-
-					var fadeUIElement, fadeUIOffset;
-					if (event.target.id === self.oscTouch1.id) {
-						// update frequency
-						self.board.setOsc1Freq(freq);
-						self.board.setOsc1FilterFreq(ffreq);
-						fadeUIElement = self.oscTouchFade1;
-						fadeUIOffset = self.oscTouchFade1Val;
-					} else if (event.target.id === self.oscTouch2.id) {
-						self.board.setOsc2Freq(freq);
-						self.board.setOsc2FilterFreq(ffreq);
-						fadeUIOffset = self.oscTouchFade2Val;
-						fadeUIElement = self.oscTouchFade2;
-					}
-					// update position of fade elements reletive to main touch element
-					fadeUIElement.setAttribute('cx', event.target.getAttribute('cx') - fadeUIOffset);
-					fadeUIElement.setAttribute('cy', event.target.getAttribute('cy'));
-					// update offsets
-					var primaryOffset = map(touch1x, (touch1r / 2), window.innerWidth - touch1r, 0, self.board.primaryOffsetMax);
-					if (primaryOffset < 0) primaryOffset = 0;
-					self.board.setPrimaryOffset(primaryOffset);
-					self.board.setSecondaryOffset(map(touch2x, (touch2r / 2), window.innerWidth - touch2r, 0, self.board.secondaryOffsetMax) * self.board.mainTimeOffset);
+					updateOsc(event.target, touch.pageX, touch.pageY);
 
 					event.preventDefault();
 				} else if (event.targetTouches.length == 2) {
@@ -245,7 +271,7 @@
 				return c < radius + 100;
 			}
 		},
-		_handleDoubleTap: function(event) {
+		_handleDoubleTap: function (event) {
 			var self = this;
 			if (event.target === self.oscTouch1) {
 				if (self.osc1PulseOn) self.board.stopOsc1Pulse();
@@ -257,16 +283,39 @@
 				self.osc2PulseOn = !self.osc2PulseOn;
 			}
 		},
-		_handleLongTouch: function(event) {
+		_handleLongTouch: function (event) {
+			//alert("_handleLongTouch " + event.target.id);
 			var self = this;
-			if (event.target === self.oscTouch1) {
-				self.waveIntOsc1++;
-				if (self.waveIntOsc1 >= self.waves.length) self.waveIntOsc1 = 0;
-				self.board.setOsc1Type(self.waves[self.waveIntOsc1]);
-			} else if (event.target === self.oscTouch2) {
-				self.waveIntOsc2++;
-				if (self.waveIntOsc2 >= self.waves.length) self.waveIntOsc2 = 0;
-				self.board.setOsc2Type(self.waves[self.waveIntOsc2]);
+			if (self.longTouchChangesWave) {
+				if (event.target === self.oscTouch1) {
+					self.waveIntOsc1++;
+					if (self.waveIntOsc1 >= self.waves.length) self.waveIntOsc1 = 0;
+					self.board.setOsc1Type(self.waves[self.waveIntOsc1]);
+				} else if (event.target === self.oscTouch2) {
+					self.waveIntOsc2++;
+					if (self.waveIntOsc2 >= self.waves.length) self.waveIntOsc2 = 0;
+					self.board.setOsc2Type(self.waves[self.waveIntOsc2]);
+				}
+			}
+			if (self.longTouchSelectsFong) {
+				if (event.target == self.oscTouch1) {
+					if (self.longTouchedOsc != self.oscTouch1) {
+						log("_handleLongTouch osc1 " + self.oscTouch1.id);
+						self.longTouchedOsc = self.oscTouch1;
+					} else {
+						log("_handleLongTouch unselect osc1");
+						self.longTouchedOsc = null;
+					}
+				}
+				if (event.target == self.oscTouch2) {
+					if (self.longTouchedOsc != self.oscTouch2) {
+						log("_handleLongTouch osc2 " + self.oscTouch2.id);
+						self.longTouchedOsc = self.oscTouch2;
+					} else {
+						log("_handleLongTouch unselect osc2");
+						self.longTouchedOsc = null;
+					}
+				}
 			}
 
 			event.preventDefault();
