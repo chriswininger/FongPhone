@@ -31,8 +31,6 @@
 	}
 
 	var logicBoard = new PhonePhong.BoardLogic(context, defaults);
-	// TODO -- Namepsace all globals
-	globalBoard = logicBoard;
 
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function () {
 		return function (scope, element, attrs) {
