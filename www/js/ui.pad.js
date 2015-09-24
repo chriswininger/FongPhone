@@ -69,42 +69,36 @@
 
 			function _handleBackGroundTouchStart(event) {
 				if (event.target !== self.backgroundPad) return;
-				//log("_handleBackGroundTouchStart");
-				for (var i = 0; i < event.targetTouches.length; i++) {
+				if (self.lastSelectedFong) {
+					var touch = event.targetTouches[0];
+					offsetX = 0;
+					offsetY = 0;
+					updateOsc(self.lastSelectedFong, touch.pageX, touch.pageY);
+					offsetX = null;
+					offsetY = null;
+				}
+				/*for (var i = 0; i < event.targetTouches.length; i++) {
 					var touch = event.targetTouches[i];
 					//log("_handleBackGroundTouchStart looping");
-					if (!self.longTouchSelectsFong) {
-						// TODO (CAW) could get tricky when oscillators are close together
-						if (isTouchAroundOsc(self.oscTouch1, touch) || isTouchAroundOsc(self.oscTouch2, touch)) {
-							var dist1 = getTouchDist(self.oscTouch1, touch),
-								dist2 = getTouchDist(self.oscTouch2, touch);
-							if (dist1 <= dist2) {
-								console.log('!!! Turn it off osc1');
-								self.board.osc1Off();
-								_touches[touch.identifier] = {
-									on: _.bind(self.board.osc1On, self.board)
-								};
-							} else {
-								console.log('!!! Turn it off osc2');
-								self.board.osc2Off();
-								_touches[touch.identifier] = {
-									on: _.bind(self.board.osc2On, self.board)
-								};
-							}
-						}
-					} else {
-						//log("checking longTouchedOsc");
-						if (self.longTouchedOsc) {
-							//log("longTouchedOsc not null");
-							offsetX = 0;
-							offsetY = 0;
-							var touch = event.targetTouches[0];
-							updateOsc(self.longTouchedOsc, touch.pageX, touch.pageY);
-							offsetX = null;
-							offsetY = null;
+					// TODO (CAW) could get tricky when oscillators are close together
+					if (isTouchAroundOsc(self.oscTouch1, touch) || isTouchAroundOsc(self.oscTouch2, touch)) {
+						var dist1 = getTouchDist(self.oscTouch1, touch),
+							dist2 = getTouchDist(self.oscTouch2, touch);
+						if (dist1 <= dist2) {
+							console.log('!!! Turn it off osc1');
+							self.board.osc1Off();
+							_touches[touch.identifier] = {
+								on: _.bind(self.board.osc1On, self.board)
+							};
+						} else {
+							console.log('!!! Turn it off osc2');
+							self.board.osc2Off();
+							_touches[touch.identifier] = {
+								on: _.bind(self.board.osc2On, self.board)
+							};
 						}
 					}
-				}
+				}*/
 			}
 
 			function _handleBackGroundTouchEnd(event) {
@@ -236,6 +230,7 @@
 				$(event.target).attr('class', 'fong');
 				offsetX = null;
 				offsetY = null;
+				self.lastSelectedFong = event.target;
 			}
 
 			function _handleFadeMove(event) {
@@ -286,36 +281,15 @@
 		_handleLongTouch: function (event) {
 			//alert("_handleLongTouch " + event.target.id);
 			var self = this;
-			if (self.longTouchChangesWave) {
-				if (event.target === self.oscTouch1) {
-					self.waveIntOsc1++;
-					if (self.waveIntOsc1 >= self.waves.length) self.waveIntOsc1 = 0;
-					self.board.setOsc1Type(self.waves[self.waveIntOsc1]);
-				} else if (event.target === self.oscTouch2) {
-					self.waveIntOsc2++;
-					if (self.waveIntOsc2 >= self.waves.length) self.waveIntOsc2 = 0;
-					self.board.setOsc2Type(self.waves[self.waveIntOsc2]);
-				}
-			}
-			if (self.longTouchSelectsFong) {
-				if (event.target == self.oscTouch1) {
-					if (self.longTouchedOsc != self.oscTouch1) {
-						log("_handleLongTouch osc1 " + self.oscTouch1.id);
-						self.longTouchedOsc = self.oscTouch1;
-					} else {
-						log("_handleLongTouch unselect osc1");
-						self.longTouchedOsc = null;
-					}
-				}
-				if (event.target == self.oscTouch2) {
-					if (self.longTouchedOsc != self.oscTouch2) {
-						log("_handleLongTouch osc2 " + self.oscTouch2.id);
-						self.longTouchedOsc = self.oscTouch2;
-					} else {
-						log("_handleLongTouch unselect osc2");
-						self.longTouchedOsc = null;
-					}
-				}
+
+			if (event.target === self.oscTouch1) {
+				self.waveIntOsc1++;
+				if (self.waveIntOsc1 >= self.waves.length) self.waveIntOsc1 = 0;
+				self.board.setOsc1Type(self.waves[self.waveIntOsc1]);
+			} else if (event.target === self.oscTouch2) {
+				self.waveIntOsc2++;
+				if (self.waveIntOsc2 >= self.waves.length) self.waveIntOsc2 = 0;
+				self.board.setOsc2Type(self.waves[self.waveIntOsc2]);
 			}
 
 			event.preventDefault();
