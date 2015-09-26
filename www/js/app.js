@@ -60,8 +60,22 @@
 		});
 	});
 
+	var padUI;
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		var padUI = new PhonePhong.UI.Pad(logicBoard);
+		/* TODO (CAW) Two problems posed by angular view change,
+			1. Dom re-rendered
+				a. Re-assign any member variables that reference the dom
+				b. drop all listeners to prevent holding onto old dom references (though member variable re-assignment
+					may take care of this)
+				c. Re-assign all listeners
+			2. We do not specify the ui state in code, it is initialized by the dom, which has been reloaded
+				a. Store state of fong positions (fade offsets etc...)
+				b. On view load re-position elements according to this state
+		 */
+		if (!padUI)
+			padUI = new PhonePhong.UI.Pad(logicBoard);
+		else
+			padUI.listen(); // fix this to call removeListeners first
 		$scope.pageClass = 'view-pad';
 	}]);
 
