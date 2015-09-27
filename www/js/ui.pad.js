@@ -22,10 +22,9 @@
 		this.lastPinchDist = 0;
 
 		this.longTouchChangesWave = false;
-		this.longTouchSelectsFong = true;		
+		this.longTouchSelectsFong = true;
 
-		for (var i = 0; i < self.board.fongs.length; i++)
-		{
+		for (var i = 0; i < self.board.fongs.length; i++) {
 			var fong = self.board.fongs[i];
 			this.updateFongLocation(i, fong.x, fong.y);
 		}
@@ -66,18 +65,31 @@
 			var fong = self.board.fongs[i];
 			self.board.fongs[i].x = x;
 			self.board.fongs[i].y = y;
-			
+
 			var iPlusOne = parseInt(i) + 1;
 			$("#oscTouch" + iPlusOne).attr("cx", x);
 			$("#oscTouch" + iPlusOne).attr("cy", y);
 			
-			var fadeUIElement = document.getElementById('oscTouchFade' + iPlusOne);
 			var fadeUIOffset = fong.oscTouchFadeVal;
-
-			// update position of fade elements reletive to main touch element
-			fadeUIElement.setAttribute('cx', fong.x - fadeUIOffset);
-			fadeUIElement.setAttribute('cy', fong.y);
+			this.updateFadeLocation(i, x - fadeUIOffset, y);
+		},
+		updateFadeLocation: function (i, x, y) {
 			
+			var self = this;
+			var fong = self.board.fongs[i];
+
+			var iPlusOne = parseInt(i) + 1;
+			var c = document.getElementById('oscTouch' + iPlusOne);
+
+			var fadeUIElement = $("#oscTouchFade" + iPlusOne);
+			log(x + " " + y);
+			if (c.getAttribute("r") > Math.abs(x - c.getAttribute("cx"))) {
+				fadeUIElement.attr("cx", x);
+				fong.oscTouchFadeVal = c.getAttribute('cx') - x;
+			}
+			fadeUIElement.attr("cy", y);
+
+			return fong;
 		},
 		updateOsc: function (target, x, y) {
 			var self = this;
@@ -125,14 +137,14 @@
 				ffreq = fnote.freq;
 			}
 
-			log(freq + " " + ffreq);
+			//log(freq + " " + ffreq);
 
 			if (freq < 0) freq = 0;
 			if (ffreq < 100) ffreq = 100;
 
 			var i = event.target.getAttribute('data-index');
-			
-			var fong = self.board.fongs[i];			
+
+			var fong = self.board.fongs[i];
 			// update frequencies
 			fong.setOscFreq(freq);
 			fong.setOscFilterFreq(ffreq);
@@ -169,18 +181,8 @@
 				var touch = event.targetTouches[0];
 
 				var i = event.target.getAttribute('data-index');
-				var fong = self.board.fongs[i];
-
-				var iPlusOne = parseInt(i) + 1;
-				var c = document.getElementById('oscTouch' + iPlusOne);
-
-				log(c.getAttribute("r") + " " +
-					Math.abs(touch.pageX - c.getAttribute("cx")));
-
-				if (c.getAttribute("r") > Math.abs(touch.pageX - c.getAttribute("cx"))) {
-					event.target.setAttribute('cx', touch.pageX);
-					fong.oscTouchFadeVal = c.getAttribute('cx') - touch.pageX;
-				}
+				log('x ' + i + " " + touch.pageX);
+				var fong = this.updateFadeLocation(i, touch.pageX, event.target.getAttribute('cy'));
 
 				// TODO (CAW) -- range should reflect size of outer sphere
 				fong.setFade(map(-1 * fong.oscTouchFadeVal, -35, 35, -2, 2));
