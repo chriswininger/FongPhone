@@ -22,7 +22,13 @@
 		this.lastPinchDist = 0;
 
 		this.longTouchChangesWave = false;
-		this.longTouchSelectsFong = true;
+		this.longTouchSelectsFong = true;		
+
+		for (var i = 0; i < self.board.fongs.length; i++)
+		{
+			var fong = self.board.fongs[i];
+			this.updateOscLocation(i, fong.x, fong.y);
+		}
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
@@ -54,6 +60,24 @@
 			this.oscTouchFade2.addEventListener('touchmove', _.bind(this._handleFadeMove, this));
 			this.backgroundPad.addEventListener('touchstart', _.bind(this._handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this._handleBackGroundTouchEnd, this));
+		},
+		updateOscLocation: function (i, x, y) {
+			var self = this;
+			var fong = self.board.fongs[i];
+			self.board.fongs[i].x = x;
+			self.board.fongs[i].y = y;
+			
+			var iPlusOne = parseInt(i) + 1;
+			$("#oscTouch" + iPlusOne).attr("cx", x);
+			$("#oscTouch" + iPlusOne).attr("cy", y);
+			
+			var fadeUIElement = document.getElementById('oscTouchFade' + iPlusOne);
+			var fadeUIOffset = fong.oscTouchFadeVal;
+
+			// update position of fade elements reletive to main touch element
+			fadeUIElement.setAttribute('cx', fong.x - fadeUIOffset);
+			fadeUIElement.setAttribute('cy', fong.y);
+			
 		},
 		updateOsc: function (target, x, y) {
 			var self = this;
@@ -119,6 +143,9 @@
 			fong.setOscFreq(freq);
 			fong.setOscFilterFreq(ffreq);
 
+			fong.x = target.getAttribute('cx');
+			fong.y = target.getAttribute('cy');
+
 			// update position of fade elements reletive to main touch element
 			fadeUIElement.setAttribute('cx', target.getAttribute('cx') - fadeUIOffset);
 			fadeUIElement.setAttribute('cy', target.getAttribute('cy'));
@@ -158,14 +185,14 @@
 
 				var iPlusOne = parseInt(i) + 1;
 				var c = document.getElementById('oscTouch' + iPlusOne);
-				
-				log(c.getAttribute("r") + " " + 
+
+				log(c.getAttribute("r") + " " +
 					Math.abs(touch.pageX - c.getAttribute("cx")));
 
-				if (c.getAttribute("r") > Math.abs(touch.pageX - c.getAttribute("cx"))) {					
+				if (c.getAttribute("r") > Math.abs(touch.pageX - c.getAttribute("cx"))) {
 					event.target.setAttribute('cx', touch.pageX);
 					fong.oscTouchFadeVal = c.getAttribute('cx') - touch.pageX;
-				}				
+				}
 
 				// TODO (CAW) -- range should reflect size of outer sphere
 				fong.setFade(map(-1 * fong.oscTouchFadeVal, -35, 35, -2, 2));

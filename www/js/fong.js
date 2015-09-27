@@ -1,6 +1,9 @@
-var fong = function (audCtx, mainVol) {
+var fong = function (audCtx, mainVol, x, y) {
 
 	this.audCtx = audCtx;
+	this.mainVol = mainVol;
+	this.x = x;
+	this.y = y;
 
 	this.waves = ['sine', 'square', 'triangle', 'sawtooth'];
 	this.waveIntOsc = 0;

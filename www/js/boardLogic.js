@@ -4,8 +4,8 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	this.audCtx = audCtx;
 	this.mainVol = audCtx.createGain();
 	
-	this.fong1 = new fong(audCtx, this.mainVol);
-	this.fong2 = new fong(audCtx, this.mainVol);	
+	this.fong1 = new fong(audCtx, this.mainVol, 60, 60);
+	this.fong2 = new fong(audCtx, this.mainVol, 200, 200);	
 	
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);
