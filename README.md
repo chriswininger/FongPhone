@@ -1,6 +1,6 @@
 # FongPhone
 
-### Requirments
+#### Requirements
 1. nodejs (dev/testing)
 2. npm
 3. gulp
