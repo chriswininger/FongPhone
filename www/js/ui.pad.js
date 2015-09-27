@@ -181,7 +181,6 @@
 				var touch = event.targetTouches[0];
 
 				var i = event.target.getAttribute('data-index');
-				log('x ' + i + " " + touch.pageX);
 				var fong = this.updateFadeLocation(i, touch.pageX, event.target.getAttribute('cy'));
 
 				// TODO (CAW) -- range should reflect size of outer sphere
@@ -189,7 +188,6 @@
 			}
 		},
 		_handleLongTouch: function (event) {
-			//alert("_handleLongTouch " + event.target.id);
 			var self = this;
 
 			self.board.fongs[event.target.getAttribute('data-index')].incrementOscillator();
