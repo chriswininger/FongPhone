@@ -101,7 +101,7 @@
 			if (this.offsetX == null && x != target.getAttribute('cx')) {
 				this.offsetX = x - target.getAttribute('cx');
 			}
-			if (this.offsetY == null && y != self.oscTouch1.getAttribute('cy')) {
+			if (this.offsetY == null && y != target.getAttribute('cy')) {
 				this.offsetY = y - target.getAttribute('cy');
 			}
 
