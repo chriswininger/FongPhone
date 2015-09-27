@@ -113,7 +113,7 @@
 			var fong = self.board.fongs[i];
 			var iPlusOne = parseInt(i) + 1;
 			var fadeUIElement = document.getElementById('oscTouchFade' + iPlusOne);
-			var fadeUIOffset = fong.oscTouchFadeVal;			
+			var fadeUIOffset = fong.oscTouchFadeVal;
 
 			// update frequencies
 			fong.setOscFreq(freq);
@@ -151,14 +151,21 @@
 
 			if (event.targetTouches.length == 1) {
 				var self = this;
-
 				var touch = event.targetTouches[0];
-				event.target.setAttribute('cx', touch.pageX);
 
 				var i = event.target.getAttribute('data-index');
 				var fong = self.board.fongs[i];
+
 				var iPlusOne = parseInt(i) + 1;
-				fong.oscTouchFadeVal = document.getElementById('oscTouch' + iPlusOne).getAttribute('cx') - touch.pageX;
+				var c = document.getElementById('oscTouch' + iPlusOne);
+				
+				log(c.getAttribute("r") + " " + 
+					Math.abs(touch.pageX - c.getAttribute("cx")));
+
+				if (c.getAttribute("r") > Math.abs(touch.pageX - c.getAttribute("cx"))) {					
+					event.target.setAttribute('cx', touch.pageX);
+					fong.oscTouchFadeVal = c.getAttribute('cx') - touch.pageX;
+				}				
 
 				// TODO (CAW) -- range should reflect size of outer sphere
 				fong.setFade(map(-1 * fong.oscTouchFadeVal, -35, 35, -2, 2));
