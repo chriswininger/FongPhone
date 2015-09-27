@@ -142,7 +142,7 @@
 			if (freq < 0) freq = 0;
 			if (ffreq < 100) ffreq = 100;
 
-			var i = event.target.getAttribute('data-index');
+			var i = target.getAttribute('data-index');
 
 			var fong = self.board.fongs[i];
 			// update frequencies
