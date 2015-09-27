@@ -19,10 +19,6 @@
 		self.listen();
 
 		// setup state
-		this.osc1PulseOn = true;
-		this.osc2PulseOn = true;
-		this.waveIntOsc1 = 0;
-		this.waveIntOsc2 = 0;
 		this.lastPinchDist = 0;
 
 		this.longTouchChangesWave = false;
