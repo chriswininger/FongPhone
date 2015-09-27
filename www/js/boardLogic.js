@@ -6,6 +6,9 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	
 	this.fong1 = new fong(audCtx, this.mainVol);
 	this.fong2 = new fong(audCtx, this.mainVol);	
+	
+	this.fongs.push(this.fong1);
+	this.fongs.push(this.fong2);
 
 	this.mainVol.connect(this.audCtx.destination);
 
@@ -67,38 +70,10 @@ $class.primaryLoop = function () {
 	}
 };
 
+$class.fongs = [];
+
 $class.setMainVol = function (vol) {
 	this.mainVol.gain.value = vol;
-};
-
-$class.setOsc1Vol = function (vol) {
-	vol = vol / 3;
-	this.fong1.oscVol = vol;
-	this.fong1.oscVolOffset.gain.value = vol;
-};
-
-$class.setOsc2Vol = function (vol) {
-	vol = vol / 3;
-	this.fong2.oscVol = vol;
-	this.fong2.oscVolOffset.gain.value = vol;
-};
-
-$class.setOsc1FilterFreq = function (freq) {
-	this.fong1.filter.frequency.value = freq;
-};
-
-$class.setOsc2FilterFreq = function (freq) {
-	this.fong2.filter.frequency.value = freq;
-};
-
-$class.setOsc1Freq = function (freq) {
-	this.fong1.oscFreq = freq;
-	this.fong1.osc.frequency.value = freq;
-};
-
-$class.setOsc2Freq = function (freq) {
-	this.fong2.oscFreq = freq;
-	this.fong2.osc.frequency.value = freq;
 };
 
 $class.setPrimaryOffset = function (value) {
@@ -113,45 +88,6 @@ $class.setSecondaryOffset = function (value) {
 	this.fong2.oscGainCtrl.frequency.value = value / 4;
 };
 
-$class.setOsc1Type = function (type) {
-	this.fong1.osc.type = type;
-};
-
-$class.setOsc2Type = function (type) {
-	this.fong2.osc.type = type;
-};
-
-
-$class.stopOsc1Pulse = function () {
-	this.fong1.oscGainCtrl.disconnect(this.fong1.oscVol.gain);
-};
-$class.startOsc1Pulse = function () {
-	this.fong1.oscGainCtrl.connect(this.fong1.oscVol.gain);
-};
-
-$class.stopOsc2Pulse = function () {
-	this.fong2.oscGainCtrl.disconnect(this.fong2.oscVol.gain);
-};
-$class.startOscPulse = function () {
-	this.fong2.oscGainCtrl.connect(this.fong2.oscVol.gain);
-};
-
-$class.osc1Off = function () {
-	//this.oscVol1.disconnect(this.audCtx.destination);
-};
-
-$class.osc1On = function () {
-	//this.oscVol1.connect(this.audCtx.destination);
-};
-
-$class.osc2Off = function () {
-	//this.oscVol2.disconnect(this.audCtx.destination);
-};
-
-$class.osc2On = function () {
-	//this.oscVol2.connect(this.audCtx.destination);
-};
-
 $class.setPrimaryFade = function (val) {
 	this.fong1.oscPanCtrl.setPosition(val, 0, 0);
 };
@@ -161,10 +97,10 @@ $class.setSecondaryFade = function (val) {
 };
 
 $class.updateBoard = function (values) {
-	this.setOsc1Vol(values.osc1Vol);
-	this.setOsc2Vol(values.osc2Vol);
-	this.setOsc1Freq(values.osc1Freq);
-	this.setOsc2Freq(values.osc2Freq);
+	this.fong1.setOscVol(values.osc1Vol);
+	this.fong2.setOscVol(values.osc2Vol);
+	this.fong1.setOscFreq(values.osc1Freq);
+	this.fong2.setOscFreq(values.osc2Freq);
 	this.setPrimaryOffset(values.primaryOffset);
 
 	this.setMainVol(values.mainVol);

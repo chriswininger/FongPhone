@@ -1,5 +1,14 @@
 var fong = function (audCtx, mainVol) {
 
+	this.audCtx = audCtx;
+
+	this.waves = ['sine', 'square', 'triangle', 'sawtooth'];
+	this.waveIntOsc = 0;
+
+	this.oscTouchFadeVal = 0;
+
+	this.oscPulseOn = true;
+
 	this.osc = audCtx.createOscillator();
 	this.osc.type = 'sine';
 	this.oscPanCtrl = audCtx.createPanner();
@@ -33,5 +42,58 @@ var fong = function (audCtx, mainVol) {
 		this.osc.start(0);
 		this.oscGainCtrl.start(0);
 	}
+
+	this.setOscType = function (type) {
+		this.osc.type = type;
+	};
+
+	this.incrementOscillator = function () {
+		this.waveIntOsc++;
+		if (this.waveIntOsc >= this.waves.length) this.waveIntOsc = 0;
+		this.setOscType(this.waves[this.waveIntOsc]);
+	}
+
+	this.stopOscPulse = function () {
+		this.oscGainCtrl.disconnect(this.oscVol.gain);
+		this.oscPulseOn = false;
+	};
+
+	this.startOscPulse = function () {
+		this.oscGainCtrl.connect(this.oscVol.gain);
+		this.oscPulseOn = true;
+	};
+
+	this.toggleOscPulse = function () {
+		if (this.oscPulseOn) this.stopOscPulse();
+		else this.startOscPulse();
+	}
+
+	this.setOscVol = function (vol) {
+		vol = vol / 3;
+		this.oscVol = vol;
+		this.oscVolOffset.gain.value = vol;
+	};
+
+	this.setOscFreq = function (freq) {
+		this.oscFreq = freq;
+		this.osc.frequency.value = freq;
+	};
+
+	this.setOscFilterFreq = function (freq) {
+		this.filter.frequency.value = freq;
+	};
+
+	this.oscOff = function () {
+		this.oscVol.disconnect(this.audCtx.destination);
+	};
+
+	this.oscOn = function () {
+		this.oscVol.connect(this.audCtx.destination);
+	};
+
+	//not used yet
+	this.setFade = function (val) {
+		this.oscPanCtrl.setPosition(val, 0, 0);
+	};
 
 };

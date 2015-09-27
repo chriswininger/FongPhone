@@ -63,7 +63,7 @@
 			this.backgroundPad.addEventListener('touchstart', _.bind(this._handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this._handleBackGroundTouchEnd, this));
 		},
-		updateOsc: function(target, x, y) {
+		updateOsc: function (target, x, y) {
 			var self = this;
 
 			// TODO (CAW) -- Seems setup for one fong but confused (target.getAttribute('cx') vs
@@ -119,17 +119,17 @@
 
 			var fadeUIElement, fadeUIOffset;
 			if (target.id === self.oscTouch1.id) {
-				// update frequency
-				self.board.setOsc1Freq(freq);
-				self.board.setOsc1FilterFreq(ffreq);
 				fadeUIElement = self.oscTouchFade1;
 				fadeUIOffset = self.oscTouchFade1Val;
 			} else if (target.id === self.oscTouch2.id) {
-				self.board.setOsc2Freq(freq);
-				self.board.setOsc2FilterFreq(ffreq);
 				fadeUIOffset = self.oscTouchFade2Val;
 				fadeUIElement = self.oscTouchFade2;
 			}
+
+			// update frequencies
+			self.board.fongs[event.target.getAttribute('data-index')].setOscFreq(freq);
+			self.board.fongs[event.target.getAttribute('data-index')].setOscFilterFreq(ffreq);
+
 			// update position of fade elements reletive to main touch element
 			fadeUIElement.setAttribute('cx', target.getAttribute('cx') - fadeUIOffset);
 			fadeUIElement.setAttribute('cy', target.getAttribute('cy'));
@@ -142,7 +142,7 @@
 		_handleBackGroundTouchEnd: function (event) {
 			// TODO (CAW) Shift background touch to here, so it comes after swipe detection
 		},
-		_handleBackGroundTouchStart: function(event) {
+		_handleBackGroundTouchStart: function (event) {
 			if (event.target !== this.backgroundPad) return;
 			if (this.lastSelectedFong) {
 				var touch = event.targetTouches[0];
@@ -155,17 +155,9 @@
 		},
 		_handleDoubleTap: function (event) {
 			var self = this;
-			if (event.target === self.oscTouch1) {
-				if (self.osc1PulseOn) self.board.stopOsc1Pulse();
-				else self.board.startOsc1Pulse();
-				self.osc1PulseOn = !self.osc1PulseOn;
-			} else if (event.target === self.oscTouch2) {
-				if (self.osc2PulseOn) self.board.stopOsc2Pulse();
-				else self.board.startOsc2Pulse();
-				self.osc2PulseOn = !self.osc2PulseOn;
-			}
+			self.board.fongs[event.target.getAttribute('data-index')].toggleOscPulse();
 		},
-		_handleFadeMove: function(event) {
+		_handleFadeMove: function (event) {
 			var self = this;
 
 			if (event.targetTouches.length == 1) {
@@ -180,25 +172,23 @@
 					// TODO (CAW) -- range should reflect size of outer sphere
 					self.board.setSecondaryFade(map(-1 * self.oscTouchFade2Val, -35, 35, -2, 2));
 				}
+				
+				var i = event.target.getAttribute('data-index');
+				$("#oscTouch" + i).getAttribute('cx') - touch.pageX;
+				
+				// TODO (CAW) -- range should reflect size of outer sphere
+				//self.board.fongs[].setFade(map(-1 * oscTouchFadeVal, -35, 35, -2, 2));
 			}
 		},
 		_handleLongTouch: function (event) {
 			//alert("_handleLongTouch " + event.target.id);
 			var self = this;
 
-			if (event.target === self.oscTouch1) {
-				self.waveIntOsc1++;
-				if (self.waveIntOsc1 >= self.waves.length) self.waveIntOsc1 = 0;
-				self.board.setOsc1Type(self.waves[self.waveIntOsc1]);
-			} else if (event.target === self.oscTouch2) {
-				self.waveIntOsc2++;
-				if (self.waveIntOsc2 >= self.waves.length) self.waveIntOsc2 = 0;
-				self.board.setOsc2Type(self.waves[self.waveIntOsc2]);
-			}
+			self.board.fongs[event.target.getAttribute('data-index')].incrementOscillator();
 
 			event.preventDefault();
 		},
-		_handleOSCTouchEnd: function(event) {
+		_handleOSCTouchEnd: function (event) {
 			this.lastPinchDist = 0;
 
 			// reset touch offset
@@ -208,7 +198,7 @@
 			$(event.target).attr('class', 'fong');
 			this.lastSelectedFong = event.target;
 		},
-		_handleOSCTouchMove: function(event) {
+		_handleOSCTouchMove: function (event) {
 			var self = this;
 
 			// If there's exactly one finger inside this element
@@ -235,12 +225,7 @@
 
 				event.target.setAttribute('r', r);
 
-				if (event.target.id === self.oscTouch1.id) {
-					self.board.setOsc1Vol(map(r, 60, 100, 0.9949676394462585, 5));
-				} else if (event.target.id === self.oscTouch2.id) {
-					self.board.setOsc2Vol(map(r, 60, 100, 0.9949676394462585, 5));
-				}
-
+				self.board.fongs[event.target.getAttribute('data-index')].setOscVol(map(r, 60, 100, 0.9949676394462585, 5));
 
 				self.lastPinchDist = dist;
 			}
