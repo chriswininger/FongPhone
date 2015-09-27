@@ -26,7 +26,6 @@
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
-		waves: ['sine', 'square', 'triangle', 'sawtooth'],
 		createComponents: function () {
 			$('#phongUIGrid').height(window.innerHeight);
 			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
@@ -110,18 +109,15 @@
 			if (freq < 0) freq = 0;
 			if (ffreq < 100) ffreq = 100;
 
-			var fadeUIElement, fadeUIOffset;
-			if (target.id === self.oscTouch1.id) {
-				fadeUIElement = self.oscTouchFade1;
-				fadeUIOffset = self.board.fong1.oscTouchFadeVal;
-			} else if (target.id === self.oscTouch2.id) {
-				fadeUIOffset = self.board.fong2.oscTouchFadeVal;
-				fadeUIElement = self.oscTouchFade2;
-			}
+			var i = event.target.getAttribute('data-index');
+			var fong = self.board.fongs[i];
+			var iPlusOne = parseInt(i) + 1;
+			var fadeUIElement = document.getElementById('oscTouchFade' + iPlusOne);
+			var fadeUIOffset = fong.oscTouchFadeVal;			
 
 			// update frequencies
-			self.board.fongs[event.target.getAttribute('data-index')].setOscFreq(freq);
-			self.board.fongs[event.target.getAttribute('data-index')].setOscFilterFreq(ffreq);
+			fong.setOscFreq(freq);
+			fong.setOscFilterFreq(ffreq);
 
 			// update position of fade elements reletive to main touch element
 			fadeUIElement.setAttribute('cx', target.getAttribute('cx') - fadeUIOffset);
