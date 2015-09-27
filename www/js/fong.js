@@ -30,7 +30,7 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.filter.type = 'lowpass'; // In this case it's a lowshelf filter
 	this.filter.frequency.value = 200;
-	this.filter.Q.value = 50;
+	this.filter.Q.value = 0;
 	this.filter.gain.value = 1;
 
 	this.osc.connect(this.filter);
@@ -84,6 +84,10 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.setOscFilterFreq = function (freq) {
 		this.filter.frequency.value = freq;
+	};
+	
+	this.setOscFilterResonance = function (q) {
+		this.filter.Q.value = q;
 	};
 
 	this.oscOff = function () {

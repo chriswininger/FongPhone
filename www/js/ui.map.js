@@ -1,6 +1,7 @@
 var _availableNotes;
 var _scale = 'ionian';
 var _baseNote = 'a4';
+var _filterResonance = 5;
 (function () {
 	try {
 		_availableNotes = [
@@ -25,8 +26,8 @@ var _baseNote = 'a4';
 				};
 
 				_availableNotes.push(n);
-			}						
-			
+			}
+
 		}
 
 		generateScale(_baseNote.substr(0, 1), _baseNote.substr(1, 1), _scale);
@@ -34,7 +35,7 @@ var _baseNote = 'a4';
 		var rowSize = 1;
 
 		window.PhonePhong.UI.NoteMap = function ($scope, $window) {
-			
+
 			//$scope.NoteMap = _availableNotes;
 			$scope.windowHeight = $window.innerHeight;
 			$scope.Math = {};
@@ -43,12 +44,25 @@ var _baseNote = 'a4';
 			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
 			$scope.FilterOn = true;
 			
+			$("#filterResonanceControl").val(_filterResonance);
+
+			$(".dial").knob({
+				'stopper': true,
+				'change': function (v) {
+					for (var i = 0; i < logicBoard.fongs.length; i++)
+					{
+						_filterResonance = v;
+						logicBoard.fongs[i].setOscFilterResonance(v*10);
+					}
+				}
+			});
+
 			$scope.noteClick = function (row, col) {
 				$scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
 				// update mapped notes
 				window.PhonePhong.NoteMap = buildMap(_availableNotes);
 			};
-			
+
 			$scope.toggleNoteMapClick = function () {
 				window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
 			};
@@ -60,7 +74,10 @@ var _baseNote = 'a4';
 			$scope.toggleFilterNoteMapClick = function () {
 				window.PhonePhong.FilterNoteMapOn = $scope.FilterNoteMapOn = !window.PhonePhong.FilterNoteMapOn;
 			};
-			
+			$scope.changeResonance = function () {
+				alert('z');
+			};
+
 			$scope.SelectedScale = _scale;
 			$scope.IsSelectedScale = function (scale) {
 				return scale === $scope.SelectedScale;
@@ -73,11 +90,11 @@ var _baseNote = 'a4';
 				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
 
 				_baseNote = $(event.target).html().trim();
-				
+
 				$scope.regenerateMap();
 
 				$(event.target).attr('class', 'selectedScale');
-				
+
 				window.PhonePhong.NoteMap = buildMap(_availableNotes);
 			}
 			$scope.changeScale = function (event) {
@@ -86,15 +103,15 @@ var _baseNote = 'a4';
 
 				$scope.SelectedScale = $(event.target).html().trim();
 				_scale = $scope.SelectedScale;
-				
+
 				$scope.regenerateMap();
 
 				$(event.target).attr('class', 'selectedScale');
-				
+
 				window.PhonePhong.NoteMap = buildMap(_availableNotes);
 			};
-			
-			$scope.regenerateMap = function() {
+
+			$scope.regenerateMap = function () {
 				generateScale(_baseNote.substr(0, 1), _baseNote.substr(1, 1), $scope.SelectedScale);
 
 				$scope.availableNotesByRow = [];
@@ -114,7 +131,7 @@ var _baseNote = 'a4';
 					}
 				}
 			}
-			
+
 			$scope.availableNotesByRow = [];
 
 			var currentRow = [];

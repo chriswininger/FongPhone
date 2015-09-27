@@ -19,7 +19,8 @@ var clientDependencies = [
 	'hammerjs#2.0.x',
 	'jquery-touch-events#1.0.x',
     'teoria',
-	'localforage#1.2.x'
+	'localforage#1.2.x',
+	'jquery-knob'
 ];
 function initialize (complete) {
 	async.waterfall([

@@ -79,7 +79,6 @@ var logicBoard;
 })();
 
 // TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)
-function log(message)
-{
+function log(message) {
 	$('#log').html(message);
 }
