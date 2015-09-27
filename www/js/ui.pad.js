@@ -41,11 +41,10 @@
 		},
 		listen: function () {
 			// Changes wave form
-			$(this.oscTouch1).on('taphold', _.bind(this._handleLongTouch, this));
-			$(this.oscTouch2).on('taphold', _.bind(this._handleLongTouch, this));
+			$(".fong").on('taphold', _.bind(this._handleLongTouch, this));
 			// Toggles solid tone
-			$(this.oscTouch1).on('doubletap', _.bind(this._handleDoubleTap, this));
-			$(this.oscTouch2).on('doubletap', _.bind(this._handleDoubleTap, this));
+			$(".fong").on('doubletap', _.bind(this._handleDoubleTap, this));
+
 			// Moves circles controlling pitch and speed
 			this.oscTouch1.addEventListener('touchmove', _.bind(this._handleOSCTouchMove, this));
 			this.oscTouch2.addEventListener('touchmove', _.bind(this._handleOSCTouchMove, this));
