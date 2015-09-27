@@ -156,15 +156,15 @@
 
 			if (event.targetTouches.length == 1) {
 				var self = this;
-				
+
 				var touch = event.targetTouches[0];
 				event.target.setAttribute('cx', touch.pageX);
-				
-				var i = event.target.getAttribute('data-index');				
-				var fong = self.board.fongs[i];				
-				var iPlusOne = parseInt(i)+1;				
+
+				var i = event.target.getAttribute('data-index');
+				var fong = self.board.fongs[i];
+				var iPlusOne = parseInt(i) + 1;
 				fong.oscTouchFadeVal = document.getElementById('oscTouch' + iPlusOne).getAttribute('cx') - touch.pageX;
-				
+
 				// TODO (CAW) -- range should reflect size of outer sphere
 				fong.setFade(map(-1 * fong.oscTouchFadeVal, -35, 35, -2, 2));
 			}
