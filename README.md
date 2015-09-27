@@ -20,9 +20,6 @@ gulp initialize
 
 #### In Browser Testing
 
-- While intended for use as a mobile app, this can be testing locally in a browser
--   such as Chrome, using the server.js file in [project dir]/server
-- Simply run
--   node ./server/server.js
-- Open chrome and navigate to http://localhost:3000
--   Use develper tools to enable mobile emulation in order to interact with the app
+- While intended for use as a mobile app, this can be testing locally in a browser such as Chrome, using the server.js file in [project dir]/server
+- Simply run node ./server/server.js
+- Open chrome and navigate to http://localhost:3000. Use develper tools to enable mobile emulation in order to interact with the app.
