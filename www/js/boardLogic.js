@@ -88,14 +88,6 @@ $class.setSecondaryOffset = function (value) {
 	this.fong2.oscGainCtrl.frequency.value = value / 4;
 };
 
-$class.setPrimaryFade = function (val) {
-	this.fong1.oscPanCtrl.setPosition(val, 0, 0);
-};
-
-$class.setSecondaryFade = function (val) {
-	this.fong2.oscPanCtrl.setPosition(val, 0, 0);
-};
-
 $class.updateBoard = function (values) {
 	this.fong1.setOscVol(values.osc1Vol);
 	this.fong2.setOscVol(values.osc2Vol);

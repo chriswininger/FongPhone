@@ -91,7 +91,6 @@ var fong = function (audCtx, mainVol) {
 		this.oscVol.connect(this.audCtx.destination);
 	};
 
-	//not used yet
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
 	};

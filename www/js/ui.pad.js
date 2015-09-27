@@ -23,8 +23,6 @@
 		this.osc2PulseOn = true;
 		this.waveIntOsc1 = 0;
 		this.waveIntOsc2 = 0;
-		this.oscTouchFade1Val = 0;
-		this.oscTouchFade2Val = 0;
 		this.lastPinchDist = 0;
 
 		this.longTouchChangesWave = false;
@@ -120,9 +118,9 @@
 			var fadeUIElement, fadeUIOffset;
 			if (target.id === self.oscTouch1.id) {
 				fadeUIElement = self.oscTouchFade1;
-				fadeUIOffset = self.oscTouchFade1Val;
+				fadeUIOffset = self.board.fong1.oscTouchFadeVal;
 			} else if (target.id === self.oscTouch2.id) {
-				fadeUIOffset = self.oscTouchFade2Val;
+				fadeUIOffset = self.board.fong2.oscTouchFadeVal;
 				fadeUIElement = self.oscTouchFade2;
 			}
 
@@ -161,23 +159,18 @@
 			var self = this;
 
 			if (event.targetTouches.length == 1) {
+				var self = this;
+				
 				var touch = event.targetTouches[0];
 				event.target.setAttribute('cx', touch.pageX);
-
-				if (event.target.id === self.oscTouchFade1.id) {
-					self.oscTouchFade1Val = self.oscTouch1.getAttribute('cx') - touch.pageX;
-					self.board.setPrimaryFade(map(-1 * self.oscTouchFade1Val, -35, 35, -2, 2));
-				} else {
-					self.oscTouchFade2Val = self.oscTouch2.getAttribute('cx') - touch.pageX;
-					// TODO (CAW) -- range should reflect size of outer sphere
-					self.board.setSecondaryFade(map(-1 * self.oscTouchFade2Val, -35, 35, -2, 2));
-				}
 				
-				var i = event.target.getAttribute('data-index');
-				$("#oscTouch" + i).getAttribute('cx') - touch.pageX;
+				var i = event.target.getAttribute('data-index');				
+				var fong = self.board.fongs[i];				
+				var iPlusOne = parseInt(i)+1;				
+				fong.oscTouchFadeVal = document.getElementById('oscTouch' + iPlusOne).getAttribute('cx') - touch.pageX;
 				
 				// TODO (CAW) -- range should reflect size of outer sphere
-				//self.board.fongs[].setFade(map(-1 * oscTouchFadeVal, -35, 35, -2, 2));
+				fong.setFade(map(-1 * fong.oscTouchFadeVal, -35, 35, -2, 2));
 			}
 		},
 		_handleLongTouch: function (event) {
