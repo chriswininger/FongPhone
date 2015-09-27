@@ -27,7 +27,7 @@
 		for (var i = 0; i < self.board.fongs.length; i++)
 		{
 			var fong = self.board.fongs[i];
-			this.updateOscLocation(i, fong.x, fong.y);
+			this.updateFongLocation(i, fong.x, fong.y);
 		}
 	};
 
@@ -61,7 +61,7 @@
 			this.backgroundPad.addEventListener('touchstart', _.bind(this._handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this._handleBackGroundTouchEnd, this));
 		},
-		updateOscLocation: function (i, x, y) {
+		updateFongLocation: function (i, x, y) {
 			var self = this;
 			var fong = self.board.fongs[i];
 			self.board.fongs[i].x = x;
@@ -94,8 +94,7 @@
 			}
 
 			// Place element where the finger is
-			target.setAttribute('cx', x - this.offsetX);
-			target.setAttribute('cy', y - this.offsetY);
+			this.updateFongLocation($(target).attr("data-index"), x - this.offsetX, y - this.offsetY);
 			$(target).attr('class', 'selectedFong');
 
 			// get attributes from ui
@@ -115,8 +114,6 @@
 				var note = PhonePhong.NoteMap[noteNumber];
 				if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
 				freq = note.freq;
-
-
 			}
 
 			if (!window.PhonePhong.FilterNoteMapOn) {
@@ -134,21 +131,12 @@
 			if (ffreq < 100) ffreq = 100;
 
 			var i = event.target.getAttribute('data-index');
-			var fong = self.board.fongs[i];
-			var iPlusOne = parseInt(i) + 1;
-			var fadeUIElement = document.getElementById('oscTouchFade' + iPlusOne);
-			var fadeUIOffset = fong.oscTouchFadeVal;
-
+			
+			var fong = self.board.fongs[i];			
 			// update frequencies
 			fong.setOscFreq(freq);
 			fong.setOscFilterFreq(ffreq);
 
-			fong.x = target.getAttribute('cx');
-			fong.y = target.getAttribute('cy');
-
-			// update position of fade elements reletive to main touch element
-			fadeUIElement.setAttribute('cx', target.getAttribute('cx') - fadeUIOffset);
-			fadeUIElement.setAttribute('cy', target.getAttribute('cy'));
 			// update offsets
 			var primaryOffset = map(touch1x, (touch1r / 2), window.innerWidth - touch1r, 0, self.board.primaryOffsetMax);
 			if (primaryOffset < 0) primaryOffset = 0;
