@@ -94,6 +94,24 @@ var fong = function (audCtx, mainVol, x, y) {
 		this.oscVol.connect(this.audCtx.destination);
 	};
 
+	this.turnFilterOn = function () {
+		try {
+			this.osc.disconnect(this.oscPanCtrl);			
+			this.osc.connect(this.filter);
+		} catch (err) {
+			alert(err.message);
+		}
+	}
+
+	this.turnFilterOff = function () {
+		try {
+			this.osc.disconnect(this.filter);
+			this.osc.connect(this.oscPanCtrl);			
+		} catch (err) {
+			alert(err.message);
+		}
+	}
+
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
 	};

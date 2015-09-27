@@ -25,8 +25,8 @@ var _baseNote = 'a4';
 				};
 
 				_availableNotes.push(n);
-			}
-
+			}						
+			
 		}
 
 		generateScale(_baseNote.substr(0, 1), _baseNote.substr(1, 1), _scale);
@@ -34,12 +34,14 @@ var _baseNote = 'a4';
 		var rowSize = 1;
 
 		window.PhonePhong.UI.NoteMap = function ($scope, $window) {
+			
 			//$scope.NoteMap = _availableNotes;
 			$scope.windowHeight = $window.innerHeight;
 			$scope.Math = {};
 			$scope.Math.floor = Math.floor;
 			$scope.NoteMapOn = window.PhonePhong.NoteMapOn;
 			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
+			$scope.FilterOn = true;
 			
 			$scope.noteClick = function (row, col) {
 				$scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
@@ -49,6 +51,11 @@ var _baseNote = 'a4';
 			
 			$scope.toggleNoteMapClick = function () {
 				window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
+			};
+			$scope.toggleFilterClick = function () {
+				window.PhonePhong.FilterOn = !$scope.FilterOn;
+				$scope.FilterOn = window.PhonePhong.FilterOn;
+				logicBoard.setFilterStatus(window.PhonePhong.FilterOn);
 			};
 			$scope.toggleFilterNoteMapClick = function () {
 				window.PhonePhong.FilterNoteMapOn = $scope.FilterNoteMapOn = !window.PhonePhong.FilterNoteMapOn;

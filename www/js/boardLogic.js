@@ -76,6 +76,20 @@ $class.setMainVol = function (vol) {
 	this.mainVol.gain.value = vol;
 };
 
+$class.setFilterStatus = function (b) {
+	for (var i = 0; i < this.fongs.length; i++)
+	{
+		if (b)
+		{
+			this.fongs[i].turnFilterOn();
+		}
+		else
+		{
+			this.fongs[i].turnFilterOff();
+		}
+	}
+};
+
 $class.setPrimaryOffset = function (value) {
 	this.mainTimeOffset = value;
 	this.fong1.oscGainCtrl.frequency.value = value / 4;

@@ -1,3 +1,4 @@
+var logicBoard;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -30,7 +31,7 @@
 		conole.error(new Error('AudioContext not supported.'));
 	}
 
-	var logicBoard = new PhonePhong.BoardLogic(context, defaults);
+	logicBoard = new PhonePhong.BoardLogic(context, defaults);
 
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function () {
 		return function (scope, element, attrs) {

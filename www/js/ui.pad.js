@@ -27,7 +27,7 @@
 		for (var i = 0; i < self.board.fongs.length; i++) {
 			var fong = self.board.fongs[i];
 			this.updateFongLocation(i, fong.x, fong.y);
-		}
+		}				
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
