@@ -11,7 +11,30 @@
 (function () {
 	window.PhonePhong.UI.Pad = function (board) {
 		var self = this;
+		var svgElementID = 'phongUIGrid';
+
 		this.board = board;
+		this.FongDots = [];
+		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
+			elementID: 'oscTouch1',
+			x: 60,
+			y: 60,
+			radius: 60,
+			color: '#ded6d6',
+			fadeOffSet: 0,
+			dataIndex: this.FongDots.length, // temporary
+			updater: function() {}
+		}));
+		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
+			elementID: 'oscTouch2',
+			x: 200,
+			y: 200,
+			radius: 60,
+			color: '#ded6d6',
+			fadeOffSet: 0,
+			dataIndex: this.FongDots.length, // temporary
+			updater: function() {}
+		}));
 
 		// make changes to dom to create ui
 		self.createComponents();
@@ -35,8 +58,8 @@
 			$('#phongUIGrid').height(window.innerHeight);
 			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
 			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/help', Hammer.DIRECTION_DOWN);
-			this.oscTouchFade1 = document.getElementById('oscTouchFade1');
-			this.oscTouchFade2 = document.getElementById('oscTouchFade2');
+			this.oscTouchFade1 = document.getElementById('oscTouch1Fade');
+			this.oscTouchFade2 = document.getElementById('oscTouch2Fade');
 			this.oscTouch1 = document.getElementById('oscTouch1');
 			this.oscTouch2 = document.getElementById('oscTouch2');
 			this.backgroundPad = document.getElementById('phongUIGrid');
@@ -69,7 +92,8 @@
 			var iPlusOne = parseInt(i) + 1;
 			$("#oscTouch" + iPlusOne).attr("cx", x);
 			$("#oscTouch" + iPlusOne).attr("cy", y);
-			
+
+			var fadeUIElement = document.getElementById('oscTouch' + iPlusOne + 'Fade');
 			var fadeUIOffset = fong.oscTouchFadeVal;
 			this.updateFadeLocation(i, x - fadeUIOffset, y);
 		},
@@ -81,7 +105,7 @@
 			var iPlusOne = parseInt(i) + 1;
 			var c = document.getElementById('oscTouch' + iPlusOne);
 
-			var fadeUIElement = $("#oscTouchFade" + iPlusOne);
+			var fadeUIElement = $("#oscTouch" + iPlusOne + "Fade");
 			log(x + " " + y);
 			if (c.getAttribute("r") > Math.abs(x - c.getAttribute("cx"))) {
 				fadeUIElement.attr("cx", x);
