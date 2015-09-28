@@ -21,9 +21,10 @@
 			y: 60,
 			radius: 60,
 			color: '#ded6d6',
-			fadeOffSet: 0,
+			fadeOffset: 0,
+			boardInput: this.board.fongs[0],
 			dataIndex: this.FongDots.length, // temporary
-			updater: function() {}
+			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this)
 		}));
 		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
 			elementID: 'oscTouch2',
@@ -31,9 +32,10 @@
 			y: 200,
 			radius: 60,
 			color: '#ded6d6',
-			fadeOffSet: 0,
+			fadeOffset: 0,
+			boardInput: this.board.fongs[1],
 			dataIndex: this.FongDots.length, // temporary
-			updater: function() {}
+			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this)
 		}));
 
 		// make changes to dom to create ui
@@ -67,14 +69,13 @@
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
 		listen: function () {
+			var self = this;
 			// Changes wave form
 			$(".fong").on('taphold', _.bind(this._handleLongTouch, this));
 			// Toggles solid tone
 			$(".fong").on('doubletap', _.bind(this._handleDoubleTap, this));
 
 			// Moves circles controlling pitch and speed
-			this.oscTouch1.addEventListener('touchmove', _.bind(this._handleOSCTouchMove, this));
-			this.oscTouch2.addEventListener('touchmove', _.bind(this._handleOSCTouchMove, this));
 			this.oscTouch1.addEventListener('touchend', _.bind(this._handleOSCTouchEnd, this));
 			this.oscTouch2.addEventListener('touchend', _.bind(this._handleOSCTouchEnd, this));
 			// handles fade left/right
@@ -176,6 +177,57 @@
 			// update offsets
 			var primaryOffset = map(touch1x, (touch1r / 2), window.innerWidth - touch1r, 0, self.board.primaryOffsetMax);
 			if (primaryOffset < 0) primaryOffset = 0;
+			self.board.setPrimaryOffset(primaryOffset);
+			self.board.setSecondaryOffset(map(touch2x, (touch2r / 2), window.innerWidth - touch2r, 0, self.board.secondaryOffsetMax) * self.board.mainTimeOffset);
+		},
+		handlePositionChangedPrimary: function(fong, oldX, oldY) {
+			fong.boardInput.setOscFreq(freq);
+			fong.boardInput.setOscFilterFreq(ffreq);
+			// update offsets
+			var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, self.board.primaryOffsetMax);
+			if (primaryOffset < 0) primaryOffset = 0;
+
+			//-------------------------
+			// calculate frequency
+			var freq, ffreq;
+			if (!window.PhonePhong.NoteMapOn) {
+				freq = map(y / 2, (r / 2), window.innerHeight - r, 0, self.board.osc1MaxFreq);
+
+			} else {
+				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
+				var noteNumber = parseInt(y * PhonePhong.NoteMap.length / window.innerHeight);
+				var note = PhonePhong.NoteMap[noteNumber];
+				if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+				freq = note.freq;
+			}
+
+			if (!window.PhonePhong.FilterNoteMapOn) {
+				ffreq = map(x / 2, (r / 2), window.innerWidth - r, 0, self.board.osc1MaxFreq);
+			} else {
+				var fnoteNumber = parseInt(x * PhonePhong.NoteMap.length / window.innerWidth);
+				var fnote = PhonePhong.NoteMap[fnoteNumber];
+				if (!fnote) fnote = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+				ffreq = fnote.freq;
+			}
+			//----------------------------
+
+
+			self.board.setPrimaryOffset(primaryOffset);
+		},
+		handlePositionChangedSecondary: function(fong, oldX, oldY) {
+			// update frequencies
+			fong.boardInput.setOscFreq(freq);
+			fong.boardInput.setOscFilterFreq(ffreq);
+
+			// update offsets
+			var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, self.board.primaryOffsetMax);
+			if (primaryOffset < 0) primaryOffset = 0;
+
+
+
+
+
+
 			self.board.setPrimaryOffset(primaryOffset);
 			self.board.setSecondaryOffset(map(touch2x, (touch2r / 2), window.innerWidth - touch2r, 0, self.board.secondaryOffsetMax) * self.board.mainTimeOffset);
 		},
