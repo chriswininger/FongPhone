@@ -143,6 +143,11 @@ td.ui-map-note-map-toggle {
 	opacity:.5;
 }
 
+.fong-fade {
+	fill: #ffffff;
+	opacity: 0.5;
+}
+
 .selectedFong {
 	opacity:0.8;
 	stroke:black;

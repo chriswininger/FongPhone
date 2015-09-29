@@ -20,7 +20,8 @@ var clientDependencies = [
 	'jquery-touch-events#1.0.x',
     'teoria',
 	'localforage#1.2.x',
-	'jquery-knob'
+	'jquery-knob',
+	'js-signals'
 ];
 function initialize (complete) {
 	async.waterfall([
