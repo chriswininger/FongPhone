@@ -14,6 +14,7 @@
 		var svgElementID = 'phongUIGrid';
 
 		this.board = board;
+		// create fong ui representations
 		this.FongDots = [];
 		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
 			elementID: 'oscTouch1',
@@ -26,7 +27,9 @@
 			dataIndex: this.FongDots.length, // temporary
 			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handlFongSelected: _.bind(this.handlFongSelected, this)
+			handleFongSelected: _.bind(this.handleFongSelected, this),
+			doubleTabHandler: _.bind(this.handleDoubleTap, this),
+			longTouchHandler: _.bind(this.handleLongTouch, this)
 		}));
 		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
 			elementID: 'oscTouch2',
@@ -39,16 +42,15 @@
 			dataIndex: this.FongDots.length, // temporary
 			positionChangedHandler: _.bind(this.handlePositionChangedSecondary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handlFongSelected: _.bind(this.handlFongSelected, this)
+			handleFongSelected: _.bind(this.handleFongSelected, this),
+			doubleTabHandler: _.bind(this.handleDoubleTap, this),
+			longTouchHandler: _.bind(this.handleLongTouch, this)
 		}));
 
 		// make changes to dom to create ui
 		self.createComponents();
 		// set up dom events
 		self.listen();
-
-		// setup state
-		this.lastPinchDist = 0;
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
@@ -61,12 +63,6 @@
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
 		listen: function () {
-			var self = this;
-			// Changes wave form
-			$(".fong").on('taphold', _.bind(this._handleLongTouch, this));
-			// Toggles solid tone
-			$(".fong").on('doubletap', _.bind(this._handleDoubleTap, this));
-
 			this.backgroundPad.addEventListener('touchstart', _.bind(this.handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this.handleBackGroundTouchEnd, this));
 		},
@@ -122,7 +118,7 @@
 		handleBackGroundTouchEnd: function (event) {
 			// TODO (CAW) Shift background touch to here, so it comes after swipe detection
 		},
-		handlFongSelected: function(fong) {
+		handleFongSelected: function(fong) {
 			this.lastSelectedFong = fong;
 		},
 		handleBackGroundTouchStart: function (event) {
@@ -134,16 +130,11 @@
 				this.lastSelectedFong.y = touch.pageY;
 			}
 		},
-		_handleDoubleTap: function (event) {
-			var self = this;
-			self.board.fongs[event.target.getAttribute('data-index')].toggleOscPulse();
+		handleDoubleTap: function (fong) {
+			fong.boardInput.toggleOscPulse();
 		},
-		_handleLongTouch: function (event) {
-			var self = this;
-
-			self.board.fongs[event.target.getAttribute('data-index')].incrementOscillator();
-
-			event.preventDefault();
+		handleLongTouch: function (fong, event) {
+			fong.boardInput.incrementOscillator();
 		}
 	});
 
