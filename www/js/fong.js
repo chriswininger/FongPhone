@@ -53,6 +53,7 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.incrementOscillator = function () {
 		this.waveIntOsc++;
 		if (this.waveIntOsc >= this.waves.length) this.waveIntOsc = 0;
+		this.waveType = this.waves[this.waveIntOsc];
 		this.setOscType(this.waves[this.waveIntOsc]);
 	}
 
@@ -118,6 +119,14 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
+	};
+
+	this.toJSON = function() {
+		return {
+			oscPulseOn: this.oscPulseOn,
+			oscFreq: this.oscFreq,
+			waveType: this.waveType
+		};
 	};
 
 };

@@ -14,6 +14,24 @@
 		var svgElementID = 'phongUIGrid';
 
 		this.board = board;
+
+		this.roleHandlers = {
+			primary: {
+				positionChanged: _.bind(this.handlePositionChangedPrimary, this),
+				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
+				handleFongSelected: _.bind(this.handleFongSelected, this),
+				doubleTabHandler: _.bind(this.handleDoubleTap, this),
+				longTouchHandler: _.bind(this.handleLongTouch, this)
+			},
+			secondary: {
+				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
+				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
+				handleFongSelected: _.bind(this.handleFongSelected, this),
+				doubleTabHandler: _.bind(this.handleDoubleTap, this),
+				longTouchHandler: _.bind(this.handleLongTouch, this)
+			}
+		};
+
 		// create fong ui representations
 		this.FongDots = [];
 		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
@@ -25,6 +43,7 @@
 			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
 			boardInput: this.board.fongs[0],
 			dataIndex: this.FongDots.length, // temporary
+			initializer: function() {},
 			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 			handleFongSelected: _.bind(this.handleFongSelected, this),
@@ -40,6 +59,7 @@
 			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
 			boardInput: this.board.fongs[1],
 			dataIndex: this.FongDots.length, // temporary
+			initializer: function() {},
 			positionChangedHandler: _.bind(this.handlePositionChangedSecondary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 			handleFongSelected: _.bind(this.handleFongSelected, this),
@@ -135,6 +155,45 @@
 		},
 		handleLongTouch: function (fong, event) {
 			fong.boardInput.incrementOscillator();
+		},
+		set: function(json) {
+			var fongs = json.fongDots || [];
+			_.each(fongs, function(fongJSON) {
+				this.FongDots.push(new  window.FongPhone.UI.Fong(fongJSON.domCtxID, this.board, {
+					elementID: fongJSON.elementID,
+					x: fongJSON.x,
+					y: fongJSON.y,
+					radius: fongJSON.radius,
+					color: fongJSON.color, // maybe can be replaced by a class and/or type concept
+					fadeOffset: fongJSON.fadeOffset, // initialize from board for now
+					boardInputIndex: fongJSON.boardInputIndex,
+					fongRole: fongJSON.fongRole, // secondary/primary/what ever else we invent
+					states: fongJSON.states,
+					classes: fongJSON.classes,
+					selectedClass: fongJSON.selectedClass,
+					selectedState: fongJSON.selectedState,
+					positionChangedHandler: this.roleHandlers[fongJSON.fongRole].handlePositionChanged,
+					fadeChangedHandler: this.roleHandlers[fongJSON.fongRole].handleFadeChanged,
+					handleFongSelected: this.roleHandlers[fongJSON.fongRole].handleFongSelected,
+					doubleTabHandler: this.roleHandlers[fongJSON.fongRole].handleDoubleTap,
+					longTouchHandler: this.roleHandlers[fongJSON.fongRole].handleLongTouch
+				}));
+
+				// just specify a number of classes, then we can increment those and repeat after each increment
+				// states: [ 'pulseOn', 'pulseOff'];
+				// classes: [ 'sine', 'triange', 'square', 'etc...'];
+			}, this);
+
+		},
+		toJSON: function() {
+			var state = {
+				fongDots: []
+			};
+			_.each(this.fongDots, function(fong) {
+				state.fongDots.push(fong.toJSON());
+			});
+
+			return state;
 		}
 	});
 

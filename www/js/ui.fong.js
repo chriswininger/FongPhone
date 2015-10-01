@@ -4,12 +4,14 @@
 
     var Signal = signals.Signal;
 
-    window.FongPhone.UI.Fong = function (domCtxID, state) {
+    window.FongPhone.UI.Fong = function (domCtxID, board, state) {
         window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
         window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);
         window.FongPhone.utils.createGetSet(this, 'radius', this.getRadius, this.setRadius);
         window.FongPhone.utils.createGetSet(this, 'color', this.getColor, this.setColor);
         window.FongPhone.utils.createGetSet(this, 'fadeOffset', this.getFadeOffSet, this.setFadeOffSet);
+        window.FongPhone.utils.createGetSet(this, 'selectedClass', this.setSelectedClass, this.getSelectedClass);
+        window.FongPhone.utils.createGetSet(this, 'selectedState', this.setSelectedState, this.getSelectedState);
 
         this.offsetX = null;
         this.offsetY = null;
@@ -18,7 +20,6 @@
         this.domCtxID = domCtxID;
         this.elementID = state.elementID;
         this.fadeElementID = state.elementID + 'Fade'; // temporary
-        this.dataIndex = state.dataIndex; // temporary
         this.domElement = this.initializeDomElement(this.elementID, 'fong');
         this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade');
         if (!this.fadeElement || ! this.domElement) return;
@@ -27,17 +28,29 @@
         this.fadeElement.setAttribute('r', 10);
 
         // TODO (CAW) Switch to extend
-        this.boardInput = state.boardInput;
+        this.boardInputIndex = state.boardInputIndex;
+        this.boardInput = board.fongs[this.boardInputIndex];
         this.x = state.x;
         this.y = state.y;
         this.fadeOffset = state.fadeOffset;
         this.radius = state.radius;
         this.color = state.color;
+        this.states = state.states;
+        this.classes = state.classes;
+        this.selectedClass = state.selectedClass;
+        this.selectedState = state.selectedState;
+
+        this.fongRole = state.fongRole;
+        this.initializer = state.initializer;
         this.positionChangedHandler = state.positionChangedHandler;
         this.fadeChangedHandler = state.fadeChangedHandler;
         this.handleFongSelected = state.handleFongSelected;
+        this.selectedClassChangedHandler = state.selectedClassChangedHandler;
         this.doubleTabHandler = state.doubleTabHandler;
         this.longTouchHandler = state.longTouchHandler;
+
+        if (this.initializer)
+            this.initializer(this);
 
         // wire up touch events on dom
         this.listen();
@@ -119,7 +132,6 @@
                 element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 element.setAttribute('class', className);
                 element.id = id;
-                element.setAttribute('data-index', this.dataIndex);
                 domCtx.appendChild(element);
             }
 
@@ -185,7 +197,35 @@
         setColor: function(color) {
             this._color = color;
             this.domElement.style.fill = this.color;
+        },
+        setSelectedClass: function(selectedClass) {
+            if (selectedClass < this.classes.length){
+                this._selectedClass = selectedClass;
+                if (this.selectedClassChangedHandler)
+                    this.selectedClassChangedHandler(this);
+            }
+        },
+        getSelectedClass: function() {
+            return this._selectedClass;
+        },
+        toJSON: function() {
+            return {
+                x: this.x,
+                y: this.y,
+                color: this.color,
+                states: this.states,
+                classes: this.classes,
+                selectedClass: state.selectedClass,
+                selectedState: state.selectedState,
+                fongRole: this.fongRole,
+                domCtxID: this.domCtxID,
+                boardInputIndex: this.boardInputIndex,
+                elementID: this.elementID,
+                fadeElementID: this.fadeElementID,
+                radius: this.radius,
+                fadeOffset: this.fadeOffset,
+                boardInput: this.boardInput.toJSON(),
+            };
         }
-        //positionChanged: new Signal()
     });
 })();
