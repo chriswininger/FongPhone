@@ -48,6 +48,7 @@ var _filterResonance = 5;
 
 			$(".dial").knob({
 				'stopper': true,
+				'height': 90,
 				'change': function (v) {
 					for (var i = 0; i < logicBoard.fongs.length; i++)
 					{

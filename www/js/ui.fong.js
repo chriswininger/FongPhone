@@ -107,6 +107,7 @@
             if (!element) {
                 element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                 element.setAttribute('class', className);
+				element.setAttribute('fill', 'url(#grad1)');
                 element.id = id;
                 element.setAttribute('data-index', this.dataIndex);
                 domCtx.appendChild(element);
