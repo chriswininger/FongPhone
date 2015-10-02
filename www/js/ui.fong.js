@@ -2,14 +2,16 @@
     window.FongPhone = window.FongPhone || {};
     window.FongPhone.UI = window.FongPhone.UI || {};
 
-    var Signal = signals.Signal;
-
     window.FongPhone.UI.Fong = function (domCtxID, state) {
         window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
         window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);
         window.FongPhone.utils.createGetSet(this, 'radius', this.getRadius, this.setRadius);
         window.FongPhone.utils.createGetSet(this, 'color', this.getColor, this.setColor);
         window.FongPhone.utils.createGetSet(this, 'fadeOffset', this.getFadeOffSet, this.setFadeOffSet);
+
+        this.offsetX = null;
+        this.offsetY = null;
+        this.lastPinchDist = 0;
 
         this.domCtxID = domCtxID;
         this.elementID = state.elementID;
@@ -19,6 +21,7 @@
         this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade');
         if (!this.fadeElement || ! this.domElement) return;
 
+        // hard code fader size
         this.fadeElement.setAttribute('r', 10);
 
         // TODO (CAW) Switch to extend
@@ -30,20 +33,20 @@
         this.color = state.color;
         this.positionChangedHandler = state.positionChangedHandler;
         this.fadeChangedHandler = state.fadeChangedHandler;
-        this.handlFongSelected = state.handlFongSelected;
-
-        //this.positionChanged.add(this.positionChangedHandler);
-        this.offsetX = null;
-        this.offsetY = null;
+        this.handleFongSelected = state.handleFongSelected;
+        this.doubleTabHandler = state.doubleTabHandler;
+        this.longTouchHandler = state.longTouchHandler;
 
         // wire up touch events on dom
         this.listen();
-        //this.updater = state.updater;
-
     };
 
     _.extend(window.FongPhone.UI.Fong.prototype, {
-        handleFadeMove: function (event) {
+        handleDoubleTap: function(event) {
+            if (this.doubleTabHandler)
+                this.doubleTabHandler(this, event);
+        },
+        handleFadeMove: function(event) {
             if (event.targetTouches.length == 1) {
                 var touch = event.targetTouches[0];
                 if (this.radius > Math.abs(touch.pageX - this.x))
@@ -51,6 +54,11 @@
 
                 this.fadeChangedHandler(this);
             }
+        },
+        handleLongTouch: function(event) {
+            if (this.longTouchHandler)
+                this.longTouchHandler(this, event);
+            event.preventDefault();
         },
         handleTouchMove: function (event) {
             // If there's exactly one finger inside this element
@@ -98,7 +106,8 @@
             // reset touch offset
             this.offsetX = null;
             this.offsetY = null;
-            this.handlFongSelected(this);
+            if (this.handleFongSelected)
+                this.handleFongSelected(this, event);
         },
         initializeDomElement: function(id, className) {
             var domCtx = document.getElementById(this.domCtxID);
@@ -118,7 +127,10 @@
         listen: function() {
             this.domElement.addEventListener('touchmove', _.bind(this.handleTouchMove, this));
             this.domElement.addEventListener('touchend', _.bind(this.handleTouchEnd, this));
+            // TODO (CAW) Does this really only exist on jquery?
             this.fadeElement.addEventListener('touchmove', _.bind(this.handleFadeMove, this));
+            $(this.domElement).on('doubletap', _.bind(this.handleDoubleTap, this));
+            $(this.domElement).on('taphold', _.bind(this.handleLongTouch, this));
         },
         getFadeOffSet: function() {
             return this._fadeOffset;
@@ -171,7 +183,7 @@
         },
         setColor: function(color) {
             this._color = color;
-            this.domElement.style.fill = this.color;
+            //this.domElement.style.fill = this.color;
         }
         //positionChanged: new Signal()
     });

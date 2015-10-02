@@ -14,8 +14,9 @@
 		var svgElementID = 'phongUIGrid';
 
 		this.board = board;
+		// create fong ui representations
 		this.FongDots = [];
-		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
+		this.FongDots.push(new window.FongPhone.UI.Fong(svgElementID, {
 			elementID: 'oscTouch1',
 			x: this.board.fongs[0].x, // initialize from board for now
 			y: this.board.fongs[0].y, // initialize from board for now
@@ -26,9 +27,11 @@
 			dataIndex: this.FongDots.length, // temporary
 			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handlFongSelected: _.bind(this.handlFongSelected, this)
+			handleFongSelected: _.bind(this.handleFongSelected, this),
+			doubleTabHandler: _.bind(this.handleDoubleTap, this),
+			longTouchHandler: _.bind(this.handleLongTouch, this)
 		}));
-		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
+		this.FongDots.push(new window.FongPhone.UI.Fong(svgElementID, {
 			elementID: 'oscTouch2',
 			x: this.board.fongs[1].x, // initialize from board for now
 			y: this.board.fongs[1].y, // initialize from board for now
@@ -39,42 +42,39 @@
 			dataIndex: this.FongDots.length, // temporary
 			positionChangedHandler: _.bind(this.handlePositionChangedSecondary, this),
 			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handlFongSelected: _.bind(this.handlFongSelected, this)
+			handleFongSelected: _.bind(this.handleFongSelected, this),
+			doubleTabHandler: _.bind(this.handleDoubleTap, this),
+			longTouchHandler: _.bind(this.handleLongTouch, this)
 		}));
 
 		// make changes to dom to create ui
 		self.createComponents();
 		// set up dom events
 		self.listen();
-
-		// setup state
-		this.lastPinchDist = 0;
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
 		createComponents: function () {
 			$('#phongUIGrid').height(window.innerHeight);
 			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/help', Hammer.DIRECTION_DOWN);
+			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/sound', Hammer.DIRECTION_DOWN);
+			this.oscTouchFade1 = document.getElementById('oscTouchFade1');
+			this.oscTouchFade2 = document.getElementById('oscTouchFade2');
+			this.oscTouch1 = document.getElementById('oscTouch1');
+			this.oscTouch2 = document.getElementById('oscTouch2');
 			this.backgroundPad = document.getElementById('phongUIGrid');
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
 		listen: function () {
-			var self = this;
-			// Changes wave form
-			$(".fong").on('taphold', _.bind(this._handleLongTouch, this));
-			// Toggles solid tone
-			$(".fong").on('doubletap', _.bind(this._handleDoubleTap, this));
-
 			this.backgroundPad.addEventListener('touchstart', _.bind(this.handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this.handleBackGroundTouchEnd, this));
 		},
-		handleFadeChanged: function(fong) {
+		handleFadeChanged: function (fong) {
 			// TODO (CAW) -- range should reflect size of outer sphere
 			fong.boardInput.setFade(map(-1 * fong.fadeOffset, -35, 35, -2, 2));
 		},
-		handlePositionChangedPrimary: function(fong, oldX, oldY) {
+		handlePositionChangedPrimary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius);
 
@@ -87,7 +87,7 @@
 
 			this.board.setPrimaryOffset(primaryOffset);
 		},
-		handlePositionChangedSecondary: function(fong, oldX, oldY) {
+		handlePositionChangedSecondary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius);
 
@@ -97,10 +97,10 @@
 			// update offsets
 			this.board.setSecondaryOffset(map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.board.secondaryOffsetMax) * this.board.mainTimeOffset);
 		},
-		getFreq: function(x, y, r) {
+		getFreq: function (x, y, r) {
 			if (!window.PhonePhong.NoteMapOn) {
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
-			}	else {
+			} else {
 				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
 				var noteNumber = parseInt(y * PhonePhong.NoteMap.length / window.innerHeight);
 				var note = PhonePhong.NoteMap[noteNumber];
@@ -109,7 +109,7 @@
 			}
 
 		},
-		getFilterFrequency: function(x, y, r) {
+		getFilterFrequency: function (x, y, r) {
 			if (!window.PhonePhong.FilterNoteMapOn) {
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
@@ -122,7 +122,7 @@
 		handleBackGroundTouchEnd: function (event) {
 			// TODO (CAW) Shift background touch to here, so it comes after swipe detection
 		},
-		handlFongSelected: function(fong) {
+		handleFongSelected: function (fong) {
 			this.lastSelectedFong = fong;
 		},
 		handleBackGroundTouchStart: function (event) {
@@ -134,16 +134,11 @@
 				this.lastSelectedFong.y = touch.pageY;
 			}
 		},
-		_handleDoubleTap: function (event) {
-			var self = this;
-			self.board.fongs[event.target.getAttribute('data-index')].toggleOscPulse();
+		handleDoubleTap: function (fong) {
+			fong.boardInput.toggleOscPulse();
 		},
-		_handleLongTouch: function (event) {
-			var self = this;
-
-			self.board.fongs[event.target.getAttribute('data-index')].incrementOscillator();
-
-			event.preventDefault();
+		handleLongTouch: function (fong, event) {
+			fong.boardInput.incrementOscillator();
 		}
 	});
 

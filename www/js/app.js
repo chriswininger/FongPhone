@@ -58,6 +58,9 @@ var logicBoard;
 		}).when('/help', {
 			templateUrl: 'views/view-help.html',
 			controller: 'helpController'
+		}).when('/sound', {
+			templateUrl: 'views/view-sound.html',
+			controller: 'soundController'
 		});
 	});
 
