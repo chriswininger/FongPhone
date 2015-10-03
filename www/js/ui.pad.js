@@ -136,11 +136,9 @@
 			}
 		},
 		handleDoubleTap: function (fong) {
-			log('handleDoubleTap');
 			fong.boardInput.toggleOscPulse();
 		},
 		handleLongTouch: function (fong, event) {
-			log('handleLongTouch');
 			fong.boardInput.incrementOscillator();
 		}
 	});
