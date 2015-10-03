@@ -1,5 +1,47 @@
 <div style="background-color: #ffffff; height: 60px; width: 100%;height:20px;"></div>
 <div>
-	<input id="filterResonanceControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#ffffff">
-</div>
-<div id="mapPadSwipeDown" style="background-color: #ffffff; height: 60px; width: 100%; position: absolute;"></div>
+	<table class="ui-map-table" colspan="4">
+		<tr>
+			<td class="ui-map-note-map-toggle {{ FilterOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterClick()">
+				Filter {{ FilterOn ? 'On' : 'Off' }}
+			</td>
+		</tr>
+		<tr>
+			<td class="ui-map-note-map-toggle" colspan="2">Resonance</td>
+			<td colspan="2">
+				<input id="filterResonanceControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+			</td>
+		</tr>
+		<tr>
+			<td class="ui-map-note-map-toggle" colspan="2">Envelope 1</td>
+			<td colspan="2">
+				<input id="env1Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+			</td>
+		</tr>
+		<tr>
+			<td class="ui-map-note-map-toggle" colspan="2">Envelope 2</td>
+			<td colspan="2">
+				<input id="env2Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+			</td>
+		</tr>
+		<tr>
+			<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('lowpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+				lowpass
+			</td>
+			<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('highpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+				highpass
+			</td>
+			<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('peaking') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+				peaking
+			</td>
+			<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('notch') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+				notch
+			</td>
+		</tr>
+	</table>
+
+
+
+
+
+	<div id="mapPadSwipeDown" style="background-color: #ffffff; height: 40px; width: 100%; position: absolute;"></div>

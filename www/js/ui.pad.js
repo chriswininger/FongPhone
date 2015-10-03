@@ -56,8 +56,8 @@
 	_.extend(PhonePhong.UI.Pad.prototype, {
 		createComponents: function () {
 			$('#phongUIGrid').height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/sound', Hammer.DIRECTION_DOWN);
+			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
 			this.oscTouchFade1 = document.getElementById('oscTouchFade1');
 			this.oscTouchFade2 = document.getElementById('oscTouchFade2');
 			this.oscTouch1 = document.getElementById('oscTouch1');
@@ -82,10 +82,11 @@
 			fong.boardInput.setOscFilterFreq(ffreq);
 
 			// update offsets
-			var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.board.primaryOffsetMax);
-			if (primaryOffset < 0) primaryOffset = 0;
-
-			this.board.setPrimaryOffset(primaryOffset);
+			try {
+				this.board.setPrimaryOffsetFromFong(fong);
+			} catch (err) {
+				alert(err.message);
+			}
 		},
 		handlePositionChangedSecondary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius);
@@ -95,7 +96,7 @@
 			fong.boardInput.setOscFilterFreq(ffreq);
 
 			// update offsets
-			this.board.setSecondaryOffset(map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.board.secondaryOffsetMax) * this.board.mainTimeOffset);
+			this.board.setSecondaryOffsetFromFong(fong);
 		},
 		getFreq: function (x, y, r) {
 			if (!window.PhonePhong.NoteMapOn) {
@@ -135,9 +136,11 @@
 			}
 		},
 		handleDoubleTap: function (fong) {
+			log('handleDoubleTap');
 			fong.boardInput.toggleOscPulse();
 		},
 		handleLongTouch: function (fong, event) {
+			log('handleLongTouch');
 			fong.boardInput.incrementOscillator();
 		}
 	});

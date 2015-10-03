@@ -69,6 +69,15 @@ var logicBoard;
 		$scope.pageClass = 'view-pad';
 	}]);
 
+	fongPhone.controller('soundController', ['$scope', function ($scope) {
+		try {
+			var padUI = new PhonePhong.Sound($scope, logicBoard);
+			$scope.pageClass = 'view-sound';
+		} catch (err) {
+			alert(err.message);
+		}
+	}]);
+
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
 	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
 

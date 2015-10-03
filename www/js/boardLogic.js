@@ -1,12 +1,14 @@
+var _filterOn = true;
+
 window.PhonePhong = window.PhonePhong || {};
 window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	// instantiate audio sources
 	this.audCtx = audCtx;
 	this.mainVol = audCtx.createGain();
-	
+
 	this.fong1 = new fong(audCtx, this.mainVol, 60, 60);
-	this.fong2 = new fong(audCtx, this.mainVol, 200, 200);	
-	
+	this.fong2 = new fong(audCtx, this.mainVol, 200, 200);
+	alert(this.fong1.radius);
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);
 
@@ -14,6 +16,8 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 
 	// defaults
 	this.updateBoard(opts);
+
+	this.FilterOn = _filterOn;
 
 	this.init();
 };
@@ -77,18 +81,27 @@ $class.setMainVol = function (vol) {
 };
 
 $class.setFilterStatus = function (b) {
-	for (var i = 0; i < this.fongs.length; i++)
-	{
-		if (b)
-		{
+	for (var i = 0; i < this.fongs.length; i++) {
+		if (b) {
 			this.fongs[i].turnFilterOn();
-		}
-		else
-		{
+		} else {
 			this.fongs[i].turnFilterOff();
 		}
 	}
+	this.FilterOn = b;
+	_filterOn = b;
 };
+
+$class.setPrimaryOffsetFromFong = function (fong) {
+	// update offsets
+	//alert(fong.x + " " + fong.radius + " " + window.innerWidth);
+	var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.primaryOffsetMax);
+	if (primaryOffset < 0) primaryOffset = 0;
+
+	this.setPrimaryOffset(primaryOffset);
+
+	//alert(primaryOffset);
+}
 
 $class.setPrimaryOffset = function (value) {
 	this.mainTimeOffset = value;
@@ -96,6 +109,10 @@ $class.setPrimaryOffset = function (value) {
 	//clearInterval(mainInterval);
 	//mainInterval = setInterval(_.bind(this.primaryLoop, this), this.mainTimeOffset);
 };
+
+$class.setSecondaryOffsetFromFong = function (fong) {
+	this.setSecondaryOffset(map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.secondaryOffsetMax) * this.mainTimeOffset);
+}
 
 $class.setSecondaryOffset = function (value) {
 	this.secondaryOffset = value;
@@ -117,3 +134,8 @@ $class.updateBoard = function (values) {
 	this.primaryOffsetMax = values.primaryOffsetMax;
 	this.secondaryOffsetMax = values.secondaryOffsetMax;
 };
+
+// --- private helper functions ---
+function map(val, x1, x2, y1, y2) {
+	return (val - x1) / (Math.abs(x2 - x1)) * Math.abs(y2 - y1) + y1;
+}

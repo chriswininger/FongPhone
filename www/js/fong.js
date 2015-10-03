@@ -12,6 +12,8 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.oscPulseOn = true;
 
+	this.radius = 60;
+
 	this.osc = audCtx.createOscillator();
 	this.osc.type = 'sine';
 	this.oscPanCtrl = audCtx.createPanner();
@@ -85,7 +87,7 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.setOscFilterFreq = function (freq) {
 		this.filter.frequency.value = freq;
 	};
-	
+
 	this.setOscFilterResonance = function (q) {
 		this.filter.Q.value = q;
 	};
@@ -100,7 +102,7 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.turnFilterOn = function () {
 		try {
-			this.osc.disconnect(this.oscPanCtrl);			
+			this.osc.disconnect(this.oscPanCtrl);
 			this.osc.connect(this.filter);
 		} catch (err) {
 			alert(err.message);
@@ -110,7 +112,7 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.turnFilterOff = function () {
 		try {
 			this.osc.disconnect(this.filter);
-			this.osc.connect(this.oscPanCtrl);			
+			this.osc.connect(this.oscPanCtrl);
 		} catch (err) {
 			alert(err.message);
 		}
@@ -119,5 +121,9 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
 	};
+
+	this.setFilterType = function (type) {
+		this.filter.type = type;
+	}
 
 };
