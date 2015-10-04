@@ -12,10 +12,10 @@
 		this.offsetX = null;
 		this.offsetY = null;
 		this.lastPinchDist = 0;
-		
+
 		this.f = state.f;
 		this.dur = state.dur;
-		
+
 		console.log(this.f);
 
 		this.domCtxID = domCtxID;
