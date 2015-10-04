@@ -2,7 +2,7 @@
 	window.FongPhone = window.FongPhone || {};
 	window.FongPhone.UI = window.FongPhone.UI || {};
 
-	window.FongPhone.UI.Fong = function (domCtxID, state) {
+	window.FongPhone.UI.Fong = function (i, domCtxID, state) {
 		window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
 		window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);
 		window.FongPhone.utils.createGetSet(this, 'radius', this.getRadius, this.setRadius);
@@ -12,13 +12,21 @@
 		this.offsetX = null;
 		this.offsetY = null;
 		this.lastPinchDist = 0;
+		
+		this.f = state.f;
+		this.dur = state.dur;
+		
+		console.log(this.f);
 
 		this.domCtxID = domCtxID;
 		this.elementID = state.elementID;
 		this.fadeElementID = state.elementID + 'Fade'; // temporary
 		this.dataIndex = state.dataIndex; // temporary
-		this.domElement = this.initializeDomElement(this.elementID, 'fong');
-		this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade');
+		this.gradient = 'grad' + i;
+		this.animation = $("#" + this.gradient + "Animation");
+		$(this.animation).attr("dur", this.dur);
+		this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
+		this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
 		if (!this.fadeElement || !this.domElement) return;
 
 		// hard code fader size
@@ -109,14 +117,16 @@
 			if (this.handleFongSelected)
 				this.handleFongSelected(this, event);
 		},
-		initializeDomElement: function (id, className) {
+		initializeDomElement: function (id, className, gradient) {
 			var domCtx = document.getElementById(this.domCtxID);
 			if (!domCtx) return null;
 			var element = document.getElementById(id);
 			if (!element) {
 				element = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 				element.setAttribute('class', className);
-				element.setAttribute('fill', 'url(#grad1)');
+				if (gradient) {
+					element.setAttribute('fill', 'url(#' + gradient + ')');
+				}
 				element.id = id;
 				element.setAttribute('data-index', this.dataIndex);
 				domCtx.appendChild(element);

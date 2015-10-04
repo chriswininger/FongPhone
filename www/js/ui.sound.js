@@ -1,11 +1,13 @@
 var _filterResonance = 5;
 var _filterType = "lowpass";
 (function () {
-	window.PhonePhong.Sound = function ($scope, board) {
+	window.PhonePhong.Sound = function ($scope, board, pad) {
 		var self = this;
 		var svgElementID = 'soundControls';
 
 		this.board = board;
+		this.pad = pad;
+
 		$scope.FilterOn = board.FilterOn;
 
 		$scope.toggleFilterClick = function () {
@@ -32,9 +34,13 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				logicBoard.primaryOffsetMax = parseInt(v);
-				logicBoard.setPrimaryOffsetFromFong(logicBoard.fongs[0]);
-				logicBoard.setSecondaryOffsetFromFong(logicBoard.fongs[1]);
+				try {
+					logicBoard.primaryOffsetMax = parseInt(v);
+					logicBoard.setPrimaryOffsetFromFong(pad.FongDots[0]);
+					logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
+				} catch (err) {
+					alert(err.message);
+				}
 			}
 		});
 
@@ -45,7 +51,7 @@ var _filterType = "lowpass";
 			'height': 90,
 			'change': function (v) {
 				logicBoard.secondaryOffsetMax = parseInt(v);
-				logicBoard.setSecondaryOffsetFromFong(logicBoard.fongs[1]);
+				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
 			}
 		});
 

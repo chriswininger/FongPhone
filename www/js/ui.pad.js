@@ -12,14 +12,17 @@
 	window.PhonePhong.UI.Pad = function (board) {
 		var self = this;
 		var svgElementID = 'phongUIGrid';
-
+		
 		this.board = board;
 		// create fong ui representations
 		this.FongDots = [];
-		this.FongDots.push(new window.FongPhone.UI.Fong(svgElementID, {
+		
+		this.FongDots.push(new window.FongPhone.UI.Fong(1, svgElementID, {
 			elementID: 'oscTouch1',
+			f: this.board.fongs[0],
 			x: this.board.fongs[0].x, // initialize from board for now
-			y: this.board.fongs[0].y, // initialize from board for now
+			y: this.board.fongs[0].y, // initialize from board for now			
+			dur: this.board.fongs[0].dur,
 			radius: 60,
 			color: '#ded6d6',
 			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
@@ -31,10 +34,12 @@
 			doubleTabHandler: _.bind(this.handleDoubleTap, this),
 			longTouchHandler: _.bind(this.handleLongTouch, this)
 		}));
-		this.FongDots.push(new window.FongPhone.UI.Fong(svgElementID, {
+		this.FongDots.push(new window.FongPhone.UI.Fong(2, svgElementID, {
 			elementID: 'oscTouch2',
+			f: this.board.fongs[1],
 			x: this.board.fongs[1].x, // initialize from board for now
 			y: this.board.fongs[1].y, // initialize from board for now
+			dur: this.board.fongs[1].dur,
 			radius: 60,
 			color: '#ded6d6',
 			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
@@ -80,7 +85,7 @@
 
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
-
+			
 			// update offsets
 			try {
 				this.board.setPrimaryOffsetFromFong(fong);

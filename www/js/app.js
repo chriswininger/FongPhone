@@ -1,4 +1,5 @@
 var logicBoard;
+var pad;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -66,12 +67,13 @@ var logicBoard;
 
 	fongPhone.controller('padController', ['$scope', function ($scope) {
 		var padUI = new PhonePhong.UI.Pad(logicBoard);
+		pad = padUI;
 		$scope.pageClass = 'view-pad';
 	}]);
 
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
 		try {
-			var padUI = new PhonePhong.Sound($scope, logicBoard);
+			var soundUI = new PhonePhong.Sound($scope, logicBoard, pad);
 			$scope.pageClass = 'view-sound';
 		} catch (err) {
 			alert(err.message);

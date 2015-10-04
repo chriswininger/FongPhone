@@ -17,6 +17,9 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	// defaults
 	this.updateBoard(opts);
 
+	this.setPrimaryOffsetFromFong(this.fong1);
+	this.setSecondaryOffsetFromFong(this.fong2);
+
 	this.FilterOn = _filterOn;
 
 	this.init();
@@ -94,29 +97,38 @@ $class.setFilterStatus = function (b) {
 
 $class.setPrimaryOffsetFromFong = function (fong) {
 	// update offsets
-	//alert(fong.x + " " + fong.radius + " " + window.innerWidth);
 	var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.primaryOffsetMax);
 	if (primaryOffset < 0) primaryOffset = 0;
 
-	this.setPrimaryOffset(primaryOffset);
+	fong.dur = parseInt(1000 / primaryOffset * 4) + "ms";
+	if (fong.f) {
+		fong.f.dur = fong.dur;
+	}
+	$(fong.animation).attr("dur", fong.dur);
 
-	//alert(primaryOffset);
+	return this.setPrimaryOffset(primaryOffset);
 }
 
 $class.setPrimaryOffset = function (value) {
 	this.mainTimeOffset = value;
 	this.fong1.oscGainCtrl.frequency.value = value / 4;
-	//clearInterval(mainInterval);
-	//mainInterval = setInterval(_.bind(this.primaryLoop, this), this.mainTimeOffset);
+	return value;
 };
 
 $class.setSecondaryOffsetFromFong = function (fong) {
-	this.setSecondaryOffset(map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.secondaryOffsetMax) * this.mainTimeOffset);
+	var offset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.secondaryOffsetMax) * this.mainTimeOffset;
+	fong.dur = parseInt(1000 / offset * 4) + "ms";
+	if (fong.f) {
+		fong.f.dur = fong.dur;
+	}
+	$(fong.animation).attr("dur", fong.dur);
+	return this.setSecondaryOffset(offset);
 }
 
 $class.setSecondaryOffset = function (value) {
 	this.secondaryOffset = value;
 	this.fong2.oscGainCtrl.frequency.value = value / 4;
+	return value;
 };
 
 $class.updateBoard = function (values) {
