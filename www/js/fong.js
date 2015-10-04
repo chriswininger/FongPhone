@@ -1,4 +1,6 @@
-var fong = function (audCtx, mainVol, x, y) {
+var fong = function (audCtx, mainVol, x, y, board) {
+
+	this.board = board;
 
 	this.audCtx = audCtx;
 	this.mainVol = mainVol;
@@ -81,11 +83,20 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.setOscFreq = function (freq) {
 		this.oscFreq = freq;
-		this.osc.frequency.value = freq;
+		if (this.board.portamento > 0) {
+			var dur = this.board.portamento / 1000.0;
+			this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+		} else {
+			this.osc.frequency.value = freq;
+		}
 	};
 
 	this.setOscFilterFreq = function (freq) {
-		this.filter.frequency.value = freq;
+		if (this.board.filterPortamento > 0) {
+			this.filter.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + this.board.filterPortamento / 1000.0);
+		} else {
+			this.filter.frequency.value = freq;
+		}
 	};
 
 	this.setOscFilterResonance = function (q) {

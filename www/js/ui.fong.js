@@ -70,6 +70,9 @@
 		},
 		handleTouchMove: function (event) {
 			// If there's exactly one finger inside this element
+			this.boardInput.portamentoStored = this.boardInput.portamento;
+			this.boardInput.portamento = 0;
+
 			if (event.targetTouches.length == 1) {
 				var touch = event.targetTouches[0];
 
@@ -114,6 +117,9 @@
 			// reset touch offset
 			this.offsetX = null;
 			this.offsetY = null;
+			
+			this.boardInput.portamento = this.boardInput.portamentoStored;
+			
 			if (this.handleFongSelected)
 				this.handleFongSelected(this, event);
 		},

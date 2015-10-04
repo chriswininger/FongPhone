@@ -5,9 +5,12 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	// instantiate audio sources
 	this.audCtx = audCtx;
 	this.mainVol = audCtx.createGain();
+	
+	this.portamento = 0;
+	this.filterPortamento = 0;
 
-	this.fong1 = new fong(audCtx, this.mainVol, 60, 60);
-	this.fong2 = new fong(audCtx, this.mainVol, 200, 200);
+	this.fong1 = new fong(audCtx, this.mainVol, 60, 60, this);
+	this.fong2 = new fong(audCtx, this.mainVol, 200, 200, this);
 
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);

@@ -54,6 +54,26 @@ var _filterType = "lowpass";
 				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
 			}
 		});
+		
+		$("#portamentoControl").val(this.board.portamento);
+
+		$("#portamentoControl").knob({
+			'stopper': true,
+			'height': 90,
+			'change': function (v) {
+				logicBoard.portamento = parseInt(v);
+			}
+		});	
+		
+		$("#filterPortamentoControl").val(this.board.filterPortamento);
+
+		$("#filterPortamentoControl").knob({
+			'stopper': true,
+			'height': 90,
+			'change': function (v) {
+				logicBoard.filterPortamento = parseInt(v);
+			}
+		});	
 
 		$scope.IsSelectedFilterType = function (filterType) {
 			return filterType === _filterType;
