@@ -204,12 +204,12 @@ table.ui-map-table {
 
 .map-note,
 td.ui-map-note-map-toggle {
-	background-color: #ffffff;
+	background: rgba(255, 255, 255, .7);
 	font-size: x-large;
 }
 
 td.ui-map-note-map-toggle {
-	background-color: #ffffff;
+	background: rgba(255, 255, 255, .7);
 }
 
 .ui-map-note-map-toggle.map-note-off,
