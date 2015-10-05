@@ -12,11 +12,16 @@
 	window.PhonePhong.UI.Pad = function (board) {
 		var self = this;
 		var svgElementID = 'phongUIGrid';
-		
+
+		document.getElementById("phongUIGrid").addEventListener('touchmove', function (e) {
+			// Cancel the event
+			e.preventDefault();
+		}, false);
+
 		this.board = board;
 		// create fong ui representations
 		this.FongDots = [];
-		
+
 		this.FongDots.push(new window.FongPhone.UI.Fong(1, svgElementID, {
 			elementID: 'oscTouch1',
 			f: this.board.fongs[0],
@@ -85,7 +90,7 @@
 
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
-			
+
 			// update offsets
 			try {
 				this.board.setPrimaryOffsetFromFong(fong);

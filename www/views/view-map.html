@@ -1,66 +1,68 @@
-<div style="background-color: #ffffff; height: 60px; width: 100%;height:20px;"></div>
-<div style="height:300px;max-height:300px;overflow:auto;-webkit-overflow-scrolling: touch;">
-	<table class="ui-map-table">
-		<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
-			<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="4">{{ x[0].label }}</td>
-			<!--<td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
+<div id="mapUI">
+	<div style="background-color: #ffffff; height: 60px; width: 100%;height:20px;"></div>
+	<div style="height:300px;max-height:300px;overflow:auto;-webkit-overflow-scrolling: touch;">
+		<table class="ui-map-table">
+			<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
+				<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="4">{{ x[0].label }}</td>
+				<!--<td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
         <td class="ui-map-column map-note {{ x[2].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,2)">{{ x[2].label }}</td>
         <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>-->
-		</tr>
-	</table>
+			</tr>
+		</table>
+	</div>
+	<div>
+		<table class="ui-map-table">
+			<tr>
+				<td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
+					Osc Note Map {{ NoteMapOn ? 'On' : 'Off' }}
+				</td>
+				<td class="ui-map-note-map-toggle {{ FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
+					Filter Note Map {{ FilterNoteMapOn ? 'On' : 'Off' }}
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('ionian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					ionian
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('dorian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					dorian
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('aeolian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					aeolian
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('mixolydian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					mixolydian
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('chromatic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					chromatic
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('blues') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					blues
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('phrygian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					phrygian
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedScale('flamenco ') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+					flamenco
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a3') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a3
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a4') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a4
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a5') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a5
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a6') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a6
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div id="mapPadSwipeDown" style="background-color: #ffffff; height: 40px; width: 100%; position: absolute;"></div>
 </div>
-<div>
-	<table class="ui-map-table">
-		<tr>
-			<td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
-				Osc Note Map {{ NoteMapOn ? 'On' : 'Off' }}
-			</td>
-			<td class="ui-map-note-map-toggle {{ FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
-				Filter Note Map {{ FilterNoteMapOn ? 'On' : 'Off' }}
-			</td>
-		</tr>
-		<tr>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('ionian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				ionian
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('dorian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				dorian
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('aeolian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				aeolian
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('mixolydian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				mixolydian
-			</td>
-		</tr>
-		<tr>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('chromatic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				chromatic
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('blues') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				blues
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('phrygian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				phrygian
-			</td>
-			<td class="ui-map-note-map-scale {{ IsSelectedScale('flamenco ') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
-				flamenco
-			</td>
-		</tr>
-		<tr>
-			<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a3') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-				a3
-			</td>
-			<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a4') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-				a4
-			</td>
-			<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a5') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-				a5
-			</td>
-			<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a6') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-				a6
-			</td>
-		</tr>
-	</table>
-</div>
-<div id="mapPadSwipeDown" style="background-color: #ffffff; height: 40px; width: 100%; position: absolute;"></div>

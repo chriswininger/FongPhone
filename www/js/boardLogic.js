@@ -8,6 +8,9 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	
 	this.portamento = 0;
 	this.filterPortamento = 0;
+	this.delayVolume = 1;
+	this.delayTime = .5;
+	this.delayFeedback = .8;
 
 	this.fong1 = new fong(audCtx, this.mainVol, 60, 60, this);
 	this.fong2 = new fong(audCtx, this.mainVol, 200, 200, this);

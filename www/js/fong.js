@@ -41,7 +41,24 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
+
+	this.delay = audCtx.createDelay();
+	this.delay.delayTime.value = this.board.delayTime;
+
+	this.feedback = audCtx.createGain();
+	this.feedback.gain.value = this.board.delayFeedback;
+	
+	this.delayGain = audCtx.createGain();
+	this.delayGain.gain.value = this.board.delayVolume;
+
+	this.delay.connect(this.delayGain);
+	this.delayGain.connect(this.feedback);
+	this.feedback.connect(this.delay);
+
+	this.oscPanCtrl.connect(this.delay);
+
 	this.oscPanCtrl.connect(mainVol);
+	this.delay.connect(mainVol);
 
 	mainVol.connect(audCtx.destination);
 
@@ -127,6 +144,18 @@ var fong = function (audCtx, mainVol, x, y, board) {
 		} catch (err) {
 			alert(err.message);
 		}
+	}
+	
+	this.setDelayVolume = function (val) {
+		this.delayGain.gain.value = val;
+	}
+
+	this.setDelayTime = function (val) {
+		this.delay.delayTime.value = val;
+	}
+	
+	this.setDelayFeedback = function (val) {
+		this.feedback.gain.value = val;
 	}
 
 	this.setFade = function (val) {

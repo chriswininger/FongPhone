@@ -54,7 +54,7 @@ var _filterType = "lowpass";
 				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
 			}
 		});
-		
+
 		$("#portamentoControl").val(this.board.portamento);
 
 		$("#portamentoControl").knob({
@@ -63,8 +63,8 @@ var _filterType = "lowpass";
 			'change': function (v) {
 				logicBoard.portamento = parseInt(v);
 			}
-		});	
-		
+		});
+
 		$("#filterPortamentoControl").val(this.board.filterPortamento);
 
 		$("#filterPortamentoControl").knob({
@@ -73,7 +73,49 @@ var _filterType = "lowpass";
 			'change': function (v) {
 				logicBoard.filterPortamento = parseInt(v);
 			}
-		});	
+		});
+		$("#delayVolumeControl").val(parseInt(this.board.delayVolume * 100));
+
+		$("#delayVolumeControl").knob({
+			'stopper': true,
+			'height': 90,
+			'change': function (v) {
+				logicBoard.delayVolume = v/100.0;
+				for (var i = 0; i < logicBoard.fongs.length; i++) {
+					logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
+				}
+			}
+		});
+
+		$("#delayTimeControl").val(parseInt(this.board.delayTime * 1000));
+
+		$("#delayTimeControl").knob({
+			'stopper': true,
+			'height': 90,
+			'change': function (v) {
+				logicBoard.delayTime = v/1000.0;
+				for (var i = 0; i < logicBoard.fongs.length; i++) {
+					logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
+				}
+			}
+		});
+		
+		$("#delayFeedbackControl").val(parseInt(this.board.delayFeedback * 10));
+
+		$("#delayFeedbackControl").knob({
+			'stopper': true,
+			'height': 90,
+			'change': function (v) {
+				logicBoard.delayFeedback = v/10.0;
+				for (var i = 0; i < logicBoard.fongs.length; i++) {
+					logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
+				}
+			}
+		});
+
+		$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px"); 
+		
+		$('.page').css('max-height', window.innerHeight + "px"); 
 
 		$scope.IsSelectedFilterType = function (filterType) {
 			return filterType === _filterType;

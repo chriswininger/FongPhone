@@ -40,8 +40,8 @@ var _baseNote = 'a4';
 			$scope.Math = {};
 			$scope.Math.floor = Math.floor;
 			$scope.NoteMapOn = window.PhonePhong.NoteMapOn;
-			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;			
-			
+			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
+
 			$scope.noteClick = function (row, col) {
 				$scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
 				// update mapped notes
@@ -50,7 +50,7 @@ var _baseNote = 'a4';
 
 			$scope.toggleNoteMapClick = function () {
 				window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
-			};			
+			};
 			$scope.toggleFilterNoteMapClick = function () {
 				window.PhonePhong.FilterNoteMapOn = $scope.FilterNoteMapOn = !window.PhonePhong.FilterNoteMapOn;
 			};
