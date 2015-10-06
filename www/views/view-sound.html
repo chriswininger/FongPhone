@@ -1,6 +1,6 @@
 <div id="soundUI">
 	<div style="background-color: #ffffff; height: 60px; width: 100%;height:20px;"></div>
-	<div id="soundControlsDiv" style="overflow:auto;-webkit-overflow-scrolling: touch;">
+	<div id="soundControlsDiv" class="scrollable">
 		<table class="ui-map-table">
 			<tr>
 				<td class="ui-map-note-map-toggle {{ FilterOn ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleFilterClick()">
@@ -10,19 +10,25 @@
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2" style="width:50%">Resonance</td>
 				<td colspan="2">
-					<input id="filterResonanceControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="filterResonanceControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Envelope 1</td>
 				<td colspan="2">
-					<input id="env1Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="env1Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Envelope 2</td>
 				<td colspan="2">
-					<input id="env2Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="env2Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -42,31 +48,41 @@
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Glide</td>
 				<td colspan="2">
-					<input id="portamentoControl" type="text" class="dial" data-min="0" data-max="1000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="portamentoControl" type="text" class="dial" data-min="0" data-max="1000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Filter Glide</td>
 				<td colspan="2">
-					<input id="filterPortamentoControl" type="text" class="dial" data-min="0" data-max="10000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="filterPortamentoControl" type="text" class="dial" data-min="0" data-max="10000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Delay Volume</td>
 				<td colspan="2">
-					<input id="delayVolumeControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="delayVolumeControl" type="text" class="dial" data-min="0" data-max="100" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Delay</td>
 				<td colspan="2">
-					<input id="delayTimeControl" type="text" class="dial" data-min="250" data-max="10000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="delayTimeControl" type="text" class="dial" data-min="250" data-max="10000" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Feedback</td>
 				<td colspan="2">
-					<input id="delayFeedbackControl" type="text" class="dial" data-min="0" data-max="20" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					<div style="position:relative;">
+						<input id="delayFeedbackControl" type="text" class="dial" data-min="0" data-max="20" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
+					</div>
 				</td>
 			</tr>
 		</table>
