@@ -34,13 +34,9 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				try {
-					logicBoard.primaryOffsetMax = parseInt(v);
-					logicBoard.setPrimaryOffsetFromFong(pad.FongDots[0]);
-					logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
-				} catch (err) {
-					alert(err.message);
-				}
+				logicBoard.primaryOffsetMax = parseInt(v);
+				logicBoard.setPrimaryOffsetFromFong(pad.FongDots[0]);
+				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
 			}
 		});
 
@@ -80,7 +76,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				logicBoard.delayVolume = v/100.0;
+				logicBoard.delayVolume = v / 100.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
 				}
@@ -93,29 +89,29 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				logicBoard.delayTime = v/1000.0;
+				logicBoard.delayTime = v / 1000.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
 				}
 			}
 		});
-		
+
 		$("#delayFeedbackControl").val(parseInt(this.board.delayFeedback * 10));
 
 		$("#delayFeedbackControl").knob({
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				logicBoard.delayFeedback = v/10.0;
+				logicBoard.delayFeedback = v / 10.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
 				}
 			}
 		});
 
-		$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px"); 
-		
-		$('.page').css('max-height', window.innerHeight + "px"); 
+		$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px");
+
+		$('.page').css('max-height', window.innerHeight + "px");
 
 		$scope.IsSelectedFilterType = function (filterType) {
 			return filterType === _filterType;
@@ -132,6 +128,36 @@ var _filterType = "lowpass";
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setFilterType(_filterType);
 			}
+		}
+
+		$scope.IsSelectedOsc1EnvType = function (envType) {
+			return logicBoard.fongs[0].oscGainCtrl.type == envType;
+		}
+
+		$scope.IsSelectedOsc2EnvType = function (envType) {
+			return logicBoard.fongs[1].oscGainCtrl.type == envType;
+		}
+
+		$scope.changeOsc1EnvType = function (event) {
+
+			$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
+
+			oscType = $(event.target).html().trim();
+
+			$(event.target).attr('class', 'selectedScale');
+
+			logicBoard.fongs[0].oscGainCtrl.type = oscType;
+		}
+
+		$scope.changeOsc2EnvType = function (event) {
+
+			$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
+
+			oscType = $(event.target).html().trim();
+
+			$(event.target).attr('class', 'selectedScale');
+
+			logicBoard.fongs[1].oscGainCtrl.type = oscType;
 		}
 
 		var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');

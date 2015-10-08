@@ -16,11 +16,45 @@
 				</td>
 			</tr>
 			<tr>
+				<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Filter Type</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('lowpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+					lowpass
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('highpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+					highpass
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('peaking') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+					peaking
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('notch') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+					notch
+				</td>
+			</tr>
+			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Envelope 1</td>
 				<td colspan="2">
 					<div style="position:relative;">
 						<input id="env1Control" type="text" class="dial" data-min="0" data-max="50" data-width="80" data-fgColor="#AAAAAA" data-bgColor="#FFFFFF">
 					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Env 1 Type</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+					square
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+					sine
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('triangle') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+					triangle
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('sawtooth') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+					sawtooth
 				</td>
 			</tr>
 			<tr>
@@ -32,19 +66,22 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('lowpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
-					lowpass
+				<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Env 2 Type</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc2EnvType('square') ? 'selectedScale' : '' }}" ng-click="changeOsc2EnvType($event)">
+					square
 				</td>
-				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('highpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
-					highpass
-				</td>
-				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('peaking') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
-					peaking
-				</td>
-				<td class="ui-map-note-map-base-note {{ IsSelectedFilterType('notch') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
-					notch
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc2EnvType('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc2EnvType($event)">
+					sine
 				</td>
 			</tr>
+			<tr>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc2EnvType('triangle') ? 'selectedScale' : '' }}" ng-click="changeOsc2EnvType($event)">
+					triangle
+				</td>
+				<td class="ui-map-note-map-scale {{ IsSelectedOsc2EnvType('sawtooth') ? 'selectedScale' : '' }}" ng-click="changeOsc2EnvType($event)">
+					sawtooth
+				</td>
+			</tr>			
 			<tr>
 				<td class="ui-map-note-map-toggle" colspan="2">Glide</td>
 				<td colspan="2">
