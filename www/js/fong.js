@@ -1,4 +1,6 @@
-var fong = function (audCtx, mainVol, x, y) {
+var fong = function (audCtx, mainVol, x, y, board) {
+
+	this.board = board;
 
 	this.audCtx = audCtx;
 	this.mainVol = mainVol;
@@ -11,6 +13,8 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.oscTouchFadeVal = 0;
 
 	this.oscPulseOn = true;
+
+	this.radius = 60;
 
 	this.osc = audCtx.createOscillator();
 	this.osc.type = 'sine';
@@ -37,7 +41,24 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
+
+	this.delay = audCtx.createDelay();
+	this.delay.delayTime.value = this.board.delayTime;
+
+	this.feedback = audCtx.createGain();
+	this.feedback.gain.value = this.board.delayFeedback;
+	
+	this.delayGain = audCtx.createGain();
+	this.delayGain.gain.value = this.board.delayVolume;
+
+	this.delay.connect(this.delayGain);
+	this.delayGain.connect(this.feedback);
+	this.feedback.connect(this.delay);
+
+	this.oscPanCtrl.connect(this.delay);
+
 	this.oscPanCtrl.connect(mainVol);
+	this.delay.connect(mainVol);
 
 	mainVol.connect(audCtx.destination);
 
@@ -79,13 +100,22 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.setOscFreq = function (freq) {
 		this.oscFreq = freq;
-		this.osc.frequency.value = freq;
+		if (this.board.portamento > 0) {
+			var dur = this.board.portamento / 1000.0;
+			this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+		} else {
+			this.osc.frequency.value = freq;
+		}
 	};
 
 	this.setOscFilterFreq = function (freq) {
-		this.filter.frequency.value = freq;
+		if (this.board.filterPortamento > 0) {
+			this.filter.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + this.board.filterPortamento / 1000.0);
+		} else {
+			this.filter.frequency.value = freq;
+		}
 	};
-	
+
 	this.setOscFilterResonance = function (q) {
 		this.filter.Q.value = q;
 	};
@@ -100,7 +130,7 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.turnFilterOn = function () {
 		try {
-			this.osc.disconnect(this.oscPanCtrl);			
+			this.osc.disconnect(this.oscPanCtrl);
 			this.osc.connect(this.filter);
 		} catch (err) {
 			alert(err.message);
@@ -110,14 +140,30 @@ var fong = function (audCtx, mainVol, x, y) {
 	this.turnFilterOff = function () {
 		try {
 			this.osc.disconnect(this.filter);
-			this.osc.connect(this.oscPanCtrl);			
+			this.osc.connect(this.oscPanCtrl);
 		} catch (err) {
 			alert(err.message);
 		}
+	}
+	
+	this.setDelayVolume = function (val) {
+		this.delayGain.gain.value = val;
+	}
+
+	this.setDelayTime = function (val) {
+		this.delay.delayTime.value = val;
+	}
+	
+	this.setDelayFeedback = function (val) {
+		this.feedback.gain.value = val;
 	}
 
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
 	};
+
+	this.setFilterType = function (type) {
+		this.filter.type = type;
+	}
 
 };

@@ -1,12 +1,20 @@
+var _filterOn = true;
+
 window.PhonePhong = window.PhonePhong || {};
 window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	// instantiate audio sources
 	this.audCtx = audCtx;
 	this.mainVol = audCtx.createGain();
 	
-	this.fong1 = new fong(audCtx, this.mainVol, 60, 60);
-	this.fong2 = new fong(audCtx, this.mainVol, 200, 200);	
-	
+	this.portamento = 0;
+	this.filterPortamento = 0;
+	this.delayVolume = 1;
+	this.delayTime = .5;
+	this.delayFeedback = .8;
+
+	this.fong1 = new fong(audCtx, this.mainVol, 60, 60, this);
+	this.fong2 = new fong(audCtx, this.mainVol, 200, 200, this);
+
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);
 
@@ -14,6 +22,11 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 
 	// defaults
 	this.updateBoard(opts);
+
+	this.setPrimaryOffsetFromFong(this.fong1);
+	this.setSecondaryOffsetFromFong(this.fong2);
+
+	this.FilterOn = _filterOn;
 
 	this.init();
 };
@@ -77,29 +90,51 @@ $class.setMainVol = function (vol) {
 };
 
 $class.setFilterStatus = function (b) {
-	for (var i = 0; i < this.fongs.length; i++)
-	{
-		if (b)
-		{
+	for (var i = 0; i < this.fongs.length; i++) {
+		if (b) {
 			this.fongs[i].turnFilterOn();
-		}
-		else
-		{
+		} else {
 			this.fongs[i].turnFilterOff();
 		}
 	}
+	this.FilterOn = b;
+	_filterOn = b;
 };
+
+$class.setPrimaryOffsetFromFong = function (fong) {
+	// update offsets
+	var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.primaryOffsetMax);
+	if (primaryOffset < 0) primaryOffset = 0;
+
+	fong.dur = parseInt(1000 / primaryOffset * 4) + "ms";
+	if (fong.f) {
+		fong.f.dur = fong.dur;
+	}
+	$(fong.animation).attr("dur", fong.dur);
+
+	return this.setPrimaryOffset(primaryOffset);
+}
 
 $class.setPrimaryOffset = function (value) {
 	this.mainTimeOffset = value;
 	this.fong1.oscGainCtrl.frequency.value = value / 4;
-	//clearInterval(mainInterval);
-	//mainInterval = setInterval(_.bind(this.primaryLoop, this), this.mainTimeOffset);
+	return value;
 };
+
+$class.setSecondaryOffsetFromFong = function (fong) {
+	var offset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.secondaryOffsetMax) * this.mainTimeOffset;
+	fong.dur = parseInt(1000 / offset * 4) + "ms";
+	if (fong.f) {
+		fong.f.dur = fong.dur;
+	}
+	$(fong.animation).attr("dur", fong.dur);
+	return this.setSecondaryOffset(offset);
+}
 
 $class.setSecondaryOffset = function (value) {
 	this.secondaryOffset = value;
 	this.fong2.oscGainCtrl.frequency.value = value / 4;
+	return value;
 };
 
 $class.updateBoard = function (values) {
@@ -117,3 +152,8 @@ $class.updateBoard = function (values) {
 	this.primaryOffsetMax = values.primaryOffsetMax;
 	this.secondaryOffsetMax = values.secondaryOffsetMax;
 };
+
+// --- private helper functions ---
+function map(val, x1, x2, y1, y2) {
+	return (val - x1) / (Math.abs(x2 - x1)) * Math.abs(y2 - y1) + y1;
+}

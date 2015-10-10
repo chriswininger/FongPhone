@@ -1,4 +1,5 @@
 var logicBoard;
+var pad;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -58,12 +59,25 @@ var logicBoard;
 		}).when('/help', {
 			templateUrl: 'views/view-help.html',
 			controller: 'helpController'
+		}).when('/sound', {
+			templateUrl: 'views/view-sound.html',
+			controller: 'soundController'
 		});
 	});
 
 	fongPhone.controller('padController', ['$scope', function ($scope) {
 		var padUI = new PhonePhong.UI.Pad(logicBoard);
+		pad = padUI;
 		$scope.pageClass = 'view-pad';
+	}]);
+
+	fongPhone.controller('soundController', ['$scope', function ($scope) {
+		try {
+			var soundUI = new PhonePhong.Sound($scope, logicBoard, pad);
+			$scope.pageClass = 'view-sound';
+		} catch (err) {
+			alert(err.message);
+		}
 	}]);
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);

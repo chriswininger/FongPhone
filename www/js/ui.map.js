@@ -1,7 +1,6 @@
 var _availableNotes;
 var _scale = 'ionian';
 var _baseNote = 'a4';
-var _filterResonance = 5;
 (function () {
 	try {
 		_availableNotes = [
@@ -35,6 +34,8 @@ var _filterResonance = 5;
 		var rowSize = 1;
 
 		window.PhonePhong.UI.NoteMap = function ($scope, $window) {
+			
+			$('#mapUI').css('max-height', (window.innerHeight - 60) + "px"); 
 
 			//$scope.NoteMap = _availableNotes;
 			$scope.windowHeight = $window.innerHeight;
@@ -42,20 +43,6 @@ var _filterResonance = 5;
 			$scope.Math.floor = Math.floor;
 			$scope.NoteMapOn = window.PhonePhong.NoteMapOn;
 			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
-			$scope.FilterOn = true;
-			
-			$("#filterResonanceControl").val(_filterResonance);
-
-			$(".dial").knob({
-				'stopper': true,
-				'change': function (v) {
-					for (var i = 0; i < logicBoard.fongs.length; i++)
-					{
-						_filterResonance = v;
-						logicBoard.fongs[i].setOscFilterResonance(v*10);
-					}
-				}
-			});
 
 			$scope.noteClick = function (row, col) {
 				$scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
@@ -66,16 +53,8 @@ var _filterResonance = 5;
 			$scope.toggleNoteMapClick = function () {
 				window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
 			};
-			$scope.toggleFilterClick = function () {
-				window.PhonePhong.FilterOn = !$scope.FilterOn;
-				$scope.FilterOn = window.PhonePhong.FilterOn;
-				logicBoard.setFilterStatus(window.PhonePhong.FilterOn);
-			};
 			$scope.toggleFilterNoteMapClick = function () {
 				window.PhonePhong.FilterNoteMapOn = $scope.FilterNoteMapOn = !window.PhonePhong.FilterNoteMapOn;
-			};
-			$scope.changeResonance = function () {
-				alert('z');
 			};
 
 			$scope.SelectedScale = _scale;
