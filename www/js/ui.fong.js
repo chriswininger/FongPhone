@@ -4,20 +4,22 @@
 
     var Signal = signals.Signal;
 
-    window.FongPhone.UI.Fong = function (domCtxID, board, state) {
+    window.FongPhone.UI.Fong = function (board, state) {
         window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
         window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);
         window.FongPhone.utils.createGetSet(this, 'radius', this.getRadius, this.setRadius);
         window.FongPhone.utils.createGetSet(this, 'color', this.getColor, this.setColor);
         window.FongPhone.utils.createGetSet(this, 'fadeOffset', this.getFadeOffSet, this.setFadeOffSet);
-        window.FongPhone.utils.createGetSet(this, 'selectedClass', this.setSelectedClass, this.getSelectedClass);
-        window.FongPhone.utils.createGetSet(this, 'selectedState', this.setSelectedState, this.getSelectedState);
+        window.FongPhone.utils.createGetSet(this, 'selectedClassType', this.getSelectedClassType, this.setSelectedClassType);
+        window.FongPhone.utils.createGetSet(this, 'selectedState', this.getSelectedState, this.setSelectedState);
+        window.FongPhone.utils.createGetSet(this, 'selectedStateIndex', this.getSelectedStateIndex, this.setSelectedStateIndex);
+        window.FongPhone.utils.createGetSet(this, 'selectedClassTypeIndex', this.getSelectedClassTypeIndex, this.setSelectedClassTypeIndex);
 
         this.offsetX = null;
         this.offsetY = null;
         this.lastPinchDist = 0;
 
-        this.domCtxID = domCtxID;
+        this.domCtxID = state.domCtxID;
         this.elementID = state.elementID;
         this.fadeElementID = state.elementID + 'Fade'; // temporary
         this.domElement = this.initializeDomElement(this.elementID, 'fong');
@@ -37,20 +39,20 @@
         this.color = state.color;
         this.states = state.states;
         this.classes = state.classes;
-        this.selectedClass = state.selectedClass;
+        this.selectedClassType = state.selectedClassType;
         this.selectedState = state.selectedState;
-
         this.fongRole = state.fongRole;
-        this.initializer = state.initializer;
-        this.positionChangedHandler = state.positionChangedHandler;
-        this.fadeChangedHandler = state.fadeChangedHandler;
-        this.handleFongSelected = state.handleFongSelected;
-        this.selectedClassChangedHandler = state.selectedClassChangedHandler;
-        this.doubleTabHandler = state.doubleTabHandler;
-        this.longTouchHandler = state.longTouchHandler;
 
-        if (this.initializer)
-            this.initializer(this);
+        // set handlers last (and fire them all on init)
+        this.initializer = state.initializer || function() {};
+        this.positionChangedHandler = state.positionChangedHandler || function() {};
+        this.fadeChangedHandler = state.fadeChangedHandler || function() {};
+        this.handleFongSelected = state.handleFongSelected || function() {};
+        this.selectedClassChangedHandler = state.selectedClassChangedHandler || function() {};
+        //this.classTypeChangeHandler = state.classTypeChangeHandler || function() {};
+        this.stateChangedHandler = state.stateChangedHandler || function() {};
+
+        this.fireAllHandlers();
 
         // wire up touch events on dom
         this.listen();
@@ -58,22 +60,20 @@
 
     _.extend(window.FongPhone.UI.Fong.prototype, {
         handleDoubleTap: function(event) {
-            if (this.doubleTabHandler)
-                this.doubleTabHandler(this, event);
+            this.incrementState();
+            event.preventDefault();
         },
         handleFadeMove: function(event) {
             if (event.targetTouches.length == 1) {
                 var touch = event.targetTouches[0];
                 if (this.radius > Math.abs(touch.pageX - this.x))
                     this.fadeOffset = touch.pageX - this.x;
-
-                this.fadeChangedHandler(this);
+                if (this.fadeChangedHandler)
+                    this.fadeChangedHandler(this);
             }
         },
         handleLongTouch: function(event) {
-            if (this.longTouchHandler)
-                this.longTouchHandler(this, event);
-            event.preventDefault();
+            this.incrementClass();
         },
         handleTouchMove: function (event) {
             // If there's exactly one finger inside this element
@@ -122,7 +122,15 @@
             this.offsetX = null;
             this.offsetY = null;
             if (this.handleFongSelected)
-                this.handleFongSelected(this, event);
+                this.handleFongSelected(this);
+        },
+        fireAllHandlers: function() {
+            this.initializer(this);
+            this.positionChangedHandler(this, this.x, this.y);
+            this.fadeChangedHandler(this);
+            this.handleFongSelected(this);
+            this.selectedClassChangedHandler(this, this.selectedClassTypeIndex, this.selectedClassType);
+            this.stateChangedHandler(this, this.selectedStateIndex, this.selectedState);
         },
         initializeDomElement: function(id, className) {
             var domCtx = document.getElementById(this.domCtxID);
@@ -147,6 +155,17 @@
         },
         getFadeOffSet: function() {
             return this._fadeOffset;
+        },
+        incrementState: function() {
+          if (this.selectedStateIndex === (this.states.length - 1))
+            return this.selectedStateIndex = 0;
+
+            this.selectedStateIndex++;
+        },
+        incrementClass: function() {
+            if (this.selectedClassTypeIndex === (this.classes.length - 1))
+                return this.selectedClassTypeIndex = 0;
+            this.selectedClassTypeIndex++;
         },
         setFadeOffSet: function(fadeOffset) {
             this._fadeOffset = fadeOffset;
@@ -180,7 +199,6 @@
             this.fadeElement.setAttribute('cy', y);
             // TODO (CAW) Property store ui state so we don't need this on the board
             this.boardInput.y = y;
-            //this.positionChanged.dispatch(this, this.x, oldY);
             if (this.positionChangedHandler)
                 this.positionChangedHandler(this, this.x, oldY);
         },
@@ -198,34 +216,74 @@
             this._color = color;
             this.domElement.style.fill = this.color;
         },
-        setSelectedClass: function(selectedClass) {
-            if (selectedClass < this.classes.length){
-                this._selectedClass = selectedClass;
-                if (this.selectedClassChangedHandler)
-                    this.selectedClassChangedHandler(this);
+        setSelectedClassType: function(classType) {
+            if (!classType) return this.selectedClassTypeIndex = 0;
+            for (var i = 0; i < this.classes.length; i++) {
+                if (this.classes[i] === classType)
+                    return this.selectedClassTypeIndex = i;
             }
+
+            this.selectedClassTypeIndex = 0;
         },
-        getSelectedClass: function() {
-            return this._selectedClass;
+        getSelectedClassType: function() {
+            if (!this.classes) return;
+            return this.classes[this.selectedClassTypeIndex];
+        },
+        setSelectedClassTypeIndex: function(index) {
+            this._selectedClassTypeIndex = index;
+            if (this.selectedClassChangedHandler)
+                this.selectedClassChangedHandler(this, index, this.classes[index]);
+        },
+        getSelectedClassTypeIndex: function() {
+            return this._selectedClassTypeIndex;
+        },
+        getSelectedState: function() {
+            if (!this.states) return;
+            return this.states[this.selectedStateIndex];
+        },
+        setSelectedState: function(state) {
+            if (!state) return this.selectedStateIndex = 0;
+            for (var i = 0; i < this.states.length; i++) {
+                if (this.states[i] === state)
+                    return this.selectedStateIndex = i;
+            }
+
+            this.selectedStateIndex = 0;
+        },
+        getSelectedStateIndex: function() {
+            return this._selectedStateIndex;
+        },
+        setSelectedStateIndex: function(stateIndex) {
+            this._selectedStateIndex = stateIndex;
+            if (this.stateChangedHandler)
+                this.stateChangedHandler(this, stateIndex, this.states[stateIndex]);
         },
         toJSON: function() {
-            return {
-                x: this.x,
-                y: this.y,
-                color: this.color,
-                states: this.states,
-                classes: this.classes,
-                selectedClass: state.selectedClass,
-                selectedState: state.selectedState,
-                fongRole: this.fongRole,
-                domCtxID: this.domCtxID,
-                boardInputIndex: this.boardInputIndex,
-                elementID: this.elementID,
-                fadeElementID: this.fadeElementID,
-                radius: this.radius,
-                fadeOffset: this.fadeOffset,
-                boardInput: this.boardInput.toJSON(),
+            var _exlusionList = {
+                boardInput: true,
+                selectedClassTypeIndex: true,
+                selectedStateIndex: true,
+                offsetX: true,
+                offsetY: true,
+                lastPinchDist: true,
+                domElement: true,
+                fadeElement: true
             };
+
+            var obj = {};
+            _.each(this, function(val, key) {
+                if (!_excluded(val, key)) {
+                    obj[key] = val;
+                }
+            });
+
+            function _excluded(val, key) {
+                return (key[0] === '_') ||
+                    !!(_exlusionList[key]) ||
+                    _.isFunction(val);
+            }
+
+            return obj;
         }
     });
 })();

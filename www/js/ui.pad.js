@@ -9,7 +9,7 @@
  * @type {{}|*|Window.PhonePhong}
  */
 (function () {
-	window.PhonePhong.UI.Pad = function (board) {
+	window.PhonePhong.UI.Pad = function (board, state) {
 		var self = this;
 		var svgElementID = 'phongUIGrid';
 
@@ -20,52 +20,19 @@
 				positionChanged: _.bind(this.handlePositionChangedPrimary, this),
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
-				doubleTabHandler: _.bind(this.handleDoubleTap, this),
-				longTouchHandler: _.bind(this.handleLongTouch, this)
+				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
+				stateChangedHandler: _.bind(this.stateChangedHandler, this)
 			},
 			secondary: {
 				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
-				doubleTabHandler: _.bind(this.handleDoubleTap, this),
-				longTouchHandler: _.bind(this.handleLongTouch, this)
+				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
+				stateChangedHandler: _.bind(this.stateChangedHandler, this)
 			}
 		};
 
-		// create fong ui representations
-		this.FongDots = [];
-		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
-			elementID: 'oscTouch1',
-			x: this.board.fongs[0].x, // initialize from board for now
-			y: this.board.fongs[0].y, // initialize from board for now
-			radius: 60,
-			color: '#ded6d6',
-			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
-			boardInput: this.board.fongs[0],
-			dataIndex: this.FongDots.length, // temporary
-			initializer: function() {},
-			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this),
-			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handleFongSelected: _.bind(this.handleFongSelected, this),
-			doubleTabHandler: _.bind(this.handleDoubleTap, this),
-			longTouchHandler: _.bind(this.handleLongTouch, this)
-		}));
-		this.FongDots.push(new  window.FongPhone.UI.Fong(svgElementID, {
-			elementID: 'oscTouch2',
-			x: this.board.fongs[1].x, // initialize from board for now
-			y: this.board.fongs[1].y, // initialize from board for now
-			radius: 60,
-			color: '#ded6d6',
-			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
-			boardInput: this.board.fongs[1],
-			dataIndex: this.FongDots.length, // temporary
-			initializer: function() {},
-			positionChangedHandler: _.bind(this.handlePositionChangedSecondary, this),
-			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handleFongSelected: _.bind(this.handleFongSelected, this),
-			doubleTabHandler: _.bind(this.handleDoubleTap, this),
-			longTouchHandler: _.bind(this.handleLongTouch, this)
-		}));
+		this.set(state);
 
 		// make changes to dom to create ui
 		self.createComponents();
@@ -76,8 +43,8 @@
 	_.extend(PhonePhong.UI.Pad.prototype, {
 		createComponents: function () {
 			$('#phongUIGrid').height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeTop', '#/help', Hammer.DIRECTION_DOWN);
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_UP);
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeTop', '#/help', Hammer.DIRECTION_DOWN);
 			this.backgroundPad = document.getElementById('phongUIGrid');
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
@@ -150,45 +117,26 @@
 				this.lastSelectedFong.y = touch.pageY;
 			}
 		},
-		handleDoubleTap: function (fong) {
-			fong.boardInput.toggleOscPulse();
+		classTypeChangeHandler: function (fong, index, pulse) {
+			if (pulse) fong.boardInput.startOscPulse();
+			else fong.boardInput.stopOscPulse();
 		},
-		handleLongTouch: function (fong, event) {
-			fong.boardInput.incrementOscillator();
+		stateChangedHandler: function (fong, index, state) {
+			fong.boardInput.setOscType(state);
 		},
 		set: function(json) {
-			var fongs = json.fongDots || [];
-			_.each(fongs, function(fongJSON) {
-				this.FongDots.push(new  window.FongPhone.UI.Fong(fongJSON.domCtxID, this.board, {
-					elementID: fongJSON.elementID,
-					x: fongJSON.x,
-					y: fongJSON.y,
-					radius: fongJSON.radius,
-					color: fongJSON.color, // maybe can be replaced by a class and/or type concept
-					fadeOffset: fongJSON.fadeOffset, // initialize from board for now
-					boardInputIndex: fongJSON.boardInputIndex,
-					fongRole: fongJSON.fongRole, // secondary/primary/what ever else we invent
-					states: fongJSON.states,
-					classes: fongJSON.classes,
-					selectedClass: fongJSON.selectedClass,
-					selectedState: fongJSON.selectedState,
-					positionChangedHandler: this.roleHandlers[fongJSON.fongRole].handlePositionChanged,
-					fadeChangedHandler: this.roleHandlers[fongJSON.fongRole].handleFadeChanged,
-					handleFongSelected: this.roleHandlers[fongJSON.fongRole].handleFongSelected,
-					doubleTabHandler: this.roleHandlers[fongJSON.fongRole].handleDoubleTap,
-					longTouchHandler: this.roleHandlers[fongJSON.fongRole].handleLongTouch
-				}));
-
-				// just specify a number of classes, then we can increment those and repeat after each increment
-				// states: [ 'pulseOn', 'pulseOff'];
-				// classes: [ 'sine', 'triange', 'square', 'etc...'];
+			this.fongDots = [];
+			_.each(json.fongDots || [], function(fongJSON) {
+				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
+				fongJSON.fadeChangedHandler = this.roleHandlers[fongJSON.fongRole].fadeChangedHandler;
+				fongJSON.handleFongSelected = this.roleHandlers[fongJSON.fongRole].handleFongSelected;
+				fongJSON.selectedClassChangedHandler = this.roleHandlers[fongJSON.fongRole].classTypeChangeHandler;
+				fongJSON.stateChangedHandler = this.roleHandlers[fongJSON.fongRole].stateChangedHandler;
+				this.fongDots.push(new  window.FongPhone.UI.Fong(this.board, fongJSON));
 			}, this);
-
 		},
 		toJSON: function() {
-			var state = {
-				fongDots: []
-			};
+			var state = { fongDots: [] };
 			_.each(this.fongDots, function(fong) {
 				state.fongDots.push(fong.toJSON());
 			});

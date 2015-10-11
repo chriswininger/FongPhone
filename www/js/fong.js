@@ -74,7 +74,7 @@ var fong = function (audCtx, mainVol, x, y) {
 
 	this.setOscVol = function (vol) {
 		vol = vol / 3;
-		this.oscVol = vol;
+		this.oscVol.gain = vol;
 		this.oscVolOffset.gain.value = vol;
 	};
 

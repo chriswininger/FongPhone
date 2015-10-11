@@ -17,10 +17,12 @@ var logicBoard;
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 		document.URL.indexOf('https://') === -1);
 
-	if (isCordova)
+	if (isCordova) {
 		document.addEventListener('deviceready', _deviceReady, false);
-	else
+		document.addEventListener("pause", _onPause, false);
+	} else {
 		$(_deviceReady);
+	}
 
 	var context;
 	if (typeof AudioContext !== "undefined") {
@@ -61,9 +63,13 @@ var logicBoard;
 		});
 	});
 
+	var padUI;
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		var padUI = new PhonePhong.UI.Pad(logicBoard);
 		$scope.pageClass = 'view-pad';
+		localforage.getItem('ui.pad.state', function(err, storedState) {
+			if (err) return console.error('error retreiving ui pad state: ' + err);
+			padUI = new PhonePhong.UI.Pad(logicBoard, storedState || FongPhone.UI.Defaults);
+		});
 	}]);
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
@@ -75,7 +81,13 @@ var logicBoard;
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 	}
-	console.log('ending...');
+
+
+	function _onPause() {
+		localforage.setItem('ui.pad.state', padUI.toJSON(), function(err) {
+			if (err) conole.error('error saving ui pad state: ' + err);
+		});
+	}
 })();
 
 // TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)
