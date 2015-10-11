@@ -107,8 +107,8 @@ $class.setPrimaryOffsetFromFong = function (fong) {
 	if (primaryOffset < 0) primaryOffset = 0;
 
 	fong.dur = parseInt(1000 / primaryOffset * 4) + "ms";
-	if (fong.f) {
-		fong.f.dur = fong.dur;
+	if (fong.boardInput) {
+		fong.boardInput.dur = fong.dur;
 	}
 	$(fong.animation).attr("dur", fong.dur);
 
@@ -124,8 +124,8 @@ $class.setPrimaryOffset = function (value) {
 $class.setSecondaryOffsetFromFong = function (fong) {
 	var offset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.secondaryOffsetMax) * this.mainTimeOffset;
 	fong.dur = parseInt(1000 / offset * 4) + "ms";
-	if (fong.f) {
-		fong.f.dur = fong.dur;
+	if (fong.boardInput) {
+		fong.boardInput.dur = fong.dur;
 	}
 	$(fong.animation).attr("dur", fong.dur);
 	return this.setSecondaryOffset(offset);
