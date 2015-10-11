@@ -35,7 +35,7 @@ var _baseNote = 'a4';
 
 		window.PhonePhong.UI.NoteMap = function ($scope, $window) {
 			
-			$('#mapUI').css('max-height', (window.innerHeight - 60) + "px"); 
+			//$('#mapUI').css('max-height', (window.innerHeight - 60) + "px"); 
 
 			//$scope.NoteMap = _availableNotes;
 			$scope.windowHeight = $window.innerHeight;

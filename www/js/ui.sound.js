@@ -14,6 +14,9 @@ var _filterType = "lowpass";
 			$scope.FilterOn = !$scope.FilterOn;
 			logicBoard.setFilterStatus($scope.FilterOn);
 		};
+		
+		$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
+		$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
 
 		$("#filterResonanceControl").val(_filterResonance);
 
@@ -161,7 +164,7 @@ var _filterType = "lowpass";
 		}
 
 		var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-		mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
+		//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
 		var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
 			direction: Hammer.DIRECTION_VERTICAL
 		});
