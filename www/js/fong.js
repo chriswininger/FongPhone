@@ -94,7 +94,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 
 	this.setOscVol = function (vol) {
 		vol = vol / 3;
-		this.oscVol = vol;
+		this.oscVol.gain = vol;
 		this.oscVolOffset.gain.value = vol;
 	};
 
@@ -165,5 +165,12 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.setFilterType = function (type) {
 		this.filter.type = type;
 	}
+
+	this.toJSON = function() {
+		return {
+			oscPulseOn: this.oscPulseOn,
+			oscFreq: this.oscFreq
+		};
+	};
 
 };

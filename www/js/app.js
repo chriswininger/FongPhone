@@ -1,3 +1,4 @@
+// TODO (CAW) Namespace these
 var logicBoard;
 var pad;
 (function () {
@@ -18,10 +19,12 @@ var pad;
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 		document.URL.indexOf('https://') === -1);
 
-	if (isCordova)
+	if (isCordova) {
 		document.addEventListener('deviceready', _deviceReady, false);
-	else
+		document.addEventListener("pause", _onPause, false);
+	} else {
 		$(_deviceReady);
+	}
 
 	var context;
 	if (typeof AudioContext !== "undefined") {
@@ -66,9 +69,16 @@ var pad;
 	});
 
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		var padUI = new PhonePhong.UI.Pad(logicBoard);
-		pad = padUI;
 		$scope.pageClass = 'view-pad';
+		try {
+			var storedState = localStorage.getItem('ui.pad.state');
+			if (storedState) storedState = JSON.parse(storedState);
+			var padUI = new PhonePhong.UI.Pad(logicBoard, storedState || FongPhone.UI.Defaults);
+			pad = padUI;
+		} catch (ex) {
+			console.error('error retreiving ui pad state: ' + ex);
+			var padUI = new PhonePhong.UI.Pad(logicBoard, FongPhone.UI.Defaults);
+		}
 	}]);
 
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
@@ -89,7 +99,15 @@ var pad;
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 	}
-	console.log('ending...');
+
+
+	function _onPause() {
+		try {
+			localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+		} catch (ex) {
+			console.error('error saving ui pad state: ' + ex);
+		}
+	}
 })();
 
 // TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)

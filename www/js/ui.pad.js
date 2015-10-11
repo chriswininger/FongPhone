@@ -9,7 +9,7 @@
  * @type {{}|*|Window.PhonePhong}
  */
 (function () {
-	window.PhonePhong.UI.Pad = function (board) {
+	window.PhonePhong.UI.Pad = function (board, state) {
 		var self = this;
 		var svgElementID = 'phongUIGrid';
 
@@ -19,43 +19,25 @@
 		}, false);
 
 		this.board = board;
-		// create fong ui representations
-		this.FongDots = [];
 
-		this.FongDots.push(new window.FongPhone.UI.Fong(1, svgElementID, {
-			elementID: 'oscTouch1',
-			f: this.board.fongs[0],
-			x: this.board.fongs[0].x, // initialize from board for now
-			y: this.board.fongs[0].y, // initialize from board for now			
-			dur: this.board.fongs[0].dur,
-			radius: 60,
-			color: '#ded6d6',
-			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
-			boardInput: this.board.fongs[0],
-			dataIndex: this.FongDots.length, // temporary
-			positionChangedHandler: _.bind(this.handlePositionChangedPrimary, this),
-			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handleFongSelected: _.bind(this.handleFongSelected, this),
-			doubleTabHandler: _.bind(this.handleDoubleTap, this),
-			longTouchHandler: _.bind(this.handleLongTouch, this)
-		}));
-		this.FongDots.push(new window.FongPhone.UI.Fong(2, svgElementID, {
-			elementID: 'oscTouch2',
-			f: this.board.fongs[1],
-			x: this.board.fongs[1].x, // initialize from board for now
-			y: this.board.fongs[1].y, // initialize from board for now
-			dur: this.board.fongs[1].dur,
-			radius: 60,
-			color: '#ded6d6',
-			fadeOffset: this.board.fongs[1].oscTouchFadeVal, // initialize from board for now
-			boardInput: this.board.fongs[1],
-			dataIndex: this.FongDots.length, // temporary
-			positionChangedHandler: _.bind(this.handlePositionChangedSecondary, this),
-			fadeChangedHandler: _.bind(this.handleFadeChanged, this),
-			handleFongSelected: _.bind(this.handleFongSelected, this),
-			doubleTabHandler: _.bind(this.handleDoubleTap, this),
-			longTouchHandler: _.bind(this.handleLongTouch, this)
-		}));
+		this.roleHandlers = {
+			primary: {
+				positionChanged: _.bind(this.handlePositionChangedPrimary, this),
+				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
+				handleFongSelected: _.bind(this.handleFongSelected, this),
+				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
+				stateChangedHandler: _.bind(this.stateChangedHandler, this)
+			},
+			secondary: {
+				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
+				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
+				handleFongSelected: _.bind(this.handleFongSelected, this),
+				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
+				stateChangedHandler: _.bind(this.stateChangedHandler, this)
+			}
+		};
+
+		this.set(state);
 
 		// make changes to dom to create ui
 		self.createComponents();
@@ -66,12 +48,9 @@
 	_.extend(PhonePhong.UI.Pad.prototype, {
 		createComponents: function () {
 			$('#phongUIGrid').height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
-			window.PhonePhong.UI.Helper.registerSwipeNavigation('uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
-			this.oscTouchFade1 = document.getElementById('oscTouchFade1');
-			this.oscTouchFade2 = document.getElementById('oscTouchFade2');
-			this.oscTouch1 = document.getElementById('oscTouch1');
-			this.oscTouch2 = document.getElementById('oscTouch2');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
+
 			this.backgroundPad = document.getElementById('phongUIGrid');
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
@@ -145,11 +124,31 @@
 				this.lastSelectedFong.y = touch.pageY;
 			}
 		},
-		handleDoubleTap: function (fong) {
-			fong.boardInput.toggleOscPulse();
+		classTypeChangeHandler: function (fong, index, pulse) {
+			if (pulse) fong.boardInput.startOscPulse();
+			else fong.boardInput.stopOscPulse();
 		},
-		handleLongTouch: function (fong, event) {
-			fong.boardInput.incrementOscillator();
+		stateChangedHandler: function (fong, index, state) {
+			fong.boardInput.setOscType(state);
+		},
+		set: function(json) {
+			this.fongDots = [];
+			_.each(json.fongDots || [], function(fongJSON) {
+				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
+				fongJSON.fadeChangedHandler = this.roleHandlers[fongJSON.fongRole].fadeChangedHandler;
+				fongJSON.handleFongSelected = this.roleHandlers[fongJSON.fongRole].handleFongSelected;
+				fongJSON.selectedClassChangedHandler = this.roleHandlers[fongJSON.fongRole].classTypeChangeHandler;
+				fongJSON.stateChangedHandler = this.roleHandlers[fongJSON.fongRole].stateChangedHandler;
+				this.fongDots.push(new  window.FongPhone.UI.Fong(this.board, fongJSON));
+			}, this);
+		},
+		toJSON: function() {
+			var state = { fongDots: [] };
+			_.each(this.fongDots, function(fong) {
+				state.fongDots.push(fong.toJSON());
+			});
+
+			return state;
 		}
 	});
 
