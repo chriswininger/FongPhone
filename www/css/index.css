@@ -177,16 +177,13 @@ h1 {
 table,
 th,
 td {
-	border-bottom: 1px solid rgba(255,255,255,.1);
-	border-left: 1px solid rgba(255,255,255,.1);
-	border-collapse: collapse;
+	border-bottom: 1px solid rgba(255, 255, 255, .1);
 	padding: 5px;
+	border-spacing: 0;
 }
 
 table.ui-map-table {
 	width: 100%;
-	border-right-style: hidden;
-	border-left-style: hidden;
 }
 
 .map-note,
@@ -205,11 +202,11 @@ td.ui-map-note-map-toggle {
 }
 
 .ui-map-note-map-base-note {
-opacity: .3;	
+	opacity: .3;
 }
 
 .ui-map-note-map-scale {
-opacity: .3;	
+	opacity: .3;
 }
 
 .fong {
