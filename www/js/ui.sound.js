@@ -35,8 +35,8 @@ var _filterType = "lowpass";
 			'height': 90,
 			'change': function (v) {
 				logicBoard.primaryOffsetMax = parseInt(v);
-				logicBoard.setPrimaryOffsetFromFong(pad.FongDots[0]);
-				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
+				logicBoard.setPrimaryOffsetFromFong(pad.fongDots[0]);
+				logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 			}
 		});
 
@@ -47,7 +47,7 @@ var _filterType = "lowpass";
 			'height': 90,
 			'change': function (v) {
 				logicBoard.secondaryOffsetMax = parseInt(v);
-				logicBoard.setSecondaryOffsetFromFong(pad.FongDots[1]);
+				logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 			}
 		});
 
