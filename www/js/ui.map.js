@@ -45,6 +45,11 @@
 				
 				$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
 				
+				if (!$scope.selectedFong.NoteMap)
+				{
+					$scope.regenerateMap($scope.selectedFong);
+				}
+				
 				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
 			}
 

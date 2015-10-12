@@ -198,7 +198,7 @@ td.ui-map-note-map-toggle {
 
 .ui-map-note-map-toggle.map-note-off,
 .map-note.map-note-off {
-	opacity: 0.6;
+	opacity: 0.3;
 }
 
 .ui-map-note-map-base-note {
