@@ -17,6 +17,7 @@ var _filterType = "lowpass";
 		
 		$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
 		$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
+		$(".dial").attr('disabled','disabled');
 
 		$("#filterResonanceControl").val(_filterResonance);
 
