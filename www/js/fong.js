@@ -7,6 +7,14 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.x = x;
 	this.y = y;
 
+	this.scale = 'ionian';
+	this.SelectedScale = this.scale;
+	this.baseNote = 'a4';
+	this.availableNotes = [];
+	
+	this.NoteMapOn = false;
+	this.FilterNoteMapOn = false;
+
 	this.waves = ['sine', 'square', 'triangle', 'sawtooth'];
 	this.waveIntOsc = 0;
 
@@ -47,7 +55,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 
 	this.feedback = audCtx.createGain();
 	this.feedback.gain.value = this.board.delayFeedback;
-	
+
 	this.delayGain = audCtx.createGain();
 	this.delayGain.gain.value = this.board.delayVolume;
 
@@ -145,7 +153,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 			alert(err.message);
 		}
 	}
-	
+
 	this.setDelayVolume = function (val) {
 		this.delayGain.gain.value = val;
 	}
@@ -153,7 +161,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.setDelayTime = function (val) {
 		this.delay.delayTime.value = val;
 	}
-	
+
 	this.setDelayFeedback = function (val) {
 		this.feedback.gain.value = val;
 	}
@@ -166,7 +174,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 		this.filter.type = type;
 	}
 
-	this.toJSON = function() {
+	this.toJSON = function () {
 		return {
 			oscPulseOn: this.oscPulseOn,
 			oscFreq: this.oscFreq

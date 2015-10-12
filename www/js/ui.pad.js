@@ -64,8 +64,8 @@
 			fong.boardInput.setFade(map(-1 * fong.fadeOffset, -35, 35, -2, 2));
 		},
 		handlePositionChangedPrimary: function (fong, oldX, oldY) {
-			var freq = this.getFreq(fong.x, fong.y, fong.radius);
-			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius);
+			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
+			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
 
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
@@ -77,9 +77,9 @@
 				alert(err.message);
 			}
 		},
-		handlePositionChangedSecondary: function (fong, oldX, oldY) {
-			var freq = this.getFreq(fong.x, fong.y, fong.radius);
-			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius);
+		handlePositionChangedSecondary: function (fong, oldX, oldY) {			
+			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
+			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
 
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
@@ -87,25 +87,27 @@
 			// update offsets
 			this.board.setSecondaryOffsetFromFong(fong);
 		},
-		getFreq: function (x, y, r) {
-			if (!window.PhonePhong.NoteMapOn) {
+		getFreq: function (x, y, r, fong) {
+			var f = fong.boardInput;
+			if (!f.NoteMapOn) {
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
 			} else {
 				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-				var noteNumber = parseInt(y * PhonePhong.NoteMap.length / window.innerHeight);
-				var note = PhonePhong.NoteMap[noteNumber];
-				if (!note) note = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+				var noteNumber = parseInt(y * f.NoteMap.length / window.innerHeight);
+				var note = f.NoteMap[noteNumber];
+				if (!note) note = f.NoteMap[f.NoteMap.length - 1];
 				return note.freq;
 			}
 
 		},
-		getFilterFrequency: function (x, y, r) {
-			if (!window.PhonePhong.FilterNoteMapOn) {
+		getFilterFrequency: function (x, y, r, fong) {
+			var f = fong.boardInput;
+			if (!f.FilterNoteMapOn) {
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
-				var fnoteNumber = parseInt(x * PhonePhong.NoteMap.length / window.innerWidth);
-				var fnote = PhonePhong.NoteMap[fnoteNumber];
-				if (!fnote) fnote = PhonePhong.NoteMap[PhonePhong.NoteMap.length - 1];
+				var fnoteNumber = parseInt(x * f.NoteMap.length / window.innerWidth);
+				var fnote = f.NoteMap[fnoteNumber];
+				if (!fnote) fnote = f.NoteMap[f.NoteMap.length - 1];
 				return fnote.freq;
 			}
 		},

@@ -1,5 +1,15 @@
 <div id="mapUI" style="height:800px">
 	<div style="background-color: rgba(255,255,255,.3); height: 60px; width: 100%;height:20px;"></div>
+	<table class="ui-map-table">
+		<tr>
+			<td class="ui-map-note-map-toggle {{ Fong1Selected ? 'map-note-on' : 'map-note-off' }}" style="height:25px;width:50%" colspan="2" ng-click="toggleSelectedFong(0)">
+				Fong 1
+			</td>
+			<td class="ui-map-note-map-toggle {{ Fong2Selected ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleSelectedFong(1)">
+				Fong 2
+			</td>
+		</tr>
+	</table>
 	<div id="scrollableContainer">
 		<div style="height:300px;max-height:300px;" class="scrollable">
 			<table class="ui-map-table">
@@ -14,11 +24,11 @@
 		<div>
 			<table class="ui-map-table">
 				<tr>
-					<td class="ui-map-note-map-toggle {{ NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
-						Osc Note Map {{ NoteMapOn ? 'On' : 'Off' }}
+					<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
+						Osc Note Map {{ selectedFong.NoteMapOn ? 'On' : 'Off' }}
 					</td>
-					<td class="ui-map-note-map-toggle {{ FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
-						Filter Note Map {{ FilterNoteMapOn ? 'On' : 'Off' }}
+					<td class="ui-map-note-map-toggle {{ selectedFong.FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
+						Filter Note Map {{ selectedFong.FilterNoteMapOn ? 'On' : 'Off' }}
 					</td>
 				</tr>
 				<tr>

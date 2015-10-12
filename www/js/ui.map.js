@@ -1,18 +1,9 @@
-var _availableNotes;
-var _scale = 'ionian';
-var _baseNote = 'a4';
 (function () {
 	try {
-		_availableNotes = [
-			{
-				//                label: 'c',
-				//                freq: '4186.01',
-				//                on: false
-            }];
 
-		function generateScale(startingNote, octave, scale) {
+		function generateScale(fong, startingNote, octave, scale) {
 
-			_availableNotes.length = 0;
+			fong.availableNotes.length = 0;
 
 			var n = teoria.note(startingNote + octave);
 			var scale = n.scale(scale).simple();
@@ -24,109 +15,119 @@ var _baseNote = 'a4';
 					'on': true
 				};
 
-				_availableNotes.push(n);
+				fong.availableNotes.push(n);				
 			}
 
 		}
 
-		generateScale(_baseNote.substr(0, 1), _baseNote.substr(1, 1), _scale);
-
 		var rowSize = 1;
 
-		window.PhonePhong.UI.NoteMap = function ($scope, $window) {
-			
-			$('#scrollableContainer').css('max-height', (window.innerHeight - 40) + "px"); 
-			$('#mapUI').css('max-height', window.innerHeight + "px"); 
-			
+		window.PhonePhong.UI.NoteMap = function ($scope, $window) {			
 
-			//$scope.NoteMap = _availableNotes;
+			$('#scrollableContainer').css('max-height', (window.innerHeight - 40) + "px");
+			$('#mapUI').css('max-height', window.innerHeight + "px");
+
+			$scope.selectedFong = logicBoard.fongs[0];
+			$scope.Fong1Selected = true;
+
 			$scope.windowHeight = $window.innerHeight;
 			$scope.Math = {};
 			$scope.Math.floor = Math.floor;
-			$scope.NoteMapOn = window.PhonePhong.NoteMapOn;
+
+			$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
 			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
 
+			$scope.toggleSelectedFong = function (i) {
+				$scope.selectedFong = logicBoard.fongs[i];
+				
+				$scope.Fong1Selected = i == 0;
+				$scope.Fong2Selected = i == 1;
+				
+				$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
+				
+				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
+			}
+
 			$scope.noteClick = function (row, col) {
-				$scope.availableNotesByRow[row][col].on = !$scope.availableNotesByRow[row][col].on;
+				$scope.selectedFong.availableNotesByRow[row][col].on = !$scope.selectedFong.availableNotesByRow[row][col].on;
 				// update mapped notes
-				window.PhonePhong.NoteMap = buildMap(_availableNotes);
+				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
 			};
 
 			$scope.toggleNoteMapClick = function () {
-				window.PhonePhong.NoteMapOn = $scope.NoteMapOn = !window.PhonePhong.NoteMapOn;
+				$scope.selectedFong.NoteMapOn = !$scope.selectedFong.NoteMapOn;
 			};
 			$scope.toggleFilterNoteMapClick = function () {
-				window.PhonePhong.FilterNoteMapOn = $scope.FilterNoteMapOn = !window.PhonePhong.FilterNoteMapOn;
+				$scope.selectedFong.FilterNoteMapOn = !$scope.selectedFong.FilterNoteMapOn;
 			};
 
-			$scope.SelectedScale = _scale;
+			//$scope.selectedFong.SelectedScale = _scale;
 			$scope.IsSelectedScale = function (scale) {
-				return scale === $scope.SelectedScale;
+				return scale === $scope.selectedFong.SelectedScale;
 			}
 			$scope.IsSelectedBaseNote = function (baseNote) {
-				return baseNote === _baseNote;
+				return baseNote === $scope.selectedFong.baseNote;
 			}
 			$scope.changeBaseNote = function (event) {
 
 				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
 
-				_baseNote = $(event.target).html().trim();
+				$scope.selectedFong.baseNote = $(event.target).html().trim();
 
-				$scope.regenerateMap();
+				$scope.regenerateMap($scope.selectedFong);
 
-				$(event.target).attr('class', 'selectedScale');
-
-				window.PhonePhong.NoteMap = buildMap(_availableNotes);
+				$(event.target).attr('class', 'selectedScale');				
 			}
 			$scope.changeScale = function (event) {
 
 				$('.ui-map-note-map-scale').attr('class', 'ui-map-note-map-scale');
 
-				$scope.SelectedScale = $(event.target).html().trim();
-				_scale = $scope.SelectedScale;
+				$scope.selectedFong.SelectedScale = $(event.target).html().trim();
+				$scope.selectedFong.scale = $scope.selectedFong.SelectedScale;
 
-				$scope.regenerateMap();
+				$scope.regenerateMap($scope.selectedFong);
 
 				$(event.target).attr('class', 'selectedScale');
-
-				window.PhonePhong.NoteMap = buildMap(_availableNotes);
 			};
 
-			$scope.regenerateMap = function () {
-				generateScale(_baseNote.substr(0, 1), _baseNote.substr(1, 1), $scope.SelectedScale);
+			$scope.regenerateMap = function (fong) {
+				generateScale(fong, fong.baseNote.substr(0, 1), fong.baseNote.substr(1, 1), fong.SelectedScale);
 
-				$scope.availableNotesByRow = [];
+				fong.availableNotesByRow = [];
 
 				var currentRow = [];
-				for (var i = 0; i < _availableNotes.length; i++) {
+				for (var i = 0; i < fong.availableNotes.length; i++) {
 					if (currentRow.length < rowSize) {
-						currentRow.push(_availableNotes[i]);
+						currentRow.push(fong.availableNotes[i]);
 					} else {
-						$scope.availableNotesByRow.push(currentRow);
-						currentRow = [_availableNotes[i]];
+						fong.availableNotesByRow.push(currentRow);
+						currentRow = [fong.availableNotes[i]];
 					}
 
 					// take care of partially filled row at end
-					if (i === (_availableNotes.length - 1) && currentRow.length > 0) {
-						$scope.availableNotesByRow.push(currentRow);
+					if (i === (fong.availableNotes.length - 1) && currentRow.length > 0) {
+						fong.availableNotesByRow.push(currentRow);
 					}
 				}
+				
+				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
+				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
 			}
 
-			$scope.availableNotesByRow = [];
+			$scope.selectedFong.availableNotesByRow = [];
 
 			var currentRow = [];
-			for (var i = 0; i < _availableNotes.length; i++) {
+			for (var i = 0; i < $scope.selectedFong.availableNotes.length; i++) {
 				if (currentRow.length < rowSize) {
-					currentRow.push(_availableNotes[i]);
+					currentRow.push($scope.selectedFong.availableNotes[i]);
 				} else {
-					$scope.availableNotesByRow.push(currentRow);
-					currentRow = [_availableNotes[i]];
+					$scope.selectedFong.availableNotesByRow.push(currentRow);
+					currentRow = [$scope.selectedFong.availableNotes[i]];
 				}
 
 				// take care of partially filled row at end
-				if (i === (_availableNotes.length - 1) && currentRow.length > 0) {
-					$scope.availableNotesByRow.push(currentRow);
+				if (i === ($scope.selectedFong.availableNotes.length - 1) && currentRow.length > 0) {
+					$scope.selectedFong.availableNotesByRow.push(currentRow);
 				}
 			}
 
@@ -144,6 +145,15 @@ var _baseNote = 'a4';
 					window.location = '#/';
 				}
 			});
+
+			var f = logicBoard.fongs[0];
+			generateScale(f, f.baseNote.substr(0, 1), f.baseNote.substr(1, 1), f.scale);
+			var f1 = logicBoard.fongs[1];
+			generateScale(f1, f1.baseNote.substr(0, 1), f1.baseNote.substr(1, 1), f1.scale);
+			
+			$scope.regenerateMap(f);
+			$scope.regenerateMap(f1);
+
 		};
 
 		function buildMap(notes) {
@@ -154,15 +164,8 @@ var _baseNote = 'a4';
 			return rtn;
 		}
 
-		window.PhonePhong.NoteMap = buildMap(_availableNotes);
+		//window.PhonePhong.NoteMap = buildMap($scope.selectedFong.availableNotes);
 	} catch (err) {
 		alert(err.message);
 	}
 })();
-
-
-/*var windowHeight = 400;
-for (var $index = 0; $index < windowHeight*2; $index++) {
-    var y = ($index*20+5) - windowHeight*Math.floor(($index*20+5)/windowHeight);
-    console.log(y);
-}*/
