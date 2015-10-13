@@ -13,8 +13,60 @@
 	<div id="scrollableContainer">
 		<div style="height:300px;max-height:300px;" class="scrollable">
 			<table class="ui-map-table">
+				<tr>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						a
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						a#
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('b') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						b
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('c') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						c
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('c#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						c#
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('d') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						d
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('d#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						d#
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('e') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						e
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('f') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						f
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('f#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						f#
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('g') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						g
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('g#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+						g#
+					</td>
+				</tr>
+				<tr>
+					<td class="ui-map-note-map-base-note {{ IsSelectedOctave(3) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="3">
+						3
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedOctave(4) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="3">
+						4
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedOctave(5) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="3">
+						5
+					</td>
+					<td class="ui-map-note-map-base-note {{ IsSelectedOctave(6) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)">
+						6
+					</td>
+				</tr>
 				<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
-					<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="4">{{ x[0].label }}</td>
+					<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="12">{{ x[0].label }}</td>
 					<!--<td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
         <td class="ui-map-column map-note {{ x[2].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,2)">{{ x[2].label }}</td>
         <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>-->
@@ -58,21 +110,7 @@
 					<td class="ui-map-note-map-scale {{ IsSelectedScale('flamenco ') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
 						flamenco
 					</td>
-				</tr>
-				<tr>
-					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a3') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-						a3
-					</td>
-					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a4') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-						a4
-					</td>
-					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a5') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-						a5
-					</td>
-					<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a6') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
-						a6
-					</td>
-				</tr>
+				</tr>				
 			</table>
 		</div>
 		<div id="mapPadSwipeDown" class="swiper" style="background-color: #ffffff; height: 40px; width: 100%; position: absolute;"></div>

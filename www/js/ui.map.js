@@ -73,11 +73,24 @@
 			$scope.IsSelectedBaseNote = function (baseNote) {
 				return baseNote === $scope.selectedFong.baseNote;
 			}
+			$scope.IsSelectedOctave = function (octave) {
+				return octave === $scope.selectedFong.octave;	
+			}
 			$scope.changeBaseNote = function (event) {
 
 				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
 
 				$scope.selectedFong.baseNote = $(event.target).html().trim();
+
+				$scope.regenerateMap($scope.selectedFong);
+
+				$(event.target).attr('class', 'selectedScale');				
+			}
+			$scope.changeOctave = function (event) {
+
+				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
+
+				$scope.selectedFong.octave = parseInt($(event.target).html().trim());
 
 				$scope.regenerateMap($scope.selectedFong);
 
@@ -96,7 +109,7 @@
 			};
 
 			$scope.regenerateMap = function (fong) {
-				generateScale(fong, fong.baseNote.substr(0, 1), fong.baseNote.substr(1, 1), fong.SelectedScale);
+				generateScale(fong, fong.baseNote, fong.octave, fong.SelectedScale);
 
 				fong.availableNotesByRow = [];
 
@@ -152,9 +165,9 @@
 			});
 
 			var f = logicBoard.fongs[0];
-			generateScale(f, f.baseNote.substr(0, 1), f.baseNote.substr(1, 1), f.scale);
+			generateScale(f, f.baseNote, f.octave, f.scale);
 			var f1 = logicBoard.fongs[1];
-			generateScale(f1, f1.baseNote.substr(0, 1), f1.baseNote.substr(1, 1), f1.scale);
+			generateScale(f1, f1.baseNote, f1.octave, f1.scale);
 			
 			$scope.regenerateMap(f);
 			$scope.regenerateMap(f1);
