@@ -138,7 +138,7 @@
 
 			// position swipe pad for page switching
 			var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-			mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
+			//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
 			var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
 				direction: Hammer.DIRECTION_VERTICAL
 			});
