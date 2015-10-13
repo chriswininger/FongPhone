@@ -24,7 +24,7 @@
 
 		window.PhonePhong.UI.NoteMap = function ($scope, $window) {			
 
-			$('#scrollableContainer').css('max-height', (window.innerHeight - 40) + "px");
+			$('#mapSubUI').css('height', (window.innerHeight - 40) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 
 			$scope.selectedFong = logicBoard.fongs[0];
