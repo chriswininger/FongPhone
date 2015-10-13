@@ -9,7 +9,8 @@ var fong = function (audCtx, mainVol, x, y, board) {
 
 	this.scale = 'ionian';
 	this.SelectedScale = this.scale;
-	this.baseNote = 'a4';
+	this.baseNote = 'a';
+	this.octave = 4;
 	this.availableNotes = [];
 	
 	this.NoteMapOn = false;
