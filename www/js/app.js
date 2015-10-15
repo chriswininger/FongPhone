@@ -82,12 +82,9 @@ var pad;
 	}]);
 
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
-		try {
-			var soundUI = new PhonePhong.Sound($scope, logicBoard, pad);
-			$scope.pageClass = 'view-sound';
-		} catch (err) {
-			alert(err.message);
-		}
+		var soundUI = new PhonePhong.Sound($scope, logicBoard, pad);
+		console.log(JSON.stringify(soundUI.toJSON(), null, 4));
+		$scope.pageClass = 'view-sound';
 	}]);
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
