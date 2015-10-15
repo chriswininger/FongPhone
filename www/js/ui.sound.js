@@ -123,11 +123,7 @@ var _filterType = "lowpass";
 
 		$scope.changeFilterType = function (event) {
 
-			$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
-
 			_filterType = $(event.target).html().trim();
-
-			$(event.target).attr('class', 'selectedScale');
 
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setFilterType(_filterType);
@@ -144,22 +140,14 @@ var _filterType = "lowpass";
 
 		$scope.changeOsc1EnvType = function (event) {
 
-			$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
-
 			oscType = $(event.target).html().trim();
-
-			$(event.target).attr('class', 'selectedScale');
 
 			logicBoard.fongs[0].oscGainCtrl.type = oscType;
 		}
 
 		$scope.changeOsc2EnvType = function (event) {
 
-			$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
-
 			oscType = $(event.target).html().trim();
-
-			$(event.target).attr('class', 'selectedScale');
 
 			logicBoard.fongs[1].oscGainCtrl.type = oscType;
 		}

@@ -78,34 +78,22 @@
 			}
 			$scope.changeBaseNote = function (event) {
 
-				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
-
 				$scope.selectedFong.baseNote = $(event.target).html().trim();
 
-				$scope.regenerateMap($scope.selectedFong);
-
-				$(event.target).attr('class', 'selectedScale');				
+				$scope.regenerateMap($scope.selectedFong);			
 			}
 			$scope.changeOctave = function (event) {
 
-				$('.ui-map-note-map-base-note').attr('class', 'ui-map-note-map-scale');
-
 				$scope.selectedFong.octave = parseInt($(event.target).html().trim());
 
-				$scope.regenerateMap($scope.selectedFong);
-
-				$(event.target).attr('class', 'selectedScale');				
+				$scope.regenerateMap($scope.selectedFong);			
 			}
 			$scope.changeScale = function (event) {
-
-				$('.ui-map-note-map-scale').attr('class', 'ui-map-note-map-scale');
 
 				$scope.selectedFong.SelectedScale = $(event.target).html().trim();
 				$scope.selectedFong.scale = $scope.selectedFong.SelectedScale;
 
 				$scope.regenerateMap($scope.selectedFong);
-
-				$(event.target).attr('class', 'selectedScale');
 			};
 
 			$scope.regenerateMap = function (fong) {
