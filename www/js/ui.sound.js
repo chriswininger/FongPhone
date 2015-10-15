@@ -8,10 +8,26 @@ var _filterType = "lowpass";
 		this.board = board;
 		this.pad = pad;
 
+		FongPhone.utils.createGetSet(this, 'osc2EnvType', getOsc2EnvType, setOsc2EnvType);
+		FongPhone.utils.createGetSet(this, 'osc1EnvType', getOsc1EnvType, setOsc1EnvType);
+		FongPhone.utils.createGetSet(this, 'osc2Type', getOsc2Type, setOsc2Type);
+		FongPhone.utils.createGetSet(this, 'osc1Type', getOsc1Type, setOsc1Type);
+		FongPhone.utils.createGetSet(this, 'delayFeedbackControl', getDelayFeedbackControl, setDelayFeedbackControl);
+		FongPhone.utils.createGetSet(this, 'delayTimeControl', getDelayTimeControl, setDelayTimeControl);
+		FongPhone.utils.createGetSet(this, 'delayVolumeControl', getDelayVolumeControl, setDelayVolumeControl);
+		FongPhone.utils.createGetSet(this, 'filterPortamento', getFilterPortamento, setFilterPortamento);
+		FongPhone.utils.createGetSet(this, 'portamentoControl', getPortamentoControl, setPortamentoControl);
+		FongPhone.utils.createGetSet(this, 'evn2Control', getEvn2Control, setEvn2Control);
+		FongPhone.utils.createGetSet(this, 'env1Control', getEnv1Control, setEnv1Control);
+		FongPhone.utils.createGetSet(this, 'filterResonance', getFilterResonance, setFilterResonance);
+		FongPhone.utils.createGetSet(this, 'filterOn', getFilterOn, setFilterOn);
+
 		$scope.FilterOn = board.FilterOn;
 
 		$scope.toggleFilterClick = function () {
-			$scope.FilterOn = !$scope.FilterOn;
+			self.filterOn = !$scope.FilterOn;
+			$scope.FilterOn = self.FilterOn;
+
 			logicBoard.setFilterStatus($scope.FilterOn);
 		};
 		
@@ -25,6 +41,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.filterResonance = v;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					_filterResonance = parseInt(v);
 					logicBoard.fongs[i].setOscFilterResonance(_filterResonance * 10);
@@ -38,6 +55,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.env1Control = v;
 				logicBoard.primaryOffsetMax = parseInt(v);
 				logicBoard.setPrimaryOffsetFromFong(pad.fongDots[0]);
 				logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
@@ -50,6 +68,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.evn2Control = v;
 				logicBoard.secondaryOffsetMax = parseInt(v);
 				logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 			}
@@ -61,6 +80,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.portamentoControl = v;
 				logicBoard.portamento = parseInt(v);
 			}
 		});
@@ -71,6 +91,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.filterPortamento = v;
 				logicBoard.filterPortamento = parseInt(v);
 			}
 		});
@@ -80,6 +101,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.delayVolumeControl = v;
 				logicBoard.delayVolume = v / 100.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
@@ -93,6 +115,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.delayTimeControl = v;
 				logicBoard.delayTime = v / 1000.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
@@ -106,6 +129,7 @@ var _filterType = "lowpass";
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
+				self.delayFeedbackControl = v;
 				logicBoard.delayFeedback = v / 10.0;
 				for (var i = 0; i < logicBoard.fongs.length; i++) {
 					logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
@@ -136,8 +160,8 @@ var _filterType = "lowpass";
 
 		$scope.changeOsc1Type = function (event) {
 
-			oscType = $(event.target).html().trim();
-
+			var oscType = $(event.target).html().trim();
+			self.osc1Type = oscType;
 			//logicBoard.fongs[0].osc.type = oscType;
 			pad.fongDots[0].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
 			pad.fongDots[0].selectedState = oscType;
@@ -149,8 +173,9 @@ var _filterType = "lowpass";
 
 		$scope.changeOsc2Type = function (event) {
 
-			oscType = $(event.target).html().trim();
+			var oscType = $(event.target).html().trim();
 
+			self.osc2Type = oscType;
 			pad.fongDots[1].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
 		}
 
@@ -164,15 +189,15 @@ var _filterType = "lowpass";
 
 		$scope.changeOsc1EnvType = function (event) {
 
-			oscType = $(event.target).html().trim();
-
+			var oscType = $(event.target).html().trim();
+			self.osc1EnvType = oscType;
 			logicBoard.fongs[0].oscGainCtrl.type = oscType;
 		}
 
 		$scope.changeOsc2EnvType = function (event) {
 
-			oscType = $(event.target).html().trim();
-
+			var oscType = $(event.target).html().trim();
+			self.osc2EnvType = oscType;
 			logicBoard.fongs[1].oscGainCtrl.type = oscType;
 		}
 
