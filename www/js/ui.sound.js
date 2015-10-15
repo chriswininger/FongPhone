@@ -186,6 +186,9 @@ var _filterType = "lowpass";
 		});
 		hammeruiPadSwipeDown.on('pan', function (ev) {
 			if (ev.isFinal) {
+				if (pad) {
+					localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+				}
 				window.location = '#/';
 			}
 		});
