@@ -177,7 +177,7 @@ h1 {
 table,
 th,
 td {
-	border-bottom: 1px solid rgba(255, 255, 255, .1);
+	border-bottom: 1px solid rgba(255, 255, 255, .2);
 	padding: 5px;
 	border-spacing: 0;
 }
@@ -190,6 +190,7 @@ table.ui-map-table {
 td.ui-map-note-map-toggle {
 	opacity: .7;
 	font-size: x-large;
+	border-bottom: 1px solid rgba(255, 255, 255, .1);
 }
 
 td.ui-map-note-map-toggle {
@@ -229,7 +230,8 @@ td.ui-map-note-map-toggle {
 }
 
 .selectedScale {
-	opacity: .9;
+	opacity: .9;	
+	border-bottom: 1px solid rgba(255, 255, 255, .05);
 }
 
 .scrollable {
