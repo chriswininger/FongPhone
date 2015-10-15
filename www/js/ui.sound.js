@@ -130,6 +130,30 @@ var _filterType = "lowpass";
 			}
 		}
 
+		$scope.IsSelectedOsc1Type = function (type) {
+			return logicBoard.fongs[0].osc.type == type;
+		}
+
+		$scope.changeOsc1Type = function (event) {
+
+			oscType = $(event.target).html().trim();
+
+			//logicBoard.fongs[0].osc.type = oscType;
+			pad.fongDots[0].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
+			pad.fongDots[0].selectedState = oscType;
+		}
+
+		$scope.IsSelectedOsc2Type = function (type) {
+			return logicBoard.fongs[1].osc.type == type;
+		}
+
+		$scope.changeOsc2Type = function (event) {
+
+			oscType = $(event.target).html().trim();
+
+			pad.fongDots[1].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
+		}
+
 		$scope.IsSelectedOsc1EnvType = function (envType) {
 			return logicBoard.fongs[0].oscGainCtrl.type == envType;
 		}
