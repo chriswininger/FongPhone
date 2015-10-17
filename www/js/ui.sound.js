@@ -1,5 +1,5 @@
 (function () {
-	window.PhonePhong.Sound = function ($scope, board, pad) {
+	window.PhonePhong.Sound = function ($scope, board, pad, state) {
 		var self = this;
 		var svgElementID = 'soundControls';
 		this.board = board;
@@ -14,21 +14,14 @@
 		FongPhone.utils.createGetSet(this, 'filterPortamento', getFilterPortamento, setFilterPortamento);
 		FongPhone.utils.createGetSet(this, 'portamentoControl', getPortamentoControl, setPortamentoControl);
 		FongPhone.utils.createGetSet(this, 'env1Control', getEnv1Control, setEnv1Control);
-		FongPhone.utils.createGetSet(this, 'evn2Control', getEvn2Control, setEvn2Control);
+		FongPhone.utils.createGetSet(this, 'env2Control', getEnv2Control, setEnv2Control);
 		FongPhone.utils.createGetSet(this, 'filterResonance', getFilterResonance, setFilterResonance);
 		FongPhone.utils.createGetSet(this, 'filterOn', getFilterOn, setFilterOn);
 		FongPhone.utils.createGetSet(this, 'filterType', getFilterType, setFilterType);
+		this.set = set;
+		_.bind(set, this);
 
-
-		this.filterResonance = 5;
-		this.filterType = 'lowpass';
-		this.env1Control = this.board.primaryOffsetMax;
-		this.env2Control =  this.board.secondaryOffsetMax;
-		this.portamentoControl = this.board.portamento;
-		this.filterPortamento = this.board.filterPortamento;
-		this.delayVolumeControl = parseInt(this.board.delayVolume * 100);
-		this.delayTimeControl = parseInt(this.board.delayTime * 1000);
-		this.delayFeedbackControl = parseInt(this.board.delayFeedback * 10);
+		this.set(state);
 		// investigate $scope values
 
 		$scope.FilterOn = board.FilterOn;
@@ -61,13 +54,14 @@
 			}
 		});
 
+		console.log('!!! env2Control: ' + this.env2Control);
 		$("#env2Control").val(this.env2Control);
 
 		$("#env2Control").knob({
 			'stopper': true,
 			'height': 90,
 			'change': function (v) {
-				self.evn2Control = parseInt(v);
+				self.env2Control = parseInt(v);
 			}
 		});
 
@@ -176,6 +170,7 @@
 			if (ev.isFinal) {
 				if (pad) {
 					localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+					localStorage.setItem('ui.sound.state', JSON.stringify(self.toJSON()));
 				}
 				window.location = '#/';
 			}
@@ -193,9 +188,9 @@
 			return out;
 		};
 
-		this.set = function(state) {
+		function set(state) {
 			_.extend(this, state);
-		};
+		}
 
 		// ==== Getters and Setters ====
 		function getOsc2EnvType() {
@@ -281,12 +276,12 @@
 			logicBoard.portamento = portamento;
 		}
 
-		function getEvn2Control() {
-			return this._evn2Ctrl;
+		function getEnv2Control() {
+			return this._env2Ctrl;
 		}
-		function setEvn2Control(evn) {
-			this._evn2Ctrl = evn;
-			logicBoard.secondaryOffsetMax = evn;
+		function setEnv2Control(env) {
+			this._env2Ctrl = env;
+			logicBoard.secondaryOffsetMax = env;
 			logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 		}
 
