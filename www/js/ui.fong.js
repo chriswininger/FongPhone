@@ -155,10 +155,26 @@
 			return element;
 		},
 		listen: function() {
-			this.domElement.addEventListener('touchmove', _.bind(this.handleTouchMove, this));
-			this.domElement.addEventListener('touchend', _.bind(this.handleTouchEnd, this));
-			// TODO (CAW) Does this really only exist on jquery?
-			this.fadeElement.addEventListener('touchmove', _.bind(this.handleFadeMove, this));
+			// remove any listeners registered to dead dom nodes
+			if (this._touchMoveListener)
+				this.domElement.removeEventListener('touchMove', this._handleTouchMove);
+			if (this._touchEndListener)
+				this.domElement.removeEventListener('touchend', this._touchEndListener);
+			if (this._touchMoveFadeListener)
+				this.fadeElement.removeEventListener('touchmove', this._touchMoveFadeListener);
+
+			// clear any event listeners registered through jquery
+			$(this.domElement).off();
+
+			// store the wrapped function call so we have the instance to to call removeEventLister with later
+			this._touchMoveListener = _.bind(this.handleTouchMove, this);
+			this._touchEndListener = _.bind(this.handleTouchEnd, this);
+			this._touchMoveFadeListener = _.bind(this.handleFadeMove, this);
+
+			this.domElement.addEventListener('touchmove', this._touchMoveListener);
+			this.domElement.addEventListener('touchend', this._touchEndListener);
+			this.fadeElement.addEventListener('touchmove', this._touchMoveFadeListener);
+
 			$(this.domElement).on('doubletap', _.bind(this.handleDoubleTap, this));
 			$(this.domElement).on('taphold', _.bind(this.handleLongTouch, this));
 		},

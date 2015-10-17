@@ -56,12 +56,27 @@
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
 		listen: function () {
-			document.getElementById(this.svgElementID).addEventListener('touchmove', function (e) {
+			var svgElem = document.getElementById(this.svgElementID);
+
+			// store the function wrapper returned from bind so we can clean up after dom is refreshed
+			this._handleBackGroundTouchStart = _.bind(this.handleBackGroundTouchStart, this);
+			this._handleTouchEnd = _.bind(this.handleBackGroundTouchEnd, this);
+
+			// remove any listeners attached to dead dom nodes
+			svgElem.removeEventListener('touchmove', _stopDefault);
+			if (this._handleBackGroundTouchStart)
+				this.backgroundPad.removeEventListener('touchstart', this._handleBackGroundTouchStart);
+			if (this._handleTouchEnd)
+				this.backgroundPad.removeEventListener('touchend', this._handleTouchEnd);
+
+			svgElem.addEventListener('touchmove', _stopDefault, false);
+			this.backgroundPad.addEventListener('touchstart', this._handleBackGroundTouchStart);
+			this.backgroundPad.addEventListener('touchend', this._handleTouchEnd);
+
+			function _stopDefault(e) {
 				// Cancel the event
 				e.preventDefault();
-			}, false);
-			this.backgroundPad.addEventListener('touchstart', _.bind(this.handleBackGroundTouchStart, this));
-			this.backgroundPad.addEventListener('touchend', _.bind(this.handleBackGroundTouchEnd, this));
+			}
 		},
 		handleFadeChanged: function (fong) {
 			// TODO (CAW) -- range should reflect size of outer sphere

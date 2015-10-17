@@ -8,6 +8,9 @@
 			var hammerSwipe = new Hammer(uiSwipe, {
 				direction: direction
 			});
+
+			// release any previous listeners to avoiding holding onto old dom elements
+			hammerSwipe.off('pan');
 			hammerSwipe.on('pan', function (ev) {
 				if (ev.isFinal && ev.direction == direction) {
 					// save state of ctrl
