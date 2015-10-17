@@ -28,25 +28,8 @@
 		this.boardInput = board.fongs[this.boardInputIndex];
 		this.dur = this.boardInput.dur; // todo (caw) something of hack but maybe ok
 		this.gradient = state.gradient;
-		this.animation = $("#" + this.gradient + "Animation");
-		$(this.animation).attr("dur", this.dur);
-		this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
-		this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
 
-		if (!this.fadeElement || ! this.domElement) return;
-		// hard code fader size
-		this.fadeElement.setAttribute('r', 10);
-
-		this.x = state.x;
-		this.y = state.y;
-		this.fadeOffset = state.fadeOffset;
-		this.radius = state.radius;
-		this.color = state.color;
-		this.states = state.states;
-		this.classes = state.classes;
-		this.selectedClassType = state.selectedClassType;
-		this.selectedState = state.selectedState;
-		this.fongRole = state.fongRole;
+		this.set(state);
 
 		// set handlers last (and fire them all on init)
 		this.initializer = state.initializer || function() {};
@@ -57,13 +40,28 @@
 		//this.classTypeChangeHandler = state.classTypeChangeHandler || function() {};
 		this.stateChangedHandler = state.stateChangedHandler || function() {};
 
-		this.fireAllHandlers();
-
-		// wire up touch events on dom
-		this.listen();
+		//this.attachToDom();
 	};
 
 	_.extend(window.FongPhone.UI.Fong.prototype, {
+		attachToDom: function() {
+			this.animation = $("#" + this.gradient + "Animation");
+			$(this.animation).attr("dur", this.dur);
+			this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
+			this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
+
+			if (!this.fadeElement || ! this.domElement) return;
+			// hard code fader size
+			this.fadeElement.setAttribute('r', 10);
+
+			// reset state now that dom is attached (cheap way to trigger positioning of ui
+			this.set(this.toJSON());
+
+			this.fireAllHandlers();
+
+			// wire up touch events on dom
+			this.listen();
+		},
 		handleDoubleTap: function(event) {
 			this.incrementState();
 			event.preventDefault();
@@ -180,7 +178,8 @@
 		},
 		setFadeOffSet: function(fadeOffset) {
 			this._fadeOffset = fadeOffset;
-			this.fadeElement.setAttribute('cx', this.x + fadeOffset);
+			if (this.fadeElement)
+				this.fadeElement.setAttribute('cx', this.x + fadeOffset);
 			// TODO (CAW) Propery store ui state so we don't need this on the board
 			this.boardInput.oscTouchFadeVal = fadeOffset;
 			//this.fadeElement.setAttribute('cy', this.y);
@@ -191,9 +190,11 @@
 		setX: function(x) {
 			var oldX = this._x;
 			this._x = x;
-			this.domElement.setAttribute('cx', x);
+			if (this.domElement)
+				this.domElement.setAttribute('cx', x);
 			var fadeOffset = !this.fadeOffset ? 0 : this.fadeOffset;
-			this.fadeElement.setAttribute('cx', x + fadeOffset)
+			if (this.fadeElement)
+				this.fadeElement.setAttribute('cx', x + fadeOffset)
 			// TODO (CAW) Propery store ui state so we don't need this on the board
 			this.boardInput.x = x;
 			//this.positionChanged.dispatch(this, oldX, this.y);
@@ -206,8 +207,10 @@
 		setY: function(y) {
 			var oldY = this._y;
 			this._y = y;
-			this.domElement.setAttribute('cy', y);
-			this.fadeElement.setAttribute('cy', y);
+			if (this.domElement)
+				this.domElement.setAttribute('cy', y);
+			if (this.fadeElement)
+				this.fadeElement.setAttribute('cy', y);
 			// TODO (CAW) Property store ui state so we don't need this on the board
 			this.boardInput.y = y;
 			if (this.positionChangedHandler)
@@ -218,7 +221,8 @@
 		},
 		setRadius: function(r) {
 			this._r = r;
-			this.domElement.setAttribute('r', r);
+			if (this.domElement)
+				this.domElement.setAttribute('r', r);
 		},
 		getColor: function() {
 			return this._color;
@@ -268,6 +272,18 @@
 			this._selectedStateIndex = stateIndex;
 			if (this.stateChangedHandler)
 				this.stateChangedHandler(this, stateIndex, this.states[stateIndex]);
+		},
+		set: function (state) {
+			this.x = state.x;
+			this.y = state.y;
+			this.fadeOffset = state.fadeOffset;
+			this.radius = state.radius;
+			this.color = state.color;
+			this.states = state.states;
+			this.classes = state.classes;
+			this.selectedClassType = state.selectedClassType;
+			this.selectedState = state.selectedState;
+			this.fongRole = state.fongRole;
 		},
 		toJSON: function() {
 			var _exlusionList = {

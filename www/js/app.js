@@ -32,7 +32,7 @@ var pad;
 	} else if (typeof webkitAudioContext !== "undefined") {
 		context = new webkitAudioContext();
 	} else {
-		conole.error(new Error('AudioContext not supported.'));
+		console.error(new Error('AudioContext not supported.'));
 	}
 
 	logicBoard = new PhonePhong.BoardLogic(context, defaults);
@@ -68,32 +68,21 @@ var pad;
 		});
 	});
 
-	fongPhone.controller('padController', ['$scope', function ($scope) {
-		$scope.pageClass = 'view-pad';
-		var storedState = null;
-		try {
-			storedState = localStorage.getItem('ui.pad.state');
-		} catch (ex) {
-			console.error('error retreiving ui pad state: ' + ex);
-		}
+	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
+	 fongPhone.controller('padController', ['$scope', function ($scope) {
+		padUI.attachToDom();
 
-		if (storedState) storedState = JSON.parse(storedState);
-		var padUI = new PhonePhong.UI.Pad(logicBoard, storedState || FongPhone.UI.Defaults);
-		pad = padUI;
+		 $scope.pageClass = 'view-pad';
 	}]);
 
 	var soundUI = null;
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
-		var storedState = null;
+		soundUI = new PhonePhong.Sound(
+			$scope,
+			logicBoard,
+			padUI,
+			_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
 
-		try {
-			storedState = localStorage.getItem('ui.sound.state');
-		} catch(ex) {
-			console.error('could not retrieve sound state: ' + ex);
-		}
-
-		if (storedState) storedState = JSON.parse(storedState);
-		soundUI = new PhonePhong.Sound($scope, logicBoard, pad, storedState || FongPhone.UI.Defaults.soundBoardSettings);
 		$scope.pageClass = 'view-sound';
 	}]);
 
@@ -115,6 +104,18 @@ var pad;
 		} catch (ex) {
 			console.error('error saving ui pad state: ' + ex);
 		}
+	}
+
+	function _getStoredState(key, defaults) {
+		var storedState = null;
+		try {
+			storedState = localStorage.getItem(key);
+		} catch (ex) {
+			console.error('error retrieving ui pad state: ' + ex);
+		}
+
+		if (storedState) storedState = JSON.parse(storedState);
+		return (storedState || defaults);
 	}
 })();
 

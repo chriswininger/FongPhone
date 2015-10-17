@@ -11,12 +11,7 @@
 (function () {
 	window.PhonePhong.UI.Pad = function (board, state) {
 		var self = this;
-		var svgElementID = 'phongUIGrid';
-
-		document.getElementById("phongUIGrid").addEventListener('touchmove', function (e) {
-			// Cancel the event
-			e.preventDefault();
-		}, false);
+		this.svgElementID = 'phongUIGrid';
 
 		this.board = board;
 
@@ -38,24 +33,33 @@
 		};
 
 		this.set(state);
-
-		// make changes to dom to create ui
-		self.createComponents();
-		// set up dom events
-		self.listen();
 	};
 
 	_.extend(PhonePhong.UI.Pad.prototype, {
+		attachToDom: function(attachChildren) {
+			// make changes to dom to create ui
+			this.createComponents();
+			// set up dom events
+			this.listen();
+
+			// make sure each fong gets re-attached
+			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
+
+		},
 		createComponents: function () {
-			$('#phongUIGrid').height(window.innerHeight);
+			$('#' + this.svgElementID).height(window.innerHeight);
 			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
 			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
 
-			this.backgroundPad = document.getElementById('phongUIGrid');
+			this.backgroundPad = document.getElementById(this.svgElementID);
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 		},
 		listen: function () {
+			document.getElementById(this.svgElementID).addEventListener('touchmove', function (e) {
+				// Cancel the event
+				e.preventDefault();
+			}, false);
 			this.backgroundPad.addEventListener('touchstart', _.bind(this.handleBackGroundTouchStart, this));
 			this.backgroundPad.addEventListener('touchend', _.bind(this.handleBackGroundTouchEnd, this));
 		},
