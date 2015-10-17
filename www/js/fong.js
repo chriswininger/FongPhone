@@ -141,8 +141,9 @@ var fong = function (audCtx, mainVol, x, y, board) {
 		try {
 			this.osc.disconnect(this.oscPanCtrl);
 			this.osc.connect(this.filter);
-		} catch (err) {
-			alert(err.message);
+		} catch (ex) {
+			if (ex.code === 15) return; // not off
+			console.error(ex);
 		}
 	}
 
@@ -150,8 +151,9 @@ var fong = function (audCtx, mainVol, x, y, board) {
 		try {
 			this.osc.disconnect(this.filter);
 			this.osc.connect(this.oscPanCtrl);
-		} catch (err) {
-			alert(err.message);
+		} catch (ex) {
+			if (ex.code === 15) return; // not on
+			console.error(ex);
 		}
 	}
 

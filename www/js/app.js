@@ -70,24 +70,31 @@ var pad;
 
 	fongPhone.controller('padController', ['$scope', function ($scope) {
 		$scope.pageClass = 'view-pad';
+		var storedState = null;
 		try {
-			var storedState = localStorage.getItem('ui.pad.state');
-			if (storedState) storedState = JSON.parse(storedState);
-			var padUI = new PhonePhong.UI.Pad(logicBoard, storedState || FongPhone.UI.Defaults);
-			pad = padUI;
+			storedState = localStorage.getItem('ui.pad.state');
 		} catch (ex) {
 			console.error('error retreiving ui pad state: ' + ex);
-			var padUI = new PhonePhong.UI.Pad(logicBoard, FongPhone.UI.Defaults);
 		}
+
+		if (storedState) storedState = JSON.parse(storedState);
+		var padUI = new PhonePhong.UI.Pad(logicBoard, storedState || FongPhone.UI.Defaults);
+		pad = padUI;
 	}]);
 
+	var soundUI = null;
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
+		var storedState = null;
+
 		try {
-			var soundUI = new PhonePhong.Sound($scope, logicBoard, pad);
-			$scope.pageClass = 'view-sound';
-		} catch (err) {
-			alert(err.message);
+			storedState = localStorage.getItem('ui.sound.state');
+		} catch(ex) {
+			console.error('could not retrieve sound state: ' + ex);
 		}
+
+		if (storedState) storedState = JSON.parse(storedState);
+		soundUI = new PhonePhong.Sound($scope, logicBoard, pad, storedState || FongPhone.UI.Defaults.soundBoardSettings);
+		$scope.pageClass = 'view-sound';
 	}]);
 
 	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
@@ -104,6 +111,7 @@ var pad;
 	function _onPause() {
 		try {
 			localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+			localStorage.setItem('ui.sound.state', JSON.stringify(soundUI));
 		} catch (ex) {
 			console.error('error saving ui pad state: ' + ex);
 		}
