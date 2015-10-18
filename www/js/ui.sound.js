@@ -1,6 +1,5 @@
 (function () {
-	window.PhonePhong.Sound = function ($scope, board, pad, state) {
-		var self = this;
+	window.PhonePhong.Sound = function (board, pad, state) {
 		var svgElementID = 'soundControls';
 		this.board = board;
 
@@ -19,166 +18,116 @@
 		FongPhone.utils.createGetSet(this, 'filterOn', getFilterOn, setFilterOn);
 		FongPhone.utils.createGetSet(this, 'filterType', getFilterType, setFilterType);
 		this.set = set;
-		_.bind(set, this);
+		this.attachToDom = attachToDom;
+		this.registerKnob = registerKnob;
+		_.bindAll(this, 'set', 'attachToDom', 'registerKnob');
 
 		this.set(state);
-		// investigate $scope values
 
-		$scope.FilterOn = board.FilterOn;
 
-		$scope.toggleFilterClick = function () {
-			self.filterOn = !$scope.FilterOn;
-		};
-		
-		$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
-		$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
-		$(".dial").attr('disabled','disabled');
+		function attachToDom($scope) {
+			var self = this;
+			this.$scope = $scope;
 
-		$("#filterResonanceControl").val(this.filterResonance);
+			// investigate $scope values
+			$scope.FilterOn = board.FilterOn;
 
-		$("#filterResonanceControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.filterResonance = parseInt(v);
+			$scope.toggleFilterClick = function () {
+				self.filterOn = !$scope.FilterOn;
+			};
+
+			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
+			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
+			$(".dial").attr('disabled', 'disabled');
+
+			$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px");
+			$('.page').css('max-height', window.innerHeight + "px");
+
+			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance);
+			this.registerKnob('#env1Control', 'env1Control', this.env1Control);
+			this.registerKnob('#env2Control', 'env2Control', this.env2Control);
+			this.registerKnob('#portamentoControl', 'portamentoControl', this.portamentoControl);
+			this.registerKnob('#filterPortamentoControl', 'filterPortamento', this.filterPortamento);
+			this.registerKnob('#delayVolumeControl', 'delayVolumeControl', this.delayVolumeControl);
+			this.registerKnob('#delayTimeControl', 'delayTimeControl', this.delayTimeControl);
+			this.registerKnob('#delayFeedbackControl', 'delayFeedbackControl', this.delayFeedbackControl);
+
+
+			$scope.IsSelectedFilterType = function (filterType) {
+				return filterType === self.filterType;
 			}
-		});
 
-		$("#env1Control").val(this.env1Control);
-
-		$("#env1Control").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.env1Control = parseInt(v);
+			$scope.changeFilterType = function (event) {
+				self.filterType = $(event.target).html().trim();
 			}
-		});
 
-		console.log('!!! env2Control: ' + this.env2Control);
-		$("#env2Control").val(this.env2Control);
-
-		$("#env2Control").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.env2Control = parseInt(v);
+			$scope.IsSelectedOsc1Type = function (type) {
+				return logicBoard.fongs[0].osc.type == type;
 			}
-		});
 
-		$("#portamentoControl").val(this.portamentoControl);
-
-		$("#portamentoControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.portamentoControl = parseInt(v);
+			$scope.changeOsc1Type = function (event) {
+				self.osc1Type = $(event.target).html().trim();
 			}
-		});
 
-		$("#filterPortamentoControl").val(this.filterPortamento);
-
-		$("#filterPortamentoControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.filterPortamento = parseInt(v);
+			$scope.IsSelectedOsc2Type = function (type) {
+				return logicBoard.fongs[1].osc.type == type;
 			}
-		});
-		$("#delayVolumeControl").val(this.delayVolumeControl);
 
-		$("#delayVolumeControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.delayVolumeControl = v;
+			$scope.changeOsc2Type = function (event) {
+				self.osc2Type = $(event.target).html().trim();
 			}
-		});
 
-		$("#delayTimeControl").val(this.delayTimeControl);
-
-		$("#delayTimeControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.delayTimeControl = v;
+			$scope.IsSelectedOsc1EnvType = function (envType) {
+				return logicBoard.fongs[0].oscGainCtrl.type == envType;
 			}
-		});
 
-		$("#delayFeedbackControl").val(this.delayFeedbackControl);
-
-		$("#delayFeedbackControl").knob({
-			'stopper': true,
-			'height': 90,
-			'change': function (v) {
-				self.delayFeedbackControl = v;
+			$scope.IsSelectedOsc2EnvType = function (envType) {
+				return logicBoard.fongs[1].oscGainCtrl.type == envType;
 			}
-		});
 
-		$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px");
+			$scope.changeOsc1EnvType = function (event) {
+				self.osc1EnvType = $(event.target).html().trim();
+			}
 
-		$('.page').css('max-height', window.innerHeight + "px");
+			$scope.changeOsc2EnvType = function (event) {
+				self.osc2EnvType = $(event.target).html().trim();
+			}
 
-		$scope.IsSelectedFilterType = function (filterType) {
-			return filterType === self.filterType;
-		}
-
-		$scope.changeFilterType = function (event) {
-			self.filterType = $(event.target).html().trim();
-		}
-
-		$scope.IsSelectedOsc1Type = function (type) {
-			return logicBoard.fongs[0].osc.type == type;
-		}
-
-		$scope.changeOsc1Type = function (event) {
-			self.osc1Type =  $(event.target).html().trim();
-		}
-
-		$scope.IsSelectedOsc2Type = function (type) {
-			return logicBoard.fongs[1].osc.type == type;
-		}
-
-		$scope.changeOsc2Type = function (event) {
-			self.osc2Type = $(event.target).html().trim();
-		}
-
-		$scope.IsSelectedOsc1EnvType = function (envType) {
-			return logicBoard.fongs[0].oscGainCtrl.type == envType;
-		}
-
-		$scope.IsSelectedOsc2EnvType = function (envType) {
-			return logicBoard.fongs[1].oscGainCtrl.type == envType;
-		}
-
-		$scope.changeOsc1EnvType = function (event) {
-			self.osc1EnvType = $(event.target).html().trim();
-		}
-
-		$scope.changeOsc2EnvType = function (event) {
-			self.osc2EnvType = $(event.target).html().trim();
-		}
-
-		var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-		//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
-		var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
-			direction: Hammer.DIRECTION_VERTICAL
-		});
-		hammeruiPadSwipeDown.get('swipe').set({
-			direction: Hammer.DIRECTION_VERTICAL
-		});
-		hammeruiPadSwipeDown.on('pan', function (ev) {
-			if (ev.isFinal) {
-				if (pad) {
-					localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
-					localStorage.setItem('ui.sound.state', JSON.stringify(self.toJSON()));
+			var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
+			//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
+			var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
+				direction: Hammer.DIRECTION_VERTICAL
+			});
+			hammeruiPadSwipeDown.get('swipe').set({
+				direction: Hammer.DIRECTION_VERTICAL
+			});
+			hammeruiPadSwipeDown.on('pan', function (ev) {
+				if (ev.isFinal) {
+					if (pad) {
+						localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+						localStorage.setItem('ui.sound.state', JSON.stringify(self.toJSON()));
+					}
+					window.location = '#/';
 				}
-				window.location = '#/';
-			}
-		});
+			});
+		}
+
+		function registerKnob(selector, attrKey, val) {
+			var self = this;
+			$(selector).off('change');
+			$(selector).val(val);
+			$(selector).knob({
+				'stopper': true,
+				'height': 90,
+				'change': function (v) {
+					self[attrKey] = parseInt(v);
+				}
+			});
+		}
 
 		// ==== Member Methods ====
 		this.toJSON = function() {
-			var exclued = { board: true };
+			var exclued = { board: true, $scope: true };
 			var out = {};
 			_.each(this, function(val, key) {
 				if (key[0] !== '_' && !_.isFunction(val) && !exclued[key])
@@ -194,44 +143,44 @@
 
 		// ==== Getters and Setters ====
 		function getOsc2EnvType() {
-			return this._osc2EnvType;
+			return self._osc2EnvType;
 		}
 		function setOsc2EnvType(oscEnvType) {
-			this._osc2EnvType = oscEnvType;
+			self._osc2EnvType = oscEnvType;
 			logicBoard.fongs[1].oscGainCtrl.type = oscEnvType;
 		}
 
 		function getOsc1EnvType() {
-			return this._osc1EnvType;
+			return self._osc1EnvType;
 		}
 		function setOsc1EnvType(oscEnvType) {
-			this._osc1EnvType = oscEnvType;
+			self._osc1EnvType = oscEnvType;
 			logicBoard.fongs[0].oscGainCtrl.type = oscEnvType;
 		}
 
 		function getOsc2Type() {
-			return this._osc2Type;
+			return self._osc2Type;
 		}
 		function setOsc2Type(oscType) {
-			this._osc2Type = oscType;
+			self._osc2Type = oscType;
 			pad.fongDots[1].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
 		}
 
 		function getOsc1Type() {
-			return this._osc1Type;
+			return self._osc1Type;
 		}
 		function setOsc1Type(oscType) {
-			this._osc1Type = oscType;
+			self._osc1Type = oscType;
 			//logicBoard.fongs[0].osc.type = oscType;
 			pad.fongDots[0].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
 			pad.fongDots[0].selectedState = oscType;
 		}
 
 		function getDelayFeedbackControl() {
-			return this._delayFeedbackCtrl;
+			return self._delayFeedbackCtrl;
 		}
 		function setDelayFeedbackControl(delayFeedBackControl) {
-			this._delayFeedbackCtrl = delayFeedBackControl;
+			self._delayFeedbackCtrl = delayFeedBackControl;
 			logicBoard.delayFeedback = delayFeedBackControl / 10.0;
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
@@ -239,10 +188,10 @@
 		}
 
 		function getDelayTimeControl() {
-			return this._delayTimeCtrl;
+			return self._delayTimeCtrl;
 		}
 		function setDelayTimeControl(delayTimeControl) {
-			this._delayTimeCtrl = delayTimeControl;
+			self._delayTimeCtrl = delayTimeControl;
 			logicBoard.delayTime = delayTimeControl / 1000.0;
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
@@ -250,10 +199,10 @@
 		}
 
 		function getDelayVolumeControl() {
-			return this._delayVolumeCtrl;
+			return self._delayVolumeCtrl;
 		}
 		function setDelayVolumeControl(delayVolControl) {
-			this._delayVolumeCtrl = delayVolControl;
+			self._delayVolumeCtrl = delayVolControl;
 			logicBoard.delayVolume = delayVolControl / 100.0;
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
@@ -261,42 +210,42 @@
 		}
 
 		function getFilterPortamento() {
-			return this._filterPortamento;
+			return self._filterPortamento;
 		}
 		function setFilterPortamento(portamento) {
-			this._filterPortamento = portamento;
+			self._filterPortamento = portamento;
 			logicBoard.filterPortamento = portamento;
 		}
 
 		function getPortamentoControl() {
-			return this._portamento;
+			return self._portamento;
 		}
 		function setPortamentoControl(portamento) {
-			this._portamento = portamento;
+			self._portamento = portamento;
 			logicBoard.portamento = portamento;
 		}
 
 		function getEnv2Control() {
-			return this._env2Ctrl;
+			return self._env2Ctrl;
 		}
 		function setEnv2Control(env) {
-			this._env2Ctrl = env;
+			self._env2Ctrl = env;
 			logicBoard.secondaryOffsetMax = env;
 			logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 		}
 
 		function getEnv1Control() {
-			return this._env1Ctrl;
+			return self._env1Ctrl;
 		}
 		function setEnv1Control(env) {
-			this._env1Ctrl = env;
+			self._env1Ctrl = env;
 			logicBoard.primaryOffsetMax = env;
 			logicBoard.setPrimaryOffsetFromFong(pad.fongDots[0]);
 			logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
 		}
 
 		function getFilterResonance() {
-			return this._filterResonance;
+			return self._filterResonance;
 		}
 		function setFilterResonance(filterRes) {
 			self._filterResonance = filterRes;
@@ -306,19 +255,19 @@
 		}
 
 		function getFilterOn() {
-			return this._filterOn;
+			return self._filterOn;
 		}
 		function setFilterOn(on) {
-			this._filterOn = on;
-			$scope.FilterOn = on;
+			self._filterOn = on;
+			if (self.$scope) self.$scope.FilterOn = on;
 			logicBoard.setFilterStatus(on);
 		}
 
 		function getFilterType() {
-			return this._filterType;
+			return self._filterType;
 		}
 		function setFilterType(filterType) {
-			this._filterType = filterType;
+			self._filterType = filterType;
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
 				logicBoard.fongs[i].setFilterType(filterType);
 			}

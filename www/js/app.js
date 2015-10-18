@@ -1,6 +1,5 @@
 // TODO (CAW) Namespace these
 var logicBoard;
-var pad;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -75,14 +74,12 @@ var pad;
 		 $scope.pageClass = 'view-pad';
 	}]);
 
-	var soundUI = null;
+	var soundUI = new PhonePhong.Sound(
+		logicBoard,
+		padUI,
+		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
-		soundUI = new PhonePhong.Sound(
-			$scope,
-			logicBoard,
-			padUI,
-			_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
-
+		soundUI.attachToDom($scope);
 		$scope.pageClass = 'view-sound';
 	}]);
 

@@ -108,6 +108,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	};
 
 	this.setOscFreq = function (freq) {
+		if (freq < 0) return;
 		this.oscFreq = freq;
 		if (this.board.portamento > 0) {
 			var dur = this.board.portamento / 1000.0;
@@ -118,6 +119,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	};
 
 	this.setOscFilterFreq = function (freq) {
+		if (freq < 0) return;
 		if (this.board.filterPortamento > 0) {
 			this.filter.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + this.board.filterPortamento / 1000.0);
 		} else {
