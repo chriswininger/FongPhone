@@ -1,3 +1,5 @@
+var gradientFades = true;
+
 (function () {
 	window.FongPhone = window.FongPhone || {};
 	window.FongPhone.UI = window.FongPhone.UI || {};
@@ -49,10 +51,15 @@
 			$(this.animation).attr("dur", this.dur);
 			this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
 			this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
+			
+			if (gradientFades)
+			{
+				$(this.fadeElement).attr("style", "opacity:.01");
+			}
 
 			if (!this.fadeElement || ! this.domElement) return;
 			// hard code fader size
-			this.fadeElement.setAttribute('r', 10);
+			this.fadeElement.setAttribute('r', 20);
 
 			// reset state now that dom is attached (cheap way to trigger positioning of ui
 			this.set(this.toJSON());
@@ -69,8 +76,16 @@
 		handleFadeMove: function(event) {
 			if (event.targetTouches.length == 1) {
 				var touch = event.targetTouches[0];
+				
 				if (this.radius > Math.abs(touch.pageX - this.x))
 					this.fadeOffset = touch.pageX - this.x;
+				
+				if (gradientFades) {
+					var diff = touch.pageX - this.x;
+					var gradientOffset = Math.max(Math.min(diff * 1. / this.radius + .5, .95), .05);
+					$($("#" + this.gradient)).attr("fx", gradientOffset);
+				}
+				
 				if (this.fadeChangedHandler)
 					this.fadeChangedHandler(this);
 			}
