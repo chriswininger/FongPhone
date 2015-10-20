@@ -209,8 +209,14 @@ var gradientFades = true;
 		},
 		setFadeOffSet: function(fadeOffset) {
 			this._fadeOffset = fadeOffset;
-			if (this.fadeElement)
+			if (this.fadeElement) {
+				if (gradientFades) {
+					var gradientOffset = Math.max(Math.min(fadeOffset * 1. / this.radius + .5, .95), .05);
+					$($("#" + this.gradient)).attr("fx", gradientOffset);
+				}
+				
 				this.fadeElement.setAttribute('cx', this.x + fadeOffset);
+			}
 			// TODO (CAW) Propery store ui state so we don't need this on the board
 			this.boardInput.oscTouchFadeVal = fadeOffset;
 			//this.fadeElement.setAttribute('cy', this.y);
