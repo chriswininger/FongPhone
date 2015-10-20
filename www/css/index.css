@@ -186,6 +186,11 @@ table.ui-map-table {
 	width: 100%;
 }
 
+table.ui-sound-table {
+	width: 100%;
+	border-bottom: 3px solid rgba(255, 255, 255, .1);;
+}
+
 .map-note,
 td.ui-map-note-map-toggle {
 	opacity: .7;
@@ -232,6 +237,10 @@ td.ui-map-note-map-toggle {
 .selectedScale {
 	opacity: .9;	
 	border-bottom: 1px solid rgba(255, 255, 255, .05);
+}
+
+.noBorder {
+	border-bottom: none;
 }
 
 .scrollable {

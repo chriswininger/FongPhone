@@ -15,7 +15,7 @@
 		</svg>
 
 		<div id="soundControlsDiv" class="scrollable">
-			<table class="ui-map-table">
+			<table class="ui-sound-table">
 				<tr>
 					<td class="ui-map-note-map-toggle {{ FilterOn ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleFilterClick()">
 						Filter {{ FilterOn ? 'On' : 'Off' }}
@@ -46,7 +46,8 @@
 						notch
 					</td>
 				</tr>
-				<tr><td style="border-bottom:none;height:10px" colspan="2"></td></tr>
+			</table>
+			<table class="ui-sound-table">
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Wave 1</td>
 					<td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
@@ -89,7 +90,8 @@
 						sawtooth
 					</td>
 				</tr>
-				<tr><td style="border-bottom:none;height:10px" colspan="2"></td></tr>
+			</table>
+			<table class="ui-sound-table">
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Wave 2</td>
 					<td class="ui-map-note-map-scale {{ IsSelectedOsc2Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc2Type($event)">
@@ -132,6 +134,8 @@
 						sawtooth
 					</td>
 				</tr>
+			</table>
+			<table class="ui-sound-table">
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Glide</td>
 					<td class="ui-map-note-map-toggle" colspan="2">
@@ -148,6 +152,8 @@
 						</div>
 					</td>
 				</tr>
+			</table>
+			<table class="ui-sound-table">
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Delay Volume</td>
 					<td class="ui-map-note-map-toggle" colspan="2">
