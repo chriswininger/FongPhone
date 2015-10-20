@@ -36,7 +36,7 @@ var logicBoard;
 
 	logicBoard = new PhonePhong.BoardLogic(context, defaults);
 
-	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate']).directive('ngY', function () {
+	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate', 'ngDraggable']).directive('ngY', function () {
 		return function (scope, element, attrs) {
 			scope.$watch(attrs.ngY, function (value) {
 				element.attr('y', value);

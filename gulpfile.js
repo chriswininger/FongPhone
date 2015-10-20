@@ -21,7 +21,7 @@ var clientDependencies = [
     'teoria',
 	'localforage#1.2.x',
 	'jquery-knob',
-	'js-signals'
+	'ngDraggable'
 ];
 function initialize (complete) {
 	async.waterfall([

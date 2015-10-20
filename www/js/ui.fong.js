@@ -2,8 +2,6 @@
 	window.FongPhone = window.FongPhone || {};
 	window.FongPhone.UI = window.FongPhone.UI || {};
 
-	var Signal = signals.Signal;
-
 	window.FongPhone.UI.Fong = function (board, state) {
 		window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
 		window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);

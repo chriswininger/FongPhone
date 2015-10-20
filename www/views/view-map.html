@@ -80,12 +80,14 @@
 						</td>
 					</tr>
 					<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
-						<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="12">{{ x[0].label }}</td>
-						<!--<td class="ui-map-column map-note {{ x[1].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,1)">{{ x[1].label }}</td>
-        <td class="ui-map-column map-note {{ x[2].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,2)">{{ x[2].label }}</td>
-        <td class="ui-map-column map-note {{ x[3].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,3)">{{ x[3].label }}</td>-->
+						<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="12">
+							<div ng-drag="true" data-allow-transform="true">
+								{{ x[0].label }}
+							</div>
+						</td>
 					</tr>
 				</table>
+
 			</div>
 			<div>
 				<table class="ui-map-table">
@@ -129,6 +131,7 @@
 			</div>
 		</div>
 	</div>
+
 	<svg width="100%" height="40" class="ui-display-area">
 		<defs>
 			<linearGradient id="gradSwipe" x1="30%" y1="70%">
