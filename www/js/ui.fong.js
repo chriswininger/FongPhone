@@ -110,7 +110,7 @@ var gradientFades = true;
 
 				event.preventDefault();
 			} else if (event.targetTouches.length == 2) {
-				if (self.lastPinchDist === undefined) self.lastPinchDist = 0;
+				if (this.lastPinchDist === undefined) this.lastPinchDist = 0;
 
 				var x1 = event.targetTouches[0].pageX;
 				var y1 = event.targetTouches[0].pageY;
@@ -118,7 +118,7 @@ var gradientFades = true;
 				var y2 = event.targetTouches[1].pageY;
 
 				var dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-				var change = dist - self.lastPinchDist;
+				var change = dist - this.lastPinchDist;
 
 				var r = parseFloat(event.target.getAttribute('r'));
 				if (change > 0 && r <= 98) r += 2;
