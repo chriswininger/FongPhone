@@ -39,6 +39,7 @@ var gradientFades = true;
 		this.selectedClassChangedHandler = state.selectedClassChangedHandler || function() {};
 		//this.classTypeChangeHandler = state.classTypeChangeHandler || function() {};
 		this.stateChangedHandler = state.stateChangedHandler || function() {};
+		this.radiusChangeHandler = state.radiusChangeHandler || function() {};
 
 		//this.attachToDom();
 	};
@@ -123,11 +124,9 @@ var gradientFades = true;
 				if (change > 0 && r <= 98) r += 2;
 				else if (r >= 62) r -= 2;
 
-				event.target.setAttribute('r', r);
+				this.radius = r;
 
-				self.board.fongs[event.target.getAttribute('data-index')].setOscVol(map(r, 60, 100, 0.9949676394462585, 5));
-
-				self.lastPinchDist = dist;
+				this.lastPinchDist = dist;
 			}
 
 			event.preventDefault();
@@ -150,6 +149,7 @@ var gradientFades = true;
 			this.handleFongSelected(this);
 			this.selectedClassChangedHandler(this, this.selectedClassTypeIndex, this.selectedClassType);
 			this.stateChangedHandler(this, this.selectedStateIndex, this.selectedState);
+			this.radiusChangeHandler(this);
 		},
 		initializeDomElement: function(id, className, gradient) {
 			var domCtx = document.getElementById(this.domCtxID);
@@ -258,6 +258,8 @@ var gradientFades = true;
 			this._r = r;
 			if (this.domElement)
 				this.domElement.setAttribute('r', r);
+			if (this.radiusChangeHandler)
+				this.radiusChangeHandler(this);
 		},
 		getColor: function() {
 			return this._color;

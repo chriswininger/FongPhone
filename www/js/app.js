@@ -96,7 +96,7 @@ var logicBoard;
 
 	function _onPause() {
 		try {
-			localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
+			localStorage.setItem('ui.pad.state', JSON.stringify(padUI.toJSON()));
 			localStorage.setItem('ui.sound.state', JSON.stringify(soundUI));
 		} catch (ex) {
 			console.error('error saving ui pad state: ' + ex);

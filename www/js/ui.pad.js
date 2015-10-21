@@ -21,14 +21,16 @@
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
-				stateChangedHandler: _.bind(this.stateChangedHandler, this)
+				stateChangedHandler: _.bind(this.stateChangedHandler, this),
+				radiusChangeHandler: _.bind(this.radiusChangeHandler, this)
 			},
 			secondary: {
 				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
-				stateChangedHandler: _.bind(this.stateChangedHandler, this)
+				stateChangedHandler: _.bind(this.stateChangedHandler, this),
+				radiusChangeHandler: _.bind(this.radiusChangeHandler, this)
 			}
 		};
 
@@ -151,6 +153,9 @@
 		},
 		stateChangedHandler: function (fong, index, state) {
 			fong.boardInput.setOscType(state);
+		},
+		radiusChangeHandler: function(fong) {
+			fong.boardInput.setOscVol(map(fong.radius, 60, 100, 0.9949676394462585, 5));
 		},
 		set: function(json) {
 			this.fongDots = [];
