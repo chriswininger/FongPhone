@@ -112,7 +112,7 @@
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
 			} else {
 				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-				var noteNumber = parseInt(y * f.NoteMap.length / window.innerHeight);
+				var noteNumber = Math.floor(y * f.NoteMap.length / window.innerHeight);
 				var note = f.NoteMap[noteNumber];
 				if (!note) note = f.NoteMap[f.NoteMap.length - 1];
 				return note.freq;
@@ -124,7 +124,7 @@
 			if (!f.FilterNoteMapOn) {
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
-				var fnoteNumber = parseInt(x * f.NoteMap.length / window.innerWidth);
+				var fnoteNumber = Math.floor(x * f.NoteMap.length / window.innerWidth);
 				var fnote = f.NoteMap[fnoteNumber];
 				if (!fnote) fnote = f.NoteMap[f.NoteMap.length - 1];
 				return fnote.freq;

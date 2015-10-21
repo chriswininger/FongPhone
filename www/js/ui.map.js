@@ -59,6 +59,20 @@
 				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
 			};
 
+			$scope.onNoteDropComplete = function($index, $data, $event) {
+				var originalFreqObj = $scope.selectedFong.availableNotesByRow[$data];
+				var currFreqObj =  $scope.selectedFong.availableNotesByRow[$index];
+
+				// TODO (CAW) We reall don't need to maintain available notes by row anymore
+				// swap notes
+				$scope.selectedFong.availableNotesByRow[$index] = originalFreqObj;
+				$scope.selectedFong.availableNotesByRow[$data] = currFreqObj;
+				$scope.selectedFong.availableNotes[$index] = originalFreqObj[0];
+				$scope.selectedFong.availableNotes[$data] = currFreqObj[0];
+
+				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
+			};
+
 			$scope.toggleNoteMapClick = function () {
 				$scope.selectedFong.NoteMapOn = !$scope.selectedFong.NoteMapOn;
 			};
