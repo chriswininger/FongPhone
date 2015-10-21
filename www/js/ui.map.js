@@ -167,12 +167,17 @@
 			});
 
 			var f = logicBoard.fongs[0];
-			generateScale(f, f.baseNote, f.octave, f.scale);
+			if (!f.NoteMap)
+			{
+				generateScale(f, f.baseNote, f.octave, f.scale);
+				$scope.regenerateMap(f);
+			}
 			var f1 = logicBoard.fongs[1];
-			generateScale(f1, f1.baseNote, f1.octave, f1.scale);
-			
-			$scope.regenerateMap(f);
-			$scope.regenerateMap(f1);
+			if (!f1.NoteMap)
+			{				
+				generateScale(f1, f1.baseNote, f1.octave, f1.scale);	
+				$scope.regenerateMap(f1);
+			}
 
 		};
 
