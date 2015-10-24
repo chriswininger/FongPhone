@@ -27,7 +27,7 @@
 			$('#mapSubUI').css('height', (window.innerHeight - 40) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 
-			$scope.selectedFong = logicBoard.fongs[0];
+			$scope.selectedFong = logicBoard.fongs[0];			
 			$scope.Fong1Selected = true;
 
 			$scope.windowHeight = $window.innerHeight;
@@ -36,6 +36,8 @@
 
 			$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
 			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
+			
+			//console.log($scope.selectedFong);
 
 			$scope.toggleSelectedFong = function (i) {
 				$scope.selectedFong = logicBoard.fongs[i];
@@ -178,6 +180,9 @@
 				generateScale(f1, f1.baseNote, f1.octave, f1.scale);	
 				$scope.regenerateMap(f1);
 			}
+			
+			$scope.Fong1Selected = true;
+			$scope.toggleSelectedFong(0);			
 
 		};
 
