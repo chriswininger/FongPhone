@@ -79,10 +79,10 @@
 							6
 						</td>
 					</tr>
-					<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
-						<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="12">
-							<div ng-drag="true" data-allow-transform="true" ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data,$event)" ng-drag-data="{{$index}}">
-								{{ x[0].label }}
+					<tr ng-repeat="x in selectedFong.availableNotes" class="ui-map-row">
+						<td class="ui-map-column map-note {{ x.on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index)" colspan="12">
+							<div ng-drag="true" data-allow-transform="true" ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data, $event)" ng-drag-data="{{$index}}">
+								{{ x.label }}
 							</div>
 						</td>
 					</tr>
