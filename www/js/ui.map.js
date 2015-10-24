@@ -19,6 +19,17 @@
 			}
 
 		}
+		
+		function changeOctaveForScale(fong) {
+			for (var i = 0; i < fong.availableNotes.length; i++) {
+				var n = {
+					'label': fong.availableNotes[i].label,
+					'freq': teoria.note(fong.availableNotes[i].label + fong.octave).fq(),
+					'on': true
+				};
+				fong.availableNotes[i] = n;
+			}
+		}
 
 		var rowSize = 1;
 
@@ -102,7 +113,8 @@
 
 				$scope.selectedFong.octave = parseInt($(event.target).html().trim());
 
-				$scope.regenerateMap($scope.selectedFong);			
+				//$scope.regenerateMap($scope.selectedFong);			
+				$scope.resetOctaveForMap($scope.selectedFong);
 			}
 			$scope.changeScale = function (event) {
 
@@ -111,6 +123,31 @@
 
 				$scope.regenerateMap($scope.selectedFong);
 			};
+			
+			$scope.resetOctaveForMap = function (fong)
+			{
+				changeOctaveForScale(fong);
+				
+				fong.availableNotesByRow = [];
+
+				var currentRow = [];
+				for (var i = 0; i < fong.availableNotes.length; i++) {
+					if (currentRow.length < rowSize) {
+						currentRow.push(fong.availableNotes[i]);
+					} else {
+						fong.availableNotesByRow.push(currentRow);
+						currentRow = [fong.availableNotes[i]];
+					}
+
+					// take care of partially filled row at end
+					if (i === (fong.availableNotes.length - 1) && currentRow.length > 0) {
+						fong.availableNotesByRow.push(currentRow);
+					}
+				}
+				
+				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
+				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
+			}
 
 			$scope.regenerateMap = function (fong) {
 				generateScale(fong, fong.baseNote, fong.octave, fong.SelectedScale);
