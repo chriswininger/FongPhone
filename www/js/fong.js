@@ -1,20 +1,24 @@
-var fong = function (audCtx, mainVol, x, y, board) {
-
+function fong(audCtx, mainVol, x, y, board) {
+	var self = this;
 	this.board = board;
-
 	this.audCtx = audCtx;
 	this.mainVol = mainVol;
 	this.x = x;
 	this.y = y;
 
-	this.scale = 'ionian';
-	this.SelectedScale = this.scale;
-	this.baseNote = 'a';
-	this.octave = 4;
-	this.availableNotes = [];
-
-	this.NoteMapOn = false;
-	this.FilterNoteMapOn = false;
+	this.noteMapChanged = new signals.Signal();
+	this.NoteMapInfo = new FongPhone.Logic.NoteMapInfo({
+		SelectedScale: 'ionian',
+		baseNote: 'a',
+		octave: 4,
+		availableNotes: [],
+		NoteMapOn: false,
+		FilterNoteMapOn: false
+	});
+	this.NoteMapInfo.changed.add(function() {
+		// fire a note map changed event when changes occur
+		self.noteMapChanged.dispatch(this);
+	});
 
 	this.waves = ['sine', 'square', 'triangle', 'sawtooth'];
 	this.waveIntOsc = 0;
@@ -173,7 +177,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 			if (ex.code === 15) return; // not off
 			console.error(ex);
 		}
-	}
+	};
 
 	this.turnFilterOff = function () {
 		try {
@@ -183,19 +187,19 @@ var fong = function (audCtx, mainVol, x, y, board) {
 			if (ex.code === 15) return; // not on
 			console.error(ex);
 		}
-	}
+	};
 
 	this.setDelayVolume = function (val) {
 		this.delayGain.gain.value = val;
-	}
+	};
 
 	this.setDelayTime = function (val) {
 		this.delay.delayTime.value = val;
-	}
+	};
 
 	this.setDelayFeedback = function (val) {
 		this.feedback.gain.value = val;
-	}
+	};
 
 	this.setFade = function (val) {
 		this.oscPanCtrl.setPosition(val, 0, 0);
@@ -203,13 +207,22 @@ var fong = function (audCtx, mainVol, x, y, board) {
 
 	this.setFilterType = function (type) {
 		this.filter.type = type;
-	}
-
-	this.toJSON = function () {
-		return {
-			oscPulseOn: this.oscPulseOn,
-			oscFreq: this.oscFreq
-		};
 	};
+}
 
-};
+FongPhone.Utils.Mixins.ToJSON.applyMixin(fong.prototype, [
+	'audCtx',
+	'board',
+	'delay',
+	'delayGain',
+	'feedback',
+	'filter',
+	'mainVol',
+	'osc',
+	'oscGainCtrl',
+	'oscPanCtrl',
+	'oscVol',
+	'oscVolOffset',
+	'noteMapChanged',
+	'oscs'
+]);

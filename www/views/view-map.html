@@ -87,10 +87,14 @@
 							6
 						</td>
 					</tr>
-					<tr ng-repeat="x in availableNotesByRow" class="ui-map-row">
-						<td class="ui-map-column map-note {{ x[0].on ? 'map-note-on' : 'map-note-off' }}" ng-click="noteClick($index,0)" colspan="12">
-							<div ng-drag="true" data-allow-transform="true" ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data,$event)" ng-drag-data="{{$index}}">
-								{{ x[0].label }}
+					<tr ng-repeat="x in selectedFong.NoteMapInfo.availableNotes" class="ui-map-row">
+						<td class="ui-map-column map-note {{ x.on ? 'map-note-on' : 'map-note-off' }}" colspan="12">
+							<div style="width: auto"
+								ng-click="noteClick($index)"
+							 	ng-drag="true" data-allow-transform="true"
+							 	ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data, $event)"
+							 	ng-drag-data="{{$index}}">
+								{{ x.label }}
 							</div>
 						</td>
 					</tr>
@@ -100,11 +104,11 @@
 			<div>
 				<table class="ui-map-table">
 					<tr>
-						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
-							Osc Note Map {{ selectedFong.NoteMapOn ? 'On' : 'Off' }}
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
+							Osc Note Map {{ selectedFong.NoteMapInfo.NoteMapOn ? 'On' : 'Off' }}
 						</td>
 						<td class="ui-map-note-map-toggle {{ selectedFong.FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
-							Filter Note Map {{ selectedFong.FilterNoteMapOn ? 'On' : 'Off' }}
+							Filter Note Map {{ selectedFong.NoteMapInfo.FilterNoteMapOn ? 'On' : 'Off' }}
 						</td>
 					</tr>
 					<tr>

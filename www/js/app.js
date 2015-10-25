@@ -1,5 +1,6 @@
 // TODO (CAW) Namespace these
 var logicBoard;
+var GLOBAL_NOTE_MAP;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -67,32 +68,37 @@ var logicBoard;
 		});
 	});
 
+	// initialize ui logic
 	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
-	 fongPhone.controller('padController', ['$scope', function ($scope) {
-		padUI.attachToDom();
-
-		 $scope.pageClass = 'view-pad';
-	}]);
-
 	var soundUI = new PhonePhong.Sound(
 		logicBoard,
 		padUI,
 		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
+	var noteMap = GLOBAL_NOTE_MAP = new window.PhonePhong.UI.NoteMap(logicBoard);
+
+	// initialize angular route controllers
+	fongPhone.controller('padController', ['$scope', function ($scope) {
+		padUI.attachToDom();
+		 $scope.pageClass = 'view-pad';
+	}]);
+
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
 		soundUI.attachToDom($scope);
 		$scope.pageClass = 'view-sound';
 	}]);
 
-	fongPhone.controller('noteMapController', window.PhonePhong.UI.NoteMap);
+	fongPhone.controller('noteMapController', function($scope) {
+		noteMap.attachToDom($scope);
+		$scope.pageClass = 'view-map';
+	});
+
 	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
 
 	function _deviceReady(id) {
 		console.log('device ready');
-		var parentElement = document.getElementById(id);
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 	}
-
 
 	function _onPause() {
 		try {

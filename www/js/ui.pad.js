@@ -22,7 +22,8 @@
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
 				stateChangedHandler: _.bind(this.stateChangedHandler, this),
-				radiusChangeHandler: _.bind(this.radiusChangeHandler, this)
+				radiusChangeHandler: _.bind(this.radiusChangeHandler, this),
+				initializer: _.bind(this.fongInitializer, this)
 			},
 			secondary: {
 				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
@@ -30,7 +31,8 @@
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
 				stateChangedHandler: _.bind(this.stateChangedHandler, this),
-				radiusChangeHandler: _.bind(this.radiusChangeHandler, this)
+				radiusChangeHandler: _.bind(this.radiusChangeHandler, this),
+				initializer: _.bind(this.fongInitializer, this)
 			}
 		};
 
@@ -50,8 +52,8 @@
 		},
 		createComponents: function () {
 			$('#' + this.svgElementID).height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
 
 			this.backgroundPad = document.getElementById(this.svgElementID);
 
@@ -80,6 +82,13 @@
 				e.preventDefault();
 			}
 		},
+		fongInitializer: function(fong) {
+			// listen for map info changes on the sound board fong that is associated with this ui/fong
+			fong.boardInput.noteMapChanged.add(function() {
+				// cheep way to trigger position updated and regenerate frequency with new map info
+				fong.x = fong.x;
+			});
+		},
 		handleFadeChanged: function (fong) {
 			// TODO (CAW) -- range should reflect size of outer sphere
 			fong.boardInput.setFade(map(fong.fadeOffset, -35, 35, -2, 2));
@@ -98,7 +107,7 @@
 				alert(err.message);
 			}
 		},
-		handlePositionChangedSecondary: function (fong, oldX, oldY) {			
+		handlePositionChangedSecondary: function (fong) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
 
@@ -110,25 +119,24 @@
 		},
 		getFreq: function (x, y, r, fong) {
 			var f = fong.boardInput;
-			if (!f.NoteMapOn) {
+			if (!f.NoteMapInfo.NoteMapOn) {
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
 			} else {
 				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-				var noteNumber = Math.floor(y * f.NoteMap.length / window.innerHeight);
-				var note = f.NoteMap[noteNumber];
-				if (!note) note = f.NoteMap[f.NoteMap.length - 1];
+				var noteNumber = Math.floor(y * f.NoteMapInfo.NoteMap.length / window.innerHeight);
+				var note = f.NoteMapInfo.NoteMap[noteNumber];
+				if (!note) note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
 				return note.freq;
 			}
-
 		},
 		getFilterFrequency: function (x, y, r, fong) {
 			var f = fong.boardInput;
-			if (!f.FilterNoteMapOn) {
+			if (!f.NoteMapInfo.FilterNoteMapOn) {
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
-				var fnoteNumber = Math.floor(x * f.NoteMap.length / window.innerWidth);
-				var fnote = f.NoteMap[fnoteNumber];
-				if (!fnote) fnote = f.NoteMap[f.NoteMap.length - 1];
+				var fnoteNumber = Math.floor(x * f.NoteMapInfo.NoteMap.length / window.innerWidth);
+				var fnote = f.NoteMapInfo.NoteMap[fnoteNumber];
+				if (!fnote) fnote = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
 				return fnote.freq;
 			}
 		},
@@ -165,6 +173,8 @@
 				fongJSON.handleFongSelected = this.roleHandlers[fongJSON.fongRole].handleFongSelected;
 				fongJSON.selectedClassChangedHandler = this.roleHandlers[fongJSON.fongRole].classTypeChangeHandler;
 				fongJSON.stateChangedHandler = this.roleHandlers[fongJSON.fongRole].stateChangedHandler;
+				fongJSON.initializer = this.roleHandlers[fongJSON.fongRole].initializer;
+
 				this.fongDots.push(new  window.FongPhone.UI.Fong(this.board, fongJSON));
 			}, this);
 		},

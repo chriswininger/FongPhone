@@ -1,238 +1,164 @@
+// TODO (CAW) Store the notemaps on the ui.fong.js not the board fongs, then we can restore the notemaps into selected fongs
+//  on restore
 (function () {
-	try {
+	window.PhonePhong.UI.NoteMap = function(logicBoard) {
+		window.FongPhone.utils.createGetSet(this, 'selectedFong', this.getSelectedFong, this.setSelectedFong);
+		window.FongPhone.utils.createGetSet(this, 'selectedFongIndex', this.getSelectedFongIndex, this.setSelectedFongIndex);
 
-		function generateScale(fong, startingNote, octave, scale) {
+		this.fongs = logicBoard.fongs;
+		this.selectedFongIndex = 0;
 
-			fong.availableNotes.length = 0;
+		// TODO (get rid of this when we get rid of note/row/map
+		this.regenerateMap(this.selectedFong);
 
+		var f = this.fongs[0];
+		if (!f.NoteMapInfo.NoteMap) {
+			this.regenerateMap(f);
+		}
+		var f1 = this.fongs[1];
+		if (!f1.NoteMapInfo.NoteMap) {
+			this.regenerateMap(f1);
+		}
+	};
+
+	_.extend(window.PhonePhong.UI.NoteMap.prototype, {
+		attachToDom: function($scope) {
+			console.log('height: %s, max-height: %s', (window.innerHeight - 40) + "px", window.innerHeight + "px");
+			$('#mapSubUI').css('height', (window.innerHeight - 40) + "px");
+			$('#mapUI').css('max-height', window.innerHeight + "px");
+
+			var self = this;
+			this.$scope = $scope;
+
+			// re-initialize values with scope set to make sure they propagate to ui
+			this.selectedFongIndex = this.selectedFongIndex;
+
+			$scope.toggleSelectedFong = function (i) {
+				self.selectedFongIndex = i;
+			};
+
+			$scope.noteClick = function (index) {
+				self.selectedFong.NoteMapInfo.availableNotes[index].on = !self.selectedFong.NoteMapInfo.availableNotes[index].on;
+				// update mapped notes
+				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
+			};
+
+			$scope.onNoteDropComplete = function($index, $data) {
+				var originalFreqObj = self.selectedFong.NoteMapInfo.availableNotes[$data];
+				var currFreqObj =  self.selectedFong.NoteMapInfo.availableNotes[$index];
+
+				// TODO (CAW) We reall don't need to maintain available notes by row anymore
+				// swap notes
+				self.selectedFong.NoteMapInfo.availableNotes[$index] = originalFreqObj;
+				self.selectedFong.NoteMapInfo.availableNotes[$data] = currFreqObj;
+
+				// create a note map in the new order, minus disabled notes
+				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
+			};
+
+			$scope.toggleNoteMapClick = function () {
+				self.selectedFong.NoteMapInfo.NoteMapOn = !self.selectedFong.NoteMapInfo.NoteMapOn;
+			};
+			$scope.toggleFilterNoteMapClick = function () {
+				self.selectedFong.NoteMapInfo.FilterNoteMapOn = !self.selectedFong.NoteMapInfo.FilterNoteMapOn;
+			};
+
+			$scope.IsSelectedScale = function (scale) {
+				return scale === self.selectedFong.NoteMapInfo.SelectedScale;
+			}
+			$scope.IsSelectedBaseNote = function (baseNote) {
+				return baseNote === self.selectedFong.NoteMapInfo.baseNote;
+			}
+			$scope.IsSelectedOctave = function (octave) {
+				return octave === self.selectedFong.NoteMapInfo.octave;
+			}
+			$scope.changeBaseNote = function (event) {
+				self.selectedFong.NoteMapInfo.baseNote = $(event.target).html().trim();
+				self.regenerateMap(self.selectedFong);
+			}
+			$scope.changeOctave = function (event) {
+				self.selectedFong.NoteMapInfo.ooctave = parseInt($(event.target).html().trim());
+				//$scope.regenerateMap($scope.selectedFong);			
+				self.resetOctaveForMap(self.selectedFong);
+			}
+			$scope.changeScale = function (event) {
+				self.selectedFong.NoteMapInfo.SelectedScale = $(event.target).html().trim();
+				self.regenerateMap(self.selectedFong);
+			};
+
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'swiperight');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'swipeleft');
+		},
+		// the map is all notes minus the ones turned off
+		buildMap: function(notes) {
+			var rtn = [];
+			notes.forEach(function (note) {
+				if (note.on) rtn.push(note);
+			});
+
+			return rtn;
+		},
+		getSelectedFong: function() {
+			return this._selectedFong;
+		},
+		setSelectedFong: function(fong) {
+			this._selectedFong = fong;
+
+			// TODO (CAW) Probably don't need if its to build the map
+			if (!fong.NoteMapInfo.NoteMap)
+				this.regenerateMap(fong);
+
+			if (this.$scope)
+				this.$scope.selectedFong = fong;
+		},
+		getSelectedFongIndex: function() {
+			return this._selectedFongIndex;
+		},
+		setSelectedFongIndex: function(index) {
+			this._selectedFongIndex = index;
+			this.selectedFong = this.fongs[index];
+			if (this.$scope) {
+				this.$scope.Fong1Selected = (index === 0);
+				this.$scope.Fong2Selected = (index === 1);
+			}
+		},
+		generateScale: function(fong, startingNote, octave, scale) {
+
+			fong.NoteMapInfo.availableNotes = [];
 			var n = teoria.note(startingNote + octave);
 			var scale = n.scale(scale).simple();
 
 			for (var i = 0; i < scale.length; i++) {
 				var n = {
-					'label': scale[i],
-					'freq': teoria.note(scale[i] + octave).fq(),
-					'on': true
+					label: scale[i],
+					freq: teoria.note(scale[i] + octave).fq(),
+					on: true
 				};
 
-				fong.availableNotes.push(n);				
+				fong.NoteMapInfo.availableNotes.push(n);
 			}
-
-		}
-		
-		function changeOctaveForScale(fong) {
-			for (var i = 0; i < fong.availableNotes.length; i++) {
+		},
+		changeOctaveForScale: function(fong) {
+			for (var i = 0; i < fong.NoteMapInfo.availableNotes.length; i++) {
 				var n = {
-					'label': fong.availableNotes[i].label,
-					'freq': teoria.note(fong.availableNotes[i].label + fong.octave).fq(),
+					'label': fong.NoteMapInfo.availableNotes[i].label,
+					'freq': teoria.note(fong.NoteMapInfo.availableNotes[i].label + fong.NoteMapInfo.octave).fq(),
 					'on': true
 				};
-				fong.availableNotes[i] = n;
+				fong.NoteMapInfo.availableNotes[i] = n;
 			}
+		},
+		regenerateMap: function (fong) {
+			this.generateScale(fong, fong.NoteMapInfo.baseNote, fong.NoteMapInfo.octave, fong.NoteMapInfo.SelectedScale);
+			fong.NoteMapInfo.NoteMap = this.buildMap(this.selectedFong.NoteMapInfo.availableNotes);
+		},
+		resetOctaveForMap: function(fong) {
+			this.changeOctaveForScale(fong);
+			this.selectedFong.NoteMap = this.buildMap(self.selectedFong.availableNotes);
 		}
+	});
 
-		var rowSize = 1;
-
-		window.PhonePhong.UI.NoteMap = function ($scope, $window) {			
-
-			$('#mapSubUI').css('height', (window.innerHeight - 40) + "px");
-			$('#mapUI').css('max-height', window.innerHeight + "px");
-
-			$scope.selectedFong = logicBoard.fongs[0];			
-			$scope.Fong1Selected = true;
-
-			$scope.windowHeight = $window.innerHeight;
-			$scope.Math = {};
-			$scope.Math.floor = Math.floor;
-
-			$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
-			$scope.FilterNoteMapOn = window.PhonePhong.FilterNoteMapOn;
-			
-			//console.log($scope.selectedFong);
-
-			$scope.toggleSelectedFong = function (i) {
-				$scope.selectedFong = logicBoard.fongs[i];
-				
-				$scope.Fong1Selected = i == 0;
-				$scope.Fong2Selected = i == 1;
-				
-				$scope.NoteMapOn = $scope.selectedFong.NoteMapOn;
-				
-				if (!$scope.selectedFong.NoteMap)
-				{
-					$scope.regenerateMap($scope.selectedFong);
-				}
-				
-				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
-			}
-
-			$scope.noteClick = function (row, col) {
-				$scope.selectedFong.availableNotesByRow[row][col].on = !$scope.selectedFong.availableNotesByRow[row][col].on;
-				// update mapped notes
-				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
-			};
-
-			$scope.onNoteDropComplete = function($index, $data, $event) {
-				var originalFreqObj = $scope.selectedFong.availableNotesByRow[$data];
-				var currFreqObj =  $scope.selectedFong.availableNotesByRow[$index];
-
-				// TODO (CAW) We reall don't need to maintain available notes by row anymore
-				// swap notes
-				$scope.selectedFong.availableNotesByRow[$index] = originalFreqObj;
-				$scope.selectedFong.availableNotesByRow[$data] = currFreqObj;
-				$scope.selectedFong.availableNotes[$index] = originalFreqObj[0];
-				$scope.selectedFong.availableNotes[$data] = currFreqObj[0];
-
-				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
-			};
-
-			$scope.toggleNoteMapClick = function () {
-				$scope.selectedFong.NoteMapOn = !$scope.selectedFong.NoteMapOn;
-			};
-			$scope.toggleFilterNoteMapClick = function () {
-				$scope.selectedFong.FilterNoteMapOn = !$scope.selectedFong.FilterNoteMapOn;
-			};
-
-			//$scope.selectedFong.SelectedScale = _scale;
-			$scope.IsSelectedScale = function (scale) {
-				return scale === $scope.selectedFong.SelectedScale;
-			}
-			$scope.IsSelectedBaseNote = function (baseNote) {
-				return baseNote === $scope.selectedFong.baseNote;
-			}
-			$scope.IsSelectedOctave = function (octave) {
-				return octave === $scope.selectedFong.octave;	
-			}
-			$scope.changeBaseNote = function (event) {
-
-				$scope.selectedFong.baseNote = $(event.target).html().trim();
-
-				$scope.regenerateMap($scope.selectedFong);			
-			}
-			$scope.changeOctave = function (event) {
-
-				$scope.selectedFong.octave = parseInt($(event.target).html().trim());
-
-				//$scope.regenerateMap($scope.selectedFong);			
-				$scope.resetOctaveForMap($scope.selectedFong);
-			}
-			$scope.changeScale = function (event) {
-
-				$scope.selectedFong.SelectedScale = $(event.target).html().trim();
-				$scope.selectedFong.scale = $scope.selectedFong.SelectedScale;
-
-				$scope.regenerateMap($scope.selectedFong);
-			};
-			
-			$scope.resetOctaveForMap = function (fong)
-			{
-				changeOctaveForScale(fong);
-				
-				fong.availableNotesByRow = [];
-
-				var currentRow = [];
-				for (var i = 0; i < fong.availableNotes.length; i++) {
-					if (currentRow.length < rowSize) {
-						currentRow.push(fong.availableNotes[i]);
-					} else {
-						fong.availableNotesByRow.push(currentRow);
-						currentRow = [fong.availableNotes[i]];
-					}
-
-					// take care of partially filled row at end
-					if (i === (fong.availableNotes.length - 1) && currentRow.length > 0) {
-						fong.availableNotesByRow.push(currentRow);
-					}
-				}
-				
-				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
-				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
-			}
-
-			$scope.regenerateMap = function (fong) {
-				generateScale(fong, fong.baseNote, fong.octave, fong.SelectedScale);
-
-				fong.availableNotesByRow = [];
-
-				var currentRow = [];
-				for (var i = 0; i < fong.availableNotes.length; i++) {
-					if (currentRow.length < rowSize) {
-						currentRow.push(fong.availableNotes[i]);
-					} else {
-						fong.availableNotesByRow.push(currentRow);
-						currentRow = [fong.availableNotes[i]];
-					}
-
-					// take care of partially filled row at end
-					if (i === (fong.availableNotes.length - 1) && currentRow.length > 0) {
-						fong.availableNotesByRow.push(currentRow);
-					}
-				}
-				
-				$scope.availableNotesByRow = $scope.selectedFong.availableNotesByRow;
-				$scope.selectedFong.NoteMap = buildMap($scope.selectedFong.availableNotes);
-			}
-
-			$scope.selectedFong.availableNotesByRow = [];
-
-			var currentRow = [];
-			for (var i = 0; i < $scope.selectedFong.availableNotes.length; i++) {
-				if (currentRow.length < rowSize) {
-					currentRow.push($scope.selectedFong.availableNotes[i]);
-				} else {
-					$scope.selectedFong.availableNotesByRow.push(currentRow);
-					currentRow = [$scope.selectedFong.availableNotes[i]];
-				}
-
-				// take care of partially filled row at end
-				if (i === ($scope.selectedFong.availableNotes.length - 1) && currentRow.length > 0) {
-					$scope.selectedFong.availableNotesByRow.push(currentRow);
-				}
-			}
-
-			// position swipe pad for page switching
-			var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-			//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
-			var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.get('swipe').set({
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.on('pan', function (ev) {
-				if (ev.isFinal) {
-					window.location = '#/';
-				}
-			});
-
-			var f = logicBoard.fongs[0];
-			if (!f.NoteMap)
-			{
-				generateScale(f, f.baseNote, f.octave, f.scale);
-				$scope.regenerateMap(f);
-			}
-			var f1 = logicBoard.fongs[1];
-			if (!f1.NoteMap)
-			{				
-				generateScale(f1, f1.baseNote, f1.octave, f1.scale);	
-				$scope.regenerateMap(f1);
-			}
-			
-			$scope.Fong1Selected = true;
-			$scope.toggleSelectedFong(0);			
-
-		};
-
-		function buildMap(notes) {
-			var rtn = [];
-			notes.forEach(function (note) {
-				if (note.on) rtn.push(note);
-			});
-			return rtn;
-		}
-
-		//window.PhonePhong.NoteMap = buildMap($scope.selectedFong.availableNotes);
-	} catch (err) {
-		alert(err.message);
-	}
+	FongPhone.Utils.Mixins.ToJSON.applyMixin(window.PhonePhong.UI.NoteMap.prototype, [
+		'selectedFong'
+	]);
 })();

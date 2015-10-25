@@ -41,6 +41,7 @@ var gradientFades = true;
 		this.stateChangedHandler = state.stateChangedHandler || function() {};
 		this.radiusChangeHandler = state.radiusChangeHandler || function() {};
 
+		this.initializer(this);
 		//this.attachToDom();
 	};
 
@@ -143,7 +144,6 @@ var gradientFades = true;
 				this.handleFongSelected(this);
 		},
 		fireAllHandlers: function() {
-			this.initializer(this);
 			this.positionChangedHandler(this, this.x, this.y);
 			this.fadeChangedHandler(this);
 			this.handleFongSelected(this);
@@ -321,34 +321,18 @@ var gradientFades = true;
 			this.selectedClassType = state.selectedClassType;
 			this.selectedState = state.selectedState;
 			this.fongRole = state.fongRole;
-		},
-		toJSON: function() {
-			var _exlusionList = {
-				boardInput: true,
-				selectedClassTypeIndex: true,
-				selectedStateIndex: true,
-				offsetX: true,
-				offsetY: true,
-				lastPinchDist: true,
-				domElement: true,
-				fadeElement: true,
-				animation: true
-			};
-
-			var obj = {};
-			_.each(this, function(val, key) {
-				if (!_excluded(val, key)) {
-					obj[key] = val;
-				}
-			});
-
-			function _excluded(val, key) {
-				return (key[0] === '_') ||
-					!!(_exlusionList[key]) ||
-					_.isFunction(val);
-			}
-
-			return obj;
 		}
 	});
+
+	FongPhone.Utils.Mixins.ToJSON.applyMixin(FongPhone.UI.Fong.prototype, [
+		'animation',
+		'boardInput',
+		'selectedClassTypeIndex',
+		'selectedStateIndex',
+		'offsetX',
+		'offsetY',
+		'lastPinchDist',
+		'domElement',
+		'fadeElement'
+	]);
 })();
