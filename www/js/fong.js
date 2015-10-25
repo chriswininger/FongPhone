@@ -12,7 +12,7 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.baseNote = 'a';
 	this.octave = 4;
 	this.availableNotes = [];
-	
+
 	this.NoteMapOn = false;
 	this.FilterNoteMapOn = false;
 
@@ -27,6 +27,16 @@ var fong = function (audCtx, mainVol, x, y, board) {
 
 	this.osc = audCtx.createOscillator();
 	this.osc.type = 'sine';
+
+	this.oscs = [];
+	this.oscsCount = 0;
+	this.oscsIncrement = 2;
+
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i] = audCtx.createOscillator();
+		this.oscs[i].type = 'sine';
+	}
+
 	this.oscPanCtrl = audCtx.createPanner();
 	this.oscVol = audCtx.createGain();
 	this.oscVolOffset = audCtx.createGain();
@@ -47,6 +57,11 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.filter.gain.value = 1;
 
 	this.osc.connect(this.filter);
+
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i].connect(this.filter);
+	}
+
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
@@ -74,6 +89,10 @@ var fong = function (audCtx, mainVol, x, y, board) {
 	this.start = function () {
 		this.osc.start(0);
 		this.oscGainCtrl.start(0);
+
+		for (var i = 0; i < this.oscsCount; i++) {
+			this.oscs[i].start();
+		}
 	}
 
 	this.setOscType = function (type) {
@@ -113,8 +132,15 @@ var fong = function (audCtx, mainVol, x, y, board) {
 		if (this.board.portamento > 0) {
 			var dur = this.board.portamento / 1000.0;
 			this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+
+			for (var i = 0; i < this.oscsCount; i++) {
+				this.oscs[i].frequency.exponentialRampToValueAtTime(freq * (i + 1 * this.oscsIncrement), this.audCtx.currentTime + dur);
+			}
 		} else {
 			this.osc.frequency.value = freq;
+			for (var i = 0; i < this.oscsCount; i++) {
+				this.oscs[i].frequency.value = freq * (i + 1 * this.oscsIncrement);
+			}
 		}
 	};
 
