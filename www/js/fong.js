@@ -6,6 +6,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.x = x;
 	this.y = y;
 
+<<<<<<< HEAD
 	this.noteMapChanged = new signals.Signal();
 	this.NoteMapInfo = new FongPhone.Logic.NoteMapInfo({
 		SelectedScale: 'ionian',
@@ -31,6 +32,16 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.osc = audCtx.createOscillator();
 	this.osc.type = 'sine';
+
+	this.oscs = [];
+	this.oscsCount = 0;
+	this.oscsIncrement = 2;
+
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i] = audCtx.createOscillator();
+		this.oscs[i].type = 'sine';
+	}
+
 	this.oscPanCtrl = audCtx.createPanner();
 	this.oscVol = audCtx.createGain();
 	this.oscVolOffset = audCtx.createGain();
@@ -51,6 +62,11 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.filter.gain.value = 1;
 
 	this.osc.connect(this.filter);
+
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i].connect(this.filter);
+	}
+
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
@@ -78,6 +94,10 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.start = function () {
 		this.osc.start(0);
 		this.oscGainCtrl.start(0);
+
+		for (var i = 0; i < this.oscsCount; i++) {
+			this.oscs[i].start();
+		}
 	}
 
 	this.setOscType = function (type) {
@@ -117,8 +137,15 @@ function fong(audCtx, mainVol, x, y, board) {
 		if (this.board.portamento > 0) {
 			var dur = this.board.portamento / 1000.0;
 			this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+
+			for (var i = 0; i < this.oscsCount; i++) {
+				this.oscs[i].frequency.exponentialRampToValueAtTime(freq * (i + 1 * this.oscsIncrement), this.audCtx.currentTime + dur);
+			}
 		} else {
 			this.osc.frequency.value = freq;
+			for (var i = 0; i < this.oscsCount; i++) {
+				this.oscs[i].frequency.value = freq * (i + 1 * this.oscsIncrement);
+			}
 		}
 	};
 
@@ -145,7 +172,7 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.turnFilterOn = function () {
 		try {
-			this.osc.disconnect(this.oscPanCtrl);
+			this.osc.disconnect(this.oscVol);
 			this.osc.connect(this.filter);
 		} catch (ex) {
 			if (ex.code === 15) return; // not off
@@ -156,7 +183,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.turnFilterOff = function () {
 		try {
 			this.osc.disconnect(this.filter);
-			this.osc.connect(this.oscPanCtrl);
+			this.osc.connect(this.oscVol);
 		} catch (ex) {
 			if (ex.code === 15) return; // not on
 			console.error(ex);

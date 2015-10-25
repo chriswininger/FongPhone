@@ -33,7 +33,8 @@
 			$scope.FilterOn = board.FilterOn;
 
 			$scope.toggleFilterClick = function () {
-				self.filterOn = !$scope.FilterOn;
+				$scope.FilterOn = !$scope.FilterOn;
+				self.filterOn = $scope.FilterOn;
 			};
 
 			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
@@ -259,8 +260,7 @@
 		}
 		function setFilterOn(on) {
 			self._filterOn = on;
-			if (self.$scope) self.$scope.FilterOn = on;
-			logicBoard.setFilterStatus(on);
+			logicBoard.setFilterStatus(on);			
 		}
 
 		function getFilterType() {

@@ -77,8 +77,9 @@
 				self.regenerateMap(self.selectedFong);
 			}
 			$scope.changeOctave = function (event) {
-				self.selectedFong.NoteMapInfo.octave = parseInt($(event.target).html().trim());
-				self.regenerateMap(self.selectedFong);
+				self.selectedFong.NoteMapInfo.ooctave = parseInt($(event.target).html().trim());
+				//$scope.regenerateMap($scope.selectedFong);			
+				self.resetOctaveForMap(self.selectedFong);
 			}
 			$scope.changeScale = function (event) {
 				self.selectedFong.NoteMapInfo.SelectedScale = $(event.target).html().trim();
@@ -124,7 +125,6 @@
 		generateScale: function(fong, startingNote, octave, scale) {
 
 			fong.NoteMapInfo.availableNotes = [];
-
 			var n = teoria.note(startingNote + octave);
 			var scale = n.scale(scale).simple();
 
@@ -138,9 +138,23 @@
 				fong.NoteMapInfo.availableNotes.push(n);
 			}
 		},
+		changeOctaveForScale: function(fong) {
+			for (var i = 0; i < fong.NoteMapInfo.availableNotes.length; i++) {
+				var n = {
+					'label': fong.NoteMapInfo.availableNotes[i].label,
+					'freq': teoria.note(fong.NoteMapInfo.availableNotes[i].label + fong.NoteMapInfo.octave).fq(),
+					'on': true
+				};
+				fong.NoteMapInfo.availableNotes[i] = n;
+			}
+		},
 		regenerateMap: function (fong) {
 			this.generateScale(fong, fong.NoteMapInfo.baseNote, fong.NoteMapInfo.octave, fong.NoteMapInfo.SelectedScale);
 			fong.NoteMapInfo.NoteMap = this.buildMap(this.selectedFong.NoteMapInfo.availableNotes);
+		},
+		resetOctaveForMap: function(fong) {
+			this.changeOctaveForScale(fong);
+			this.selectedFong.NoteMap = this.buildMap(self.selectedFong.availableNotes);
 		}
 	});
 
