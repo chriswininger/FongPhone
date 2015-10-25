@@ -1,5 +1,6 @@
 // TODO (CAW) Namespace these
 var logicBoard;
+var GLOBAL_NOTE_MAP;
 (function () {
 	console.log('starting...');
 	var defaults = {
@@ -73,7 +74,7 @@ var logicBoard;
 		logicBoard,
 		padUI,
 		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
-	var noteMap = new window.PhonePhong.UI.NoteMap(logicBoard);
+	var noteMap = GLOBAL_NOTE_MAP = new window.PhonePhong.UI.NoteMap(logicBoard);
 
 	// initialize angular route controllers
 	fongPhone.controller('padController', ['$scope', function ($scope) {

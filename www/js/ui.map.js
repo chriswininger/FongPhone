@@ -5,19 +5,18 @@
 		window.FongPhone.utils.createGetSet(this, 'selectedFong', this.getSelectedFong, this.setSelectedFong);
 		window.FongPhone.utils.createGetSet(this, 'selectedFongIndex', this.getSelectedFongIndex, this.setSelectedFongIndex);
 
-		this.logicBoard = logicBoard;
-
+		this.fongs = logicBoard.fongs;
 		this.selectedFongIndex = 0;
 
 		// TODO (get rid of this when we get rid of note/row/map
 		this.regenerateMap(this.selectedFong);
 
-		var f = logicBoard.fongs[0];
-		if (!f.NoteMap) {
+		var f = this.fongs[0];
+		if (!f.NoteMapInfo.NoteMap) {
 			this.regenerateMap(f);
 		}
-		var f1 = logicBoard.fongs[1];
-		if (!f1.NoteMap) {
+		var f1 = this.fongs[1];
+		if (!f1.NoteMapInfo.NoteMap) {
 			this.regenerateMap(f1);
 		}
 	};
@@ -39,68 +38,55 @@
 			};
 
 			$scope.noteClick = function (index) {
-				self.selectedFong.availableNotes[index].on = !self.selectedFong.availableNotes[index].on;
+				self.selectedFong.NoteMapInfo.availableNotes[index].on = !self.selectedFong.NoteMapInfo.availableNotes[index].on;
 				// update mapped notes
-				self.selectedFong.NoteMap = self.buildMap(self.selectedFong.availableNotes);
+				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
 			};
 
 			$scope.onNoteDropComplete = function($index, $data) {
-				var originalFreqObj = self.selectedFong.availableNotes[$data];
-				var currFreqObj =  self.selectedFong.availableNotes[$index];
+				var originalFreqObj = self.selectedFong.NoteMapInfo.availableNotes[$data];
+				var currFreqObj =  self.selectedFong.NoteMapInfo.availableNotes[$index];
 
 				// TODO (CAW) We reall don't need to maintain available notes by row anymore
 				// swap notes
-				self.selectedFong.availableNotes[$index] = originalFreqObj;
-				self.selectedFong.availableNotes[$data] = currFreqObj;
+				self.selectedFong.NoteMapInfo.availableNotes[$index] = originalFreqObj;
+				self.selectedFong.NoteMapInfo.availableNotes[$data] = currFreqObj;
 
 				// create a note map in the new order, minus disabled notes
-				self.selectedFong.NoteMap = self.buildMap(self.selectedFong.availableNotes);
+				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
 			};
 
 			$scope.toggleNoteMapClick = function () {
-				self.selectedFong.NoteMapOn = !self.selectedFong.NoteMapOn;
+				self.selectedFong.NoteMapInfo.NoteMapOn = !self.selectedFong.NoteMapInfo.NoteMapOn;
 			};
 			$scope.toggleFilterNoteMapClick = function () {
-				self.selectedFong.FilterNoteMapOn = !self.selectedFong.FilterNoteMapOn;
+				self.selectedFong.NoteMapInfo.FilterNoteMapOn = !self.selectedFong.NoteMapInfo.FilterNoteMapOn;
 			};
 
 			$scope.IsSelectedScale = function (scale) {
-				return scale === self.selectedFong.SelectedScale;
+				return scale === self.selectedFong.NoteMapInfo.SelectedScale;
 			}
 			$scope.IsSelectedBaseNote = function (baseNote) {
-				return baseNote === self.selectedFong.baseNote;
+				return baseNote === self.selectedFong.NoteMapInfo.baseNote;
 			}
 			$scope.IsSelectedOctave = function (octave) {
-				return octave === self.selectedFong.octave;
+				return octave === self.selectedFong.NoteMapInfo.octave;
 			}
 			$scope.changeBaseNote = function (event) {
-				self.selectedFong.baseNote = $(event.target).html().trim();
+				self.selectedFong.NoteMapInfo.baseNote = $(event.target).html().trim();
 				self.regenerateMap(self.selectedFong);
 			}
 			$scope.changeOctave = function (event) {
-				self.selectedFong.octave = parseInt($(event.target).html().trim());
+				self.selectedFong.NoteMapInfo.octave = parseInt($(event.target).html().trim());
 				self.regenerateMap(self.selectedFong);
 			}
 			$scope.changeScale = function (event) {
-				self.selectedFong.SelectedScale = $(event.target).html().trim();
-				self.selectedFong.scale = self.selectedFong.SelectedScale;
+				self.selectedFong.NoteMapInfo.SelectedScale = $(event.target).html().trim();
 				self.regenerateMap(self.selectedFong);
 			};
 
-			// position swipe pad for page switching
-			var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-			//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
-			var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.get('swipe').set({
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.on('pan', function (ev) {
-				if (ev.isFinal) {
-					window.location = '#/';
-				}
-			});
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'swiperight');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'swipeleft');
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {
@@ -118,7 +104,7 @@
 			this._selectedFong = fong;
 
 			// TODO (CAW) Probably don't need if its to build the map
-			if (!fong.NoteMap)
+			if (!fong.NoteMapInfo.NoteMap)
 				this.regenerateMap(fong);
 
 			if (this.$scope)
@@ -129,7 +115,7 @@
 		},
 		setSelectedFongIndex: function(index) {
 			this._selectedFongIndex = index;
-			this.selectedFong = this.logicBoard.fongs[index];
+			this.selectedFong = this.fongs[index];
 			if (this.$scope) {
 				this.$scope.Fong1Selected = (index === 0);
 				this.$scope.Fong2Selected = (index === 1);
@@ -137,7 +123,7 @@
 		},
 		generateScale: function(fong, startingNote, octave, scale) {
 
-			fong.availableNotes = [];
+			fong.NoteMapInfo.availableNotes = [];
 
 			var n = teoria.note(startingNote + octave);
 			var scale = n.scale(scale).simple();
@@ -149,12 +135,16 @@
 					on: true
 				};
 
-				fong.availableNotes.push(n);
+				fong.NoteMapInfo.availableNotes.push(n);
 			}
 		},
 		regenerateMap: function (fong) {
-			this.generateScale(fong, fong.baseNote, fong.octave, fong.SelectedScale);
-			fong.NoteMap = this.buildMap(this.selectedFong.availableNotes);
+			this.generateScale(fong, fong.NoteMapInfo.baseNote, fong.NoteMapInfo.octave, fong.NoteMapInfo.SelectedScale);
+			fong.NoteMapInfo.NoteMap = this.buildMap(this.selectedFong.NoteMapInfo.availableNotes);
 		}
 	});
+
+	FongPhone.Utils.Mixins.ToJSON.applyMixin(window.PhonePhong.UI.NoteMap.prototype, [
+		'selectedFong'
+	]);
 })();
