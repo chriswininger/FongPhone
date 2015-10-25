@@ -6,7 +6,6 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.x = x;
 	this.y = y;
 
-<<<<<<< HEAD
 	this.noteMapChanged = new signals.Signal();
 	this.NoteMapInfo = new FongPhone.Logic.NoteMapInfo({
 		SelectedScale: 'ionian',
@@ -223,5 +222,7 @@ FongPhone.Utils.Mixins.ToJSON.applyMixin(fong.prototype, [
 	'oscGainCtrl',
 	'oscPanCtrl',
 	'oscVol',
-	'oscVolOffset'
+	'oscVolOffset',
+	'noteMapChanged',
+	'oscs'
 ]);

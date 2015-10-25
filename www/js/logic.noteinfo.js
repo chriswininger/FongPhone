@@ -40,4 +40,4 @@ _.extend(FongPhone.Logic.NoteMapInfo.prototype, {
         return this[key];
 	}
 });
-FongPhone.Utils.Mixins.ToJSON.applyMixin(FongPhone.Logic.NoteMapInfo.prototype);
+FongPhone.Utils.Mixins.ToJSON.applyMixin(FongPhone.Logic.NoteMapInfo.prototype, ['changed']);
