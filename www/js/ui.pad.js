@@ -82,7 +82,7 @@
 		},
 		handleFadeChanged: function (fong) {
 			// TODO (CAW) -- range should reflect size of outer sphere
-			fong.boardInput.setFade(map(-1 * fong.fadeOffset, -35, 35, -2, 2));
+			fong.boardInput.setFade(map(fong.fadeOffset, -35, 35, -2, 2));
 		},
 		handlePositionChangedPrimary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
