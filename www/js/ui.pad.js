@@ -103,6 +103,7 @@
 			// update offsets
 			try {
 				this.board.setPrimaryOffsetFromFong(fong);
+				this.board.setSecondaryOffsetFromFong(this.fongDotsByRole.secondary);
 			} catch (err) {
 				alert(err.message);
 			}
@@ -167,6 +168,9 @@
 		},
 		set: function(json) {
 			this.fongDots = [];
+			// TODO (CAW) more robust would be to store by id (include ids in json and have the id for secondary stored on primary)
+			this.fongDotsByRole = {};
+
 			_.each(json.fongDots || [], function(fongJSON) {
 				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
 				fongJSON.fadeChangedHandler = this.roleHandlers[fongJSON.fongRole].fadeChangedHandler;
@@ -175,7 +179,9 @@
 				fongJSON.stateChangedHandler = this.roleHandlers[fongJSON.fongRole].stateChangedHandler;
 				fongJSON.initializer = this.roleHandlers[fongJSON.fongRole].initializer;
 
-				this.fongDots.push(new  window.FongPhone.UI.Fong(this.board, fongJSON));
+				var fongUI = new FongPhone.UI.Fong(this.board, fongJSON);
+				this.fongDotsByRole[fongUI.fongRole] = fongUI;
+				this.fongDots.push(fongUI);
 			}, this);
 		},
 		toJSON: function() {

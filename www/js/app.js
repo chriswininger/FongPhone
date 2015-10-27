@@ -118,7 +118,8 @@ var GLOBAL_NOTE_MAP;
 		}
 
 		if (storedState) storedState = JSON.parse(storedState);
-		return (storedState || defaults);
+		if (storedState) return _.extend(defaults, storedState);
+		return defaults;
 	}
 })();
 
