@@ -67,6 +67,177 @@
 	  filterOn: true,
 	  filterType: 'lowpass',
 	  env2Control: 8
+	},
+	noteMapSettings: {
+		selectedFongIndex: 0,
+		fongs: [
+			{
+				"NoteMapInfo": {
+					"SelectedScale": "ionian",
+					"baseNote": "a",
+					"octave": 4,
+					"availableNotes": [
+						{
+							"label": "a",
+							"freq": 440,
+							"on": true,
+						},
+						{
+							"label": "b",
+							"freq": 493.8833012561241,
+							"on": true,
+						},
+						{
+							"label": "c#",
+							"freq": 277.1826309768721,
+							"on": true,
+						},
+						{
+							"label": "d",
+							"freq": 293.6647679174076,
+							"on": true
+						},
+						{
+							"label": "e",
+							"freq": 329.6275569128699,
+							"on": true
+						},
+						{
+							"label": "f#",
+							"freq": 369.9944227116344,
+							"on": true
+						},
+						{
+							"label": "g#",
+							"freq": 415.3046975799451,
+							"on": true
+						}
+					],
+					"NoteMapOn": false,
+					"FilterNoteMapOn": false,
+					"NoteMap": [
+						{
+							"label": "a",
+							"freq": 440,
+							"on": true
+						},
+						{
+							"label": "b",
+							"freq": 493.8833012561241,
+							"on": true
+						},
+						{
+							"label": "c#",
+							"freq": 277.1826309768721,
+							"on": true
+						},
+						{
+							"label": "d",
+							"freq": 293.6647679174076,
+							"on": true
+						},
+						{
+							"label": "e",
+							"freq": 329.6275569128699,
+							"on": true
+						},
+						{
+							"label": "f#",
+							"freq": 369.9944227116344,
+							"on": true
+						},
+						{
+							"label": "g#",
+							"freq": 415.3046975799451,
+							"on": true
+						}
+					]
+				}
+			},
+			{
+				NoteMapInfo: {
+					"SelectedScale": "ionian",
+					"baseNote": "a",
+					"octave": 4,
+					"availableNotes": [
+						{
+							"label": "a",
+							"freq": 440,
+							"on": true
+						},
+						{
+							"label": "b",
+							"freq": 493.8833012561241,
+							"on": true
+						},
+						{
+							"label": "c#",
+							"freq": 277.1826309768721,
+							"on": true
+						},
+						{
+							"label": "d",
+							"freq": 293.6647679174076,
+							"on": true
+						},
+						{
+							"label": "e",
+							"freq": 329.6275569128699,
+							"on": true
+						},
+						{
+							"label": "f#",
+							"freq": 369.9944227116344,
+							"on": true
+						},
+						{
+							"label": "g#",
+							"freq": 415.3046975799451,
+							"on": true
+						}
+					],
+					"NoteMapOn": false,
+					"FilterNoteMapOn": false,
+					"NoteMap": [
+						{
+							"label": "a",
+							"freq": 440,
+							"on": true
+						},
+						{
+							"label": "b",
+							"freq": 493.8833012561241,
+							"on": true
+						},
+						{
+							"label": "c#",
+							"freq": 277.1826309768721,
+							"on": true
+						},
+						{
+							"label": "d",
+							"freq": 293.6647679174076,
+							"on": true
+						},
+						{
+							"label": "e",
+							"freq": 329.6275569128699,
+							"on": true
+						},
+						{
+							"label": "f#",
+							"freq": 369.9944227116344,
+							"on": true
+						},
+						{
+							"label": "g#",
+							"freq": 415.3046975799451,
+							"on": true
+						}
+					]
+				}
+			}
+		]
 	}
   };
 })();

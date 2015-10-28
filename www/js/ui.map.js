@@ -1,15 +1,17 @@
 // TODO (CAW) Store the notemaps on the ui.fong.js not the board fongs, then we can restore the notemaps into selected fongs
 //  on restore
 (function () {
-	window.PhonePhong.UI.NoteMap = function(logicBoard) {
+	window.PhonePhong.UI.NoteMap = function(logicBoard, state) {
 		window.FongPhone.utils.createGetSet(this, 'selectedFong', this.getSelectedFong, this.setSelectedFong);
 		window.FongPhone.utils.createGetSet(this, 'selectedFongIndex', this.getSelectedFongIndex, this.setSelectedFongIndex);
 
 		this.fongs = logicBoard.fongs;
 		this.selectedFongIndex = 0;
 
-		// TODO (get rid of this when we get rid of note/row/map
-		this.regenerateMap(this.selectedFong);
+		_.each(state.fongs, function(_fong, i) {
+			// todo (caw) do with ids
+			this.fongs[i].NoteMapInfo = _fong.NoteMapInfo;
+		}, this);
 
 		var f = this.fongs[0];
 		if (!f.NoteMapInfo.NoteMap) {

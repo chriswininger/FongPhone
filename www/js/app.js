@@ -26,16 +26,32 @@ var GLOBAL_NOTE_MAP;
 		$(_deviceReady);
 	}
 
+	// sound and sound logic layer
 	var context;
 	if (typeof AudioContext !== "undefined") {
 		context = new AudioContext();
 	} else if (typeof webkitAudioContext !== "undefined") {
 		context = new webkitAudioContext();
 	} else {
-		console.error(new Error('AudioContext not supported.'));
+		return console.error(new Error('AudioContext not supported.'));
 	}
 
 	logicBoard = new PhonePhong.BoardLogic(context, defaults);
+
+	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
+
+	var soundUI = new PhonePhong.Sound(
+		logicBoard,
+		padUI,
+		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
+
+	var noteMap = GLOBAL_NOTE_MAP = new window.PhonePhong.UI.NoteMap(
+		logicBoard,
+		_getStoredState('ui.map.state', FongPhone.UI.Defaults.noteMapSettings)
+	);
+
+
+
 
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate', 'ngDraggable']).directive('ngY', function () {
 		return function (scope, element, attrs) {
@@ -67,14 +83,6 @@ var GLOBAL_NOTE_MAP;
 			controller: 'soundController'
 		});
 	});
-
-	// initialize ui logic
-	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
-	var soundUI = new PhonePhong.Sound(
-		logicBoard,
-		padUI,
-		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
-	var noteMap = GLOBAL_NOTE_MAP = new window.PhonePhong.UI.NoteMap(logicBoard);
 
 	// initialize angular route controllers
 	fongPhone.controller('padController', ['$scope', function ($scope) {
