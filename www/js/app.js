@@ -3,19 +3,6 @@ var logicBoard;
 var GLOBAL_NOTE_MAP;
 (function () {
 	console.log('starting...');
-	var defaults = {
-		mainVol: 0.5,
-		osc1Vol: 0.9949676394462585,
-		osc2Vol: 0.9949676394462585,
-		osc1Freq: 440,
-		osc2Freq: 1000,
-		primaryOffset: 0.5,
-		osc1MaxFreq: 3000,
-		osc2MaxFreq: 10,
-		primaryOffsetMax: 10,
-		secondaryOffsetMax: 8,
-		secondaryOffset: 1.0
-	};
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 		document.URL.indexOf('https://') === -1);
 
@@ -36,7 +23,7 @@ var GLOBAL_NOTE_MAP;
 		return console.error(new Error('AudioContext not supported.'));
 	}
 
-	logicBoard = new PhonePhong.BoardLogic(context, defaults);
+	logicBoard = new PhonePhong.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
 
 	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
 
@@ -45,13 +32,15 @@ var GLOBAL_NOTE_MAP;
 		padUI,
 		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
 
-	var noteMap = GLOBAL_NOTE_MAP = new window.PhonePhong.UI.NoteMap(
+	var noteMap = GLOBAL_NOTE_MAP = new PhonePhong.UI.NoteMap(
 		logicBoard,
 		_getStoredState('ui.map.state', FongPhone.UI.Defaults.noteMapSettings)
 	);
 
-
-
+	// start the oscillators after all other settings have been initialized to avoid hiccup
+	setTimeout(function() {
+		logicBoard.start();
+	}, 1000);
 
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate', 'ngDraggable']).directive('ngY', function () {
 		return function (scope, element, attrs) {
@@ -66,7 +55,6 @@ var GLOBAL_NOTE_MAP;
 			});
 		};
 	});
-
 
 	fongPhone.config(function ($routeProvider) {
 		$routeProvider.when('/', {

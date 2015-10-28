@@ -1,6 +1,4 @@
 (function() {
-  window.FongPhone = window.FongPhone || {};
-  window.FongPhone.UI = window.FongPhone.UI || {};
   window.FongPhone.UI.Defaults = {
 	fongDots: [{
 	  x: 60,

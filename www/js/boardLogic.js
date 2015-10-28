@@ -12,8 +12,8 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	this.delayTime = .5;
 	this.delayFeedback = .8;
 
-	this.fong1 = new fong(audCtx, this.mainVol, 60, 60, this);
-	this.fong2 = new fong(audCtx, this.mainVol, 200, 200, this);
+	this.fong1 = new fong(audCtx, this.mainVol, 0, 0, this);
+	this.fong2 = new fong(audCtx, this.mainVol, 0, 0, this);
 
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);
@@ -21,20 +21,19 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	this.mainVol.connect(this.audCtx.destination);
 
 	// defaults
-	this.updateBoard(opts);
+	if (opts)
+		this.updateBoard(opts);
 
 	this.setPrimaryOffsetFromFong(this.fong1);
 	this.setSecondaryOffsetFromFong(this.fong2);
 
 	this.FilterOn = _filterOn;
-
-	this.init();
 };
 
 var $class = PhonePhong.BoardLogic.prototype;
 
 var mainInterval;
-$class.init = function () {
+$class.start = function () {
 	this.fong1.start();
 	this.fong2.start();
 	//mainInterval = setInterval(_.bind(this.primaryLoop, this), this.mainTimeOffset);
@@ -116,6 +115,7 @@ $class.setPrimaryOffsetFromFong = function (fong) {
 }
 
 $class.setPrimaryOffset = function (value) {
+	if (isNaN(value)) return;
 	this.mainTimeOffset = value;
 	this.fong1.oscGainCtrl.frequency.value = value / 4;
 	return value;
@@ -132,6 +132,7 @@ $class.setSecondaryOffsetFromFong = function (fong) {
 }
 
 $class.setSecondaryOffset = function (value) {
+	if (isNaN(value)) return;
 	this.secondaryOffset = value;
 	this.fong2.oscGainCtrl.frequency.value = value / 4;
 	return value;
