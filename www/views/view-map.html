@@ -1,4 +1,4 @@
-<div id="mapUI" style="height:800px" class="ui-display-area">
+<div id="mapUI" style="height:100%" class="ui-display-area">
 	<div id="mapSubUI">
 		<svg width="100%" height="20">
 			<defs>
@@ -10,7 +10,7 @@
 						<animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
 					</stop>
 				</linearGradient>
-				<linearGradient id="gradSwipe" x1="30%" y1="70%">
+				<linearGradient id="gradTop" x1="30%" y1="70%">
 					<stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
 						<animate attributeName="stop-opacity" values=".9;.8;.9" dur="30s" repeatCount="indefinite" />
 					</stop>
@@ -19,7 +19,7 @@
 					</stop>
 				</linearGradient>
 			</defs>
-			<rect width="100%" height="20" fill="url(#gradSwipe)" />
+			<rect width="100%" height="20" fill="url(#gradTop)" />
 		</svg>
 
 		<table class="ui-map-table">
