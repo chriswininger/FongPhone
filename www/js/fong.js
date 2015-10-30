@@ -70,7 +70,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
 
-	this.delay = audCtx.createDelay();
+	this.delay = audCtx.createDelay(10);
 	this.delay.delayTime.value = this.board.delayTime;
 
 	this.feedback = audCtx.createGain();
