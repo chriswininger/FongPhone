@@ -49,8 +49,8 @@
 			</table>
 			<table class="ui-sound-table">
 				<tr>
-					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Wave 1</td>
-					<td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
+					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2" style="width:50%">Wave 1</td>
+					<td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)" width="25%">
 						square
 					</td>
 					<td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
@@ -93,8 +93,8 @@
 			</table>
 			<table class="ui-sound-table">
 				<tr>
-					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Wave 2</td>
-					<td class="ui-map-note-map-scale {{ IsSelectedOsc2Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc2Type($event)">
+					<td class="ui-map-note-map-toggle" colspan="2" rowspan="2" width="50%">Wave 2</td>
+					<td class="ui-map-note-map-scale {{ IsSelectedOsc2Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc2Type($event)" width="25%">
 						square
 					</td>
 					<td class="ui-map-note-map-scale {{ IsSelectedOsc2Type('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc2Type($event)">
@@ -108,6 +108,7 @@
 					<td class="ui-map-note-map-scale {{ IsSelectedOsc2Type('sawtooth') ? 'selectedScale' : '' }}" ng-click="changeOsc2Type($event)">
 						sawtooth
 					</td>
+				</tr>
 				</tr>
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Envelope 2</td>
@@ -137,30 +138,33 @@
 			</table>
 			<table class="ui-sound-table">
 				<tr>
-					<td class="ui-map-note-map-toggle" colspan="2">Glide</td>
-					<td class="ui-map-note-map-toggle" colspan="2">
+					<td class="ui-map-note-map-toggle" colspan="2" width="50%">Glide</td>
+					<td class="ui-map-note-map-toggle" colspan="1" width="25%">
 						<div style="position:relative;">
 							<input id="portamentoControl" type="text" class="dial" data-min="0" data-max="1000" data-width="80">
 						</div>
 					</td>
+					<td class="ui-map-note-map-scale"></td>
 				</tr>
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Filter Glide</td>
-					<td class="ui-map-note-map-toggle" colspan="2">
+					<td class="ui-map-note-map-toggle" colspan="1">
 						<div style="position:relative;">
 							<input id="filterPortamentoControl" type="text" class="dial" data-min="0" data-max="10000" data-width="80">
 						</div>
 					</td>
+					<td class="ui-map-note-map-scale"></td>
 				</tr>
 			</table>
 			<table class="ui-sound-table">
 				<tr>
-					<td class="ui-map-note-map-toggle" colspan="2">Delay Volume</td>
-					<td class="ui-map-note-map-toggle" colspan="2">
+					<td class="ui-map-note-map-toggle" colspan="2" width="50%">Delay Volume</td>
+					<td class="ui-map-note-map-toggle" colspan="1" width="25%">
 						<div style="position:relative;">
 							<input id="delayVolumeControl" type="text" class="dial" data-min="0" data-max="100" data-width="80">
 						</div>
 					</td>
+					<td class="ui-map-note-map-scale" width="25%"></td>
 				</tr>
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Delay</td>
@@ -169,14 +173,16 @@
 							<input id="delayTimeControl" type="text" class="dial" data-min="250" data-max="10000" data-width="80">
 						</div>
 					</td>
+					<td class="ui-map-note-map-scale"></td>
 				</tr>
 				<tr>
 					<td class="ui-map-note-map-toggle" colspan="2">Feedback</td>
-					<td class="ui-map-note-map-toggle" colspan="2">
+					<td class="ui-map-note-map-toggle" colspan="1">
 						<div style="position:relative;">
 							<input id="delayFeedbackControl" type="text" class="dial" data-min="0" data-max="20" data-width="80">
 						</div>
 					</td>
+					<td class="ui-map-note-map-scale" width="25%"></td>
 				</tr>
 			</table>
 		</div>
