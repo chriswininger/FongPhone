@@ -28,6 +28,8 @@
 		function attachToDom($scope) {
 			var self = this;
 			this.$scope = $scope;
+			
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_RIGHT, 'swiperight');
 
 			// investigate $scope values
 			$scope.FilterOn = board.FilterOn;
@@ -93,24 +95,7 @@
 			$scope.changeOsc2EnvType = function (event) {
 				self.osc2EnvType = $(event.target).html().trim();
 			}
-
-			var mapPadSwipeDown = document.getElementById('mapPadSwipeDown');
-			//mapPadSwipeDown.style.top = (window.innerHeight - mapPadSwipeDown.getClientRects()[0].height) + 'px';
-			var hammeruiPadSwipeDown = new Hammer(mapPadSwipeDown, {
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.get('swipe').set({
-				direction: Hammer.DIRECTION_VERTICAL
-			});
-			hammeruiPadSwipeDown.on('pan', function (ev) {
-				if (ev.isFinal) {
-					if (pad) {
-						localStorage.setItem('ui.pad.state', JSON.stringify(pad.toJSON()));
-						localStorage.setItem('ui.sound.state', JSON.stringify(self.toJSON()));
-					}
-					window.location = '#/';
-				}
-			});
+			
 		}
 
 		function registerKnob(selector, attrKey, val) {
