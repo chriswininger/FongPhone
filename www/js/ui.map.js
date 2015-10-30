@@ -79,7 +79,7 @@
 				self.regenerateMap(self.selectedFong);
 			}
 			$scope.changeOctave = function (event) {
-				self.selectedFong.NoteMapInfo.ooctave = parseInt($(event.target).html().trim());
+				self.selectedFong.NoteMapInfo.octave = parseInt($(event.target).html().trim());
 				//$scope.regenerateMap($scope.selectedFong);			
 				self.resetOctaveForMap(self.selectedFong);
 			}
@@ -156,7 +156,7 @@
 		},
 		resetOctaveForMap: function(fong) {
 			this.changeOctaveForScale(fong);
-			this.selectedFong.NoteMap = this.buildMap(self.selectedFong.availableNotes);
+			fong.NoteMapInfo.NoteMap = this.buildMap(fong.NoteMapInfo.availableNotes);
 		}
 	});
 
