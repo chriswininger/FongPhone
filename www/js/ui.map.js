@@ -39,11 +39,18 @@
 				self.selectedFongIndex = i;
 			};
 
+			// Fired when a note in the map is clicked
 			$scope.noteClick = function (index) {
 				self.selectedFong.NoteMapInfo.availableNotes[index].on = !self.selectedFong.NoteMapInfo.availableNotes[index].on;
 				// update mapped notes
 				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
 			};
+
+			// Fired when dragging a note in the map into position over another
+			$scope.onNoteHover = function($event) {
+				console.log('!!! foo');
+				angular.element(e.target).addClass('hover');
+			}
 
 			$scope.onNoteDropComplete = function($index, $data) {
 				// find the index of the note that drug based on frequency

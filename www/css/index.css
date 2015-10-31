@@ -247,3 +247,12 @@ td.ui-map-note-map-toggle {
 	overflow: auto;
 	-webkit-overflow-scrolling: touch;
 }
+
+[ng-drop].drag-enter {
+	border: solid 3px white;
+}
+
+[ng-drag].dragging {
+	opacity: 0.5;
+	border: 0;
+}
