@@ -249,7 +249,8 @@ td.ui-map-note-map-toggle {
 }
 
 [ng-drop].drag-enter {
-	border: solid 3px white;
+	/*border: solid 3px white;*/
+	background-color: rgba(255,255,255,.3);
 }
 
 [ng-drag].dragging {
