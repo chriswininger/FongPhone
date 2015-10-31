@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.wegotrats.fonephong" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.wegotrats.fonephone" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>FongPhone</name>
     <description>
-        A sample Apache Cordova application that responds to the deviceready event.
+        A new mobile synth experience
     </description>
-    <author email="dev@cordova.apache.org" href="http://cordova.io">
-        Apache Cordova Team
+    <author email="chris.wininger@gmail.com" href="http://cordova.io">
+        Chris Wininger
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" version="1" />
@@ -25,4 +25,5 @@
     </platform>
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
+    <preference name="orientation" value="portrait" />
 </widget>
