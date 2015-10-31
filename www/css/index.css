@@ -188,7 +188,8 @@ table.ui-map-table {
 
 table.ui-sound-table {
 	width: 100%;
-	border-bottom: 3px solid rgba(255, 255, 255, .1);;
+	border-bottom: 3px solid rgba(255, 255, 255, .1);
+	;
 }
 
 .map-note,
@@ -235,7 +236,7 @@ td.ui-map-note-map-toggle {
 }
 
 .selectedScale {
-	opacity: .9;	
+	opacity: .9;
 	border-bottom: 1px solid rgba(255, 255, 255, .05);
 }
 
@@ -250,7 +251,13 @@ td.ui-map-note-map-toggle {
 
 [ng-drop].drag-enter {
 	/*border: solid 3px white;*/
-	background-color: rgba(255,255,255,.3);
+	background-color: rgba(255, 255, 255, .3);
+	-moz-border-radius: 5px;
+	/* Firefox 3.6-, removed in Firefox 13 */
+	-webkit-border-radius: 5px;
+	/* Safari 4-, Chrome 3- */
+	border-radius: 5px;
+	/* Firefox 4+, Safari 5+, Chrome 4+, Opera 10.5+, IE9+ */
 }
 
 [ng-drag].dragging {
