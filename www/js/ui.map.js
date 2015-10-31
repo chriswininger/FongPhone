@@ -46,13 +46,25 @@
 			};
 
 			$scope.onNoteDropComplete = function($index, $data) {
-				var originalFreqObj = self.selectedFong.NoteMapInfo.availableNotes[$data];
-				var currFreqObj =  self.selectedFong.NoteMapInfo.availableNotes[$index];
+				// find the index of the note that drug based on frequency
+				var dragIndex = _.findIndex(self.selectedFong.NoteMapInfo.availableNotes,
+					function(entry) {
+						return entry.freq === $data.freq
+					});
 
-				// TODO (CAW) We reall don't need to maintain available notes by row anymore
-				// swap notes
-				self.selectedFong.NoteMapInfo.availableNotes[$index] = originalFreqObj;
-				self.selectedFong.NoteMapInfo.availableNotes[$data] = currFreqObj;
+				// if dropped on self ignore
+				if ($index === $data) return;
+
+				var originalFreqObj = self.selectedFong.NoteMapInfo.availableNotes[$data];
+
+				self.selectedFong.NoteMapInfo.availableNotes.splice($index, 0, $data);
+
+				if ($index < dragIndex) {
+					// moved back in array
+					self.selectedFong.NoteMapInfo.availableNotes.splice(dragIndex +1, 1);
+				} else {
+					self.selectedFong.NoteMapInfo.availableNotes.splice(dragIndex, 1);
+				}
 
 				// create a note map in the new order, minus disabled notes
 				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);

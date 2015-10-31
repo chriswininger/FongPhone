@@ -93,7 +93,7 @@
 								ng-click="noteClick($index)"
 							 	ng-drag="true" data-allow-transform="true"
 							 	ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data, $event)"
-							 	ng-drag-data="{{$index}}">
+							 	ng-drag-data="{{ x }}">
 								{{ x.label }}
 							</div>
 						</td>
