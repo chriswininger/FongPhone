@@ -58,6 +58,14 @@
 			this.backgroundPad = document.getElementById(this.svgElementID);
 
 			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
+			document.getElementById('version').setAttribute('y', window.innerHeight - 50);
+			document.getElementById('version').setAttribute('x', window.innerWidth - 60);
+			
+			$.get("version.txt", function (data) {
+				var v = document.getElementById("version");
+				var v2 = $("#versionxx");
+				v.textContent = data;
+			});
 		},
 		listen: function () {
 			var svgElem = document.getElementById(this.svgElementID);

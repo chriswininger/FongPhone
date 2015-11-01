@@ -25,5 +25,7 @@
     </platform>
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="orientation" value="portrait" />
+    <preference name="orientation" value="portrait" />	
+	<hook type="before_build" src="hooks/sha.sh" />
+	<hook type="before_emulate" src="hooks/sha.sh" />
 </widget>
