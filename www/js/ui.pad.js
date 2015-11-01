@@ -8,6 +8,7 @@
  *   double tab dot will turn it off/on
  * @type {{}|*|Window.PhonePhong}
  */
+var bVersionDisplayed;
 (function () {
 	window.PhonePhong.UI.Pad = function (board, state) {
 		var self = this;
@@ -61,11 +62,14 @@
 			document.getElementById('version').setAttribute('y', window.innerHeight - 50);
 			document.getElementById('version').setAttribute('x', window.innerWidth - 60);
 			
-			$.get("version.txt", function (data) {
-				var v = document.getElementById("version");
-				var v2 = $("#versionxx");
-				v.textContent = data;
-			});
+			if (!bVersionDisplayed)
+			{
+				$.get("version.txt", function (data) {
+					var v = document.getElementById("version");
+					v.textContent = data;
+					bVersionDisplayed = $(v).fadeOut(10000);
+				});
+			}
 		},
 		listen: function () {
 			var svgElem = document.getElementById(this.svgElementID);
