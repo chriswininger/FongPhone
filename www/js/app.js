@@ -100,6 +100,7 @@ var GLOBAL_NOTE_MAP;
 		try {
 			localStorage.setItem('ui.pad.state', JSON.stringify(padUI.toJSON()));
 			localStorage.setItem('ui.sound.state', JSON.stringify(soundUI));
+			localStorage.setItem('ui.map.state', JSON.stringify(noteMap));
 		} catch (ex) {
 			console.error('error saving ui pad state: ' + ex);
 		}

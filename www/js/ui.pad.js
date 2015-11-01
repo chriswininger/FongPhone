@@ -132,7 +132,7 @@ var bVersionDisplayed;
 		},
 		getFreq: function (x, y, r, fong) {
 			var f = fong.boardInput;
-			if (!f.NoteMapInfo.NoteMapOn) {
+			if (!f.NoteMapInfo.NoteMapOn || !f.NoteMapInfo.NoteMap) {
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
 			} else {
 				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
@@ -144,7 +144,7 @@ var bVersionDisplayed;
 		},
 		getFilterFrequency: function (x, y, r, fong) {
 			var f = fong.boardInput;
-			if (!f.NoteMapInfo.FilterNoteMapOn) {
+			if (!f.NoteMapInfo.FilterNoteMapOn || !f.NoteMapInfo.NoteMap) {
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
 				var fnoteNumber = Math.floor(x * f.NoteMapInfo.NoteMap.length / window.innerWidth);

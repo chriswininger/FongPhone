@@ -10,7 +10,7 @@
 
 		_.each(state.fongs, function(_fong, i) {
 			// todo (caw) do with ids
-			this.fongs[i].NoteMapInfo = _fong.NoteMapInfo;
+			_.extend(this.fongs[i].NoteMapInfo, _fong.NoteMapInfo);
 		}, this);
 
 		var f = this.fongs[0];
