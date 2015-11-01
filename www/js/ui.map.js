@@ -163,7 +163,7 @@
 				var n = {
 					'label': fong.NoteMapInfo.availableNotes[i].label,
 					'freq': teoria.note(fong.NoteMapInfo.availableNotes[i].label + fong.NoteMapInfo.octave).fq(),
-					'on': true
+					'on': fong.NoteMapInfo.availableNotes[i].on
 				};
 				fong.NoteMapInfo.availableNotes[i] = n;
 			}
