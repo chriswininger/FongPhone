@@ -43,7 +43,7 @@
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
 			$(".dial").attr('disabled', 'disabled');
 
-			$('#soundControlsDiv').css('max-height', (window.innerHeight - 60) + "px");
+			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
 			$('.page').css('max-height', window.innerHeight + "px");
 
 			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance);
