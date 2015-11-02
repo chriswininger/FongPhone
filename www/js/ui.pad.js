@@ -53,8 +53,8 @@ var bVersionDisplayed;
 		},
 		createComponents: function () {
 			$('#' + this.svgElementID).height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, this.svgElementID);
+			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, this.svgElementID);
 
 			this.backgroundPad = document.getElementById(this.svgElementID);
 

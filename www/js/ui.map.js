@@ -107,8 +107,8 @@
 				self.regenerateMap(self.selectedFong);
 			};
 
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'swipeleft');
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'swiperight');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'mapUI');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'mapUI');
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {
