@@ -19,7 +19,7 @@
 		FongPhone.utils.createGetSet(this, 'filterType', getFilterType, setFilterType);
 		this.set = set;
 		this.attachToDom = attachToDom;
-		this.registerKnob = registerKnob;
+		this.registerKnob = FongPhone.utils.registerKnob;
 		_.bindAll(this, 'set', 'attachToDom', 'registerKnob');
 
 		this.set(state);
@@ -47,14 +47,14 @@
 			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
 			$('.page').css('max-height', window.innerHeight + "px");
 
-			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance);
-			this.registerKnob('#env1Control', 'env1Control', this.env1Control);
-			this.registerKnob('#env2Control', 'env2Control', this.env2Control);
-			this.registerKnob('#portamentoControl', 'portamentoControl', this.portamentoControl);
-			this.registerKnob('#filterPortamentoControl', 'filterPortamento', this.filterPortamento);
-			this.registerKnob('#delayVolumeControl', 'delayVolumeControl', this.delayVolumeControl);
-			this.registerKnob('#delayTimeControl', 'delayTimeControl', this.delayTimeControl);
-			this.registerKnob('#delayFeedbackControl', 'delayFeedbackControl', this.delayFeedbackControl);
+			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance, this);
+			this.registerKnob('#env1Control', 'env1Control', this.env1Control, this);
+			this.registerKnob('#env2Control', 'env2Control', this.env2Control, this);
+			this.registerKnob('#portamentoControl', 'portamentoControl', this.portamentoControl, this);
+			this.registerKnob('#filterPortamentoControl', 'filterPortamento', this.filterPortamento, this);
+			this.registerKnob('#delayVolumeControl', 'delayVolumeControl', this.delayVolumeControl, this);
+			this.registerKnob('#delayTimeControl', 'delayTimeControl', this.delayTimeControl, this);
+			this.registerKnob('#delayFeedbackControl', 'delayFeedbackControl', this.delayFeedbackControl, this);
 
 
 			$scope.IsSelectedFilterType = function (filterType) {
@@ -97,20 +97,7 @@
 				self.osc2EnvType = $(event.target).html().trim();
 			}
 			
-		}
-
-		function registerKnob(selector, attrKey, val) {
-			var self = this;
-			$(selector).off('change');
-			$(selector).val(val);
-			$(selector).knob({
-				'stopper': true,
-				'height': 90,
-				'change': function (v) {
-					self[attrKey] = parseInt(v);
-				}
-			});
-		}
+		}		
 
 		// ==== Member Methods ====
 		this.toJSON = function() {

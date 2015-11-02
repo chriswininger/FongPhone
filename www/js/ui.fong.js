@@ -94,34 +94,41 @@ var gradientFades = true;
 			this.incrementClass();
 		},
 		handleTouchMove: function (event) {
+			this.handleTouchMoveHelper(event.targetTouches, event.target);
+
+			event.preventDefault();
+		},
+		handleTouchMoveHelper: function(targetTouches, targetFong) {			
+			var cx = targetFong.getAttribute('cx');
+			var cy = targetFong.getAttribute('cy');
+			var r = targetFong.getAttribute('r');
+			
 			// If there's exactly one finger inside this element
-			if (event.targetTouches.length == 1) {
-				var touch = event.targetTouches[0];
+			if (targetTouches.length == 1) {
+				var touch = targetTouches[0];
 
 				// calculate offset of finger from center of fong
-				if (this.offsetX === null && touch.pageX != event.target.getAttribute('cx')) {
-					this.offsetX = touch.pageX - event.target.getAttribute('cx');
+				if (this.offsetX === null && touch.pageX != cx) {
+					this.offsetX = touch.pageX - cx;
 				}
-				if (this.offsetY === null && touch.pageY != event.target.getAttribute('cy')) {
-					this.offsetY = touch.pageY - event.target.getAttribute('cy');
+				if (this.offsetY === null && touch.pageY != cy) {
+					this.offsetY = touch.pageY - cy;
 				}
 
 				this.x = touch.pageX - this.offsetX;
 				this.y = touch.pageY - this.offsetY;
 
-				event.preventDefault();
-			} else if (event.targetTouches.length == 2) {
+			} else if (targetTouches.length == 2) {
 				if (this.lastPinchDist === undefined) this.lastPinchDist = 0;
 
-				var x1 = event.targetTouches[0].pageX;
-				var y1 = event.targetTouches[0].pageY;
-				var x2 = event.targetTouches[1].pageX;
-				var y2 = event.targetTouches[1].pageY;
+				var x1 = targetTouches[0].pageX;
+				var y1 = targetTouches[0].pageY;
+				var x2 = targetTouches[1].pageX;
+				var y2 = targetTouches[1].pageY;
 
 				var dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 				var change = dist - this.lastPinchDist;
 
-				var r = parseFloat(event.target.getAttribute('r'));
 				if (change > 0 && r <= 98) r += 2;
 				else if (r >= 62) r -= 2;
 
@@ -129,8 +136,18 @@ var gradientFades = true;
 
 				this.lastPinchDist = dist;
 			}
+			if (this.boardInput.NoteMapInfo.LoopOn)
+			{
+				var f = this;
+				setTimeout(function() {
+					f.offsetX = 0;
+					f.offsetY = 0;
+					f.handleTouchMoveHelper(targetTouches, targetFong);
 
-			event.preventDefault();
+					targetFong.setAttribute("cx", f.x);
+					targetFong.setAttribute("cy", f.y)
+				}, f.boardInput.NoteMapInfo.LoopDuration);
+			}
 		},
 		handleTouchEnd: function(event) {
 			this.lastPinchDist = 0;

@@ -13,7 +13,8 @@ function fong(audCtx, mainVol, x, y, board) {
 		octave: 4,
 		availableNotes: [],
 		NoteMapOn: false,
-		FilterNoteMapOn: false
+		FilterNoteMapOn: false,
+		LoopDuration: 15000
 	});
 	this.NoteMapInfo.changed.add(function() {
 		// fire a note map changed event when changes occur

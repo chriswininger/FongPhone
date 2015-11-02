@@ -22,6 +22,9 @@ FongPhone.Logic.NoteMapInfo = function(state) {
 
     window.FongPhone.utils.createGetSet(this, 'NoteMap',
         _.bind(this.getter, this, '_NoteMap'), _.bind(this.setter, this, '_NoteMap'));
+	
+	window.FongPhone.utils.createGetSet(this, 'LoopDuration',
+        _.bind(this.getter, this, '_LoopDuration'), _.bind(this.setter, this, '_LoopDuration'));
 
 	_.extend(this, state);
 

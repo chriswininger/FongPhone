@@ -26,7 +26,7 @@
 	_.extend(window.PhonePhong.UI.NoteMap.prototype, {
 		attachToDom: function($scope) {
 			console.log('height: %s, max-height: %s', (window.innerHeight - 40) + "px", window.innerHeight + "px");
-			$('#mapSubUI').css('height', (window.innerHeight - 40) + "px");
+			$('#mapSubUI').css('height', (window.innerHeight - 63) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 
 			var self = this;
@@ -83,6 +83,10 @@
 			$scope.toggleFilterNoteMapClick = function () {
 				self.selectedFong.NoteMapInfo.FilterNoteMapOn = !self.selectedFong.NoteMapInfo.FilterNoteMapOn;
 			};
+			
+			$scope.toggleLoopingClick = function () {
+				self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;
+			};
 
 			$scope.IsSelectedScale = function (scale) {
 				return scale === self.selectedFong.NoteMapInfo.SelectedScale;
@@ -106,9 +110,25 @@
 				self.selectedFong.NoteMapInfo.SelectedScale = $(event.target).html().trim();
 				self.regenerateMap(self.selectedFong);
 			};
+			
+			function getLoopDuration() {
+				return self._loopDuration;
+			}
+			function setLoopDuration(loopDuration) {
+				self._loopDuration = loopDuration;
+				self.selectedFong.NoteMapInfo.LoopDuration = loopDuration;
+			}
 
 			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'swipeleft');
 			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'swiperight');
+			
+			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
+			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
+			$(".dial").attr('disabled', 'disabled');
+
+			FongPhone.utils.createGetSet(this, 'loopDuration', getLoopDuration, setLoopDuration);
+
+			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {
