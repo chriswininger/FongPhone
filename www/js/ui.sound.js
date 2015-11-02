@@ -29,7 +29,8 @@
 			var self = this;
 			this.$scope = $scope;
 			
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_RIGHT, 'swiperight');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT, 'swiperight');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT, 'swipeleft');
 
 			// investigate $scope values
 			$scope.FilterOn = board.FilterOn;

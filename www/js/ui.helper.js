@@ -10,9 +10,9 @@
 			});
 
 			// release any previous listeners to avoiding holding onto old dom elements
-			hammerSwipe.off('pan');
+			//hammerSwipe.off('pan');
 			hammerSwipe.on('pan', function (ev) {
-				if (ev.isFinal && ev.direction == direction) {
+				if (ev.isFinal && ev.direction === direction) {
 					// save state of ctrl
 					try {
 						localStorage.setItem(storageKey, JSON.stringify(ctrlElement.toJSON()));
