@@ -37,6 +37,8 @@
 
 			$scope.toggleSelectedFong = function (i) {
 				self.selectedFongIndex = i;
+				$("#loopDurationControl").val(this.selectedFong.NoteMapInfo.LoopDuration);
+				$("#loopDurationControl").trigger('change');
 			};
 
 			// Fired when a note in the map is clicked
@@ -112,10 +114,9 @@
 			};
 			
 			function getLoopDuration() {
-				return self._loopDuration;
+				return self.selectedFong.NoteMapInfo.LoopDuration;
 			}
 			function setLoopDuration(loopDuration) {
-				self._loopDuration = loopDuration;
 				self.selectedFong.NoteMapInfo.LoopDuration = loopDuration;
 			}
 
@@ -150,7 +151,7 @@
 				this.regenerateMap(fong);
 
 			if (this.$scope)
-				this.$scope.selectedFong = fong;
+				this.$scope.selectedFong = fong;						
 		},
 		getSelectedFongIndex: function() {
 			return this._selectedFongIndex;
