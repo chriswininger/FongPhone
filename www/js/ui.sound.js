@@ -151,7 +151,7 @@
 		}
 
 		function getDelayFeedbackControl() {
-			return self._delayFeedbackCtrl;
+			return parseInt(self._delayFeedbackCtrl);
 		}
 		function setDelayFeedbackControl(delayFeedBackControl) {
 			self._delayFeedbackCtrl = delayFeedBackControl;
