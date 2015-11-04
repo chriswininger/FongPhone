@@ -1,4 +1,5 @@
 var gradientFades = true;
+var loopType = 1;
 
 (function () {
 	window.FongPhone = window.FongPhone || {};
@@ -28,6 +29,7 @@ var gradientFades = true;
 		this.boardInput = board.fongs[this.boardInputIndex];
 		this.dur = this.boardInput.dur; // todo (caw) something of hack but maybe ok
 		this.gradient = state.gradient;
+		this.loopPositions = [];
 
 		this.set(state);
 
@@ -94,11 +96,11 @@ var gradientFades = true;
 			this.incrementClass();
 		},
 		handleTouchMove: function (event) {
-			this.handleTouchMoveHelper(event.targetTouches, event.target);
+			this.handleTouchMoveHelper(event.targetTouches, event.target, true);
 
 			event.preventDefault();
 		},
-		handleTouchMoveHelper: function(targetTouches, targetFong) {			
+		handleTouchMoveHelper: function(targetTouches, targetFong, addLoopPosition) {			
 			var cx = targetFong.getAttribute('cx');
 			var cy = targetFong.getAttribute('cy');
 			var r = targetFong.getAttribute('r');
@@ -117,7 +119,17 @@ var gradientFades = true;
 
 				this.x = touch.pageX - this.offsetX;
 				this.y = touch.pageY - this.offsetY;
-
+						
+				if (addLoopPosition && this.boardInput.NoteMapInfo.LoopOn && loopType == 1)
+				{
+					this.loopPositions.push({
+						x: this.x,
+						y: this.y,
+						time: window.performance.now(),
+						targetTouches: targetTouches,
+						targetFong: targetFong,
+					});
+				}
 			} else if (targetTouches.length == 2) {
 				if (this.lastPinchDist === undefined) this.lastPinchDist = 0;
 
@@ -136,7 +148,7 @@ var gradientFades = true;
 
 				this.lastPinchDist = dist;
 			}
-			if (this.boardInput.NoteMapInfo.LoopOn)
+			if (this.boardInput.NoteMapInfo.LoopOn && loopType == 0)
 			{
 				var f = this;
 				setTimeout(function() {

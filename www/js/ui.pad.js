@@ -9,9 +9,11 @@
  * @type {{}|*|Window.PhonePhong}
  */
 var bVersionDisplayed;
+var uiPad;
 (function () {
 	window.PhonePhong.UI.Pad = function (board, state) {
 		var self = this;
+		uiPad = this;
 		this.svgElementID = 'phongUIGrid';
 
 		this.board = board;
