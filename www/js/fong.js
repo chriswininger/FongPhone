@@ -137,10 +137,16 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.oscFreq = freq;
 		if (this.board.portamento > 0) {
 			var dur = this.board.portamento / 1000.0;
-			this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+			if (freq > 0)
+			{
+				this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
+			}
 
 			for (var i = 0; i < this.oscsCount; i++) {
-				this.oscs[i].frequency.exponentialRampToValueAtTime(freq * (i + 1 * this.oscsIncrement), this.audCtx.currentTime + dur);
+				if (freq * (i + 1 * this.oscsIncrement) > 0)
+				{
+					this.oscs[i].frequency.exponentialRampToValueAtTime(freq * (i + 1 * this.oscsIncrement), this.audCtx.currentTime + dur);
+				}
 			}
 		} else {
 			this.osc.frequency.value = freq;
@@ -154,7 +160,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		if (isNaN(freq)) return;
 
 		if (freq < 0) return;
-		if (this.board.filterPortamento > 0) {
+		if (this.board.filterPortamento > 0 && freq > 0) {
 			this.filter.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + this.board.filterPortamento / 1000.0);
 		} else {
 			this.filter.frequency.value = freq;
