@@ -30,7 +30,7 @@
 			this.$scope = $scope;
 			
 			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT, 'soundUI');
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT, 'soundUI');
+			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/note-states', Hammer.DIRECTION_LEFT, 'soundUI');
 
 			// investigate $scope values
 			$scope.FilterOn = board.FilterOn;

@@ -23,19 +23,14 @@ var GLOBAL_NOTE_MAP;
 		return console.error(new Error('AudioContext not supported.'));
 	}
 
+	var stateController = new FongPhone.UI.StatesController();
 	logicBoard = new PhonePhong.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
-
-	var padUI = new PhonePhong.UI.Pad(logicBoard, _getStoredState('ui.pad.state', FongPhone.UI.Defaults));
-
-	var soundUI = new PhonePhong.Sound(
-		logicBoard,
-		padUI,
-		_getStoredState('ui.sound.state', FongPhone.UI.Defaults.soundBoardSettings));
-
-	var noteMap = GLOBAL_NOTE_MAP = new PhonePhong.UI.NoteMap(
-		logicBoard,
-		_getStoredState('ui.map.state', FongPhone.UI.Defaults.noteMapSettings)
-	);
+	var padUI = new PhonePhong.UI.Pad(logicBoard, stateController.getPadState());
+	var soundUI = new PhonePhong.Sound(logicBoard, padUI, stateController.getSoundState());
+	var noteMap = GLOBAL_NOTE_MAP = new PhonePhong.UI.NoteMap(logicBoard, stateController.getMapState());
+	stateController.uiMap = noteMap;
+	stateController.uiPad = padUI;
+	stateController.uiSoundSettings = soundUI;
 
 	// start the oscillators after all other settings have been initialized to avoid hiccup
 	setTimeout(function() {
@@ -69,6 +64,9 @@ var GLOBAL_NOTE_MAP;
 		}).when('/sound', {
 			templateUrl: 'views/view-sound.html',
 			controller: 'soundController'
+		}).when('/states', {
+			templateUrl: 'views/view-states.html',
+			controller: 'stateController'
 		});
 	});
 
@@ -88,6 +86,7 @@ var GLOBAL_NOTE_MAP;
 		$scope.pageClass = 'view-map';
 	});
 
+	fongPhone.controller('stateController', _.bind(stateController.attachToDom, stateController));
 	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
 
 	function _deviceReady(id) {
@@ -97,26 +96,7 @@ var GLOBAL_NOTE_MAP;
 	}
 
 	function _onPause() {
-		try {
-			localStorage.setItem('ui.pad.state', JSON.stringify(padUI.toJSON()));
-			localStorage.setItem('ui.sound.state', JSON.stringify(soundUI));
-			localStorage.setItem('ui.map.state', JSON.stringify(noteMap));
-		} catch (ex) {
-			console.error('error saving ui pad state: ' + ex);
-		}
-	}
-
-	function _getStoredState(key, defaults) {
-		var storedState = null;
-		try {
-			storedState = localStorage.getItem(key);
-		} catch (ex) {
-			console.error('error retrieving ui pad state: ' + ex);
-		}
-
-		if (storedState) storedState = JSON.parse(storedState);
-		if (storedState) return _.extend(defaults, storedState);
-		return defaults;
+		stateController.saveAll();
 	}
 })();
 
