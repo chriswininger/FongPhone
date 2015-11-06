@@ -12,11 +12,19 @@
 
 	_.extend(FongPhone.UI.StatesController.prototype, {
 		attachToDom: function($scope) {
-			$('#statesUI').css('max-height', (window.innerHeight - 63) + "px");
-			$('.page').css('max-height', window.innerHeight + "px");
+			var self = this;
+			this.$scope = $scope;
+			$scope.pageClass = 'view-states';
+			$('#statesUI').css('max-height', (window.innerHeight - 40) + "px");
+			$('#statesUI').css('height', (window.innerHeight - 40) + "px");
 
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_RIGHT, 'soundUI');
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-sound', Hammer.DIRECTION_LEFT, 'soundUI');
+
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
+
+			this.$scope.restoreAllDefaults = function() {
+				self.restoreDefaults();
+			};
 		},
 		clearAll: function() {
 			this.clearMap();

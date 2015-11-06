@@ -10,7 +10,7 @@
  */
 var bVersionDisplayed;
 (function () {
-	window.PhonePhong.UI.Pad = function (board, state) {
+	FongPhone.UI.Pad = function (board, state) {
 		var self = this;
 		this.svgElementID = 'phongUIGrid';
 
@@ -40,7 +40,7 @@ var bVersionDisplayed;
 		this.set(state);
 	};
 
-	_.extend(PhonePhong.UI.Pad.prototype, {
+	_.extend(FongPhone.UI.Pad.prototype, {
 		attachToDom: function(attachChildren) {
 			// make changes to dom to create ui
 			this.createComponents();
@@ -53,8 +53,8 @@ var bVersionDisplayed;
 		},
 		createComponents: function () {
 			$('#' + this.svgElementID).height(window.innerHeight);
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT, 'swiperight');
-			window.PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT, 'swipeleft');
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT);
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT);
 
 			this.backgroundPad = document.getElementById(this.svgElementID);
 

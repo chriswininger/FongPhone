@@ -24,10 +24,10 @@ var GLOBAL_NOTE_MAP;
 	}
 
 	var stateController = new FongPhone.UI.StatesController();
-	logicBoard = new PhonePhong.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
-	var padUI = new PhonePhong.UI.Pad(logicBoard, stateController.getPadState());
-	var soundUI = new PhonePhong.Sound(logicBoard, padUI, stateController.getSoundState());
-	var noteMap = GLOBAL_NOTE_MAP = new PhonePhong.UI.NoteMap(logicBoard, stateController.getMapState());
+	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
+	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState());
+	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
+	var noteMap = GLOBAL_NOTE_MAP = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState());
 	stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;
 	stateController.uiSoundSettings = soundUI;
@@ -86,8 +86,10 @@ var GLOBAL_NOTE_MAP;
 		$scope.pageClass = 'view-map';
 	});
 
-	fongPhone.controller('stateController', _.bind(stateController.attachToDom, stateController));
-	fongPhone.controller('helpController', window.PhonePhong.UI.HelpView);
+	fongPhone.controller('stateController', function($scope) {
+		stateController.attachToDom($scope);
+	});
+	fongPhone.controller('helpController', FongPhone.UI.HelpView);
 
 	function _deviceReady(id) {
 		console.log('device ready');

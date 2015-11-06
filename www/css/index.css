@@ -264,3 +264,17 @@ td.ui-map-note-map-toggle {
 	opacity: 0.5;
 	border: 0;
 }
+
+.btn {
+	font-family: Arial;
+	color: #f8f8ff;
+	font-size: 20px;
+	padding: 10px 20px 10px 20px;
+	border: solid #f8f8ff 4px;
+	text-decoration: none;
+}
+
+.btn:active {
+	padding: 15px;
+	border: solid #f8f8ff 2px;
+}

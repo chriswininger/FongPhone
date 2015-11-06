@@ -1,5 +1,5 @@
 (function () {
-	window.PhonePhong.Sound = function (board, pad, state) {
+	FongPhone.UI.Sound = function (board, pad, state) {
 		var svgElementID = 'soundControls';
 		this.board = board;
 
@@ -29,8 +29,8 @@
 			var self = this;
 			this.$scope = $scope;
 
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'soundSettingsSwipeStrip', '#/note-states', Hammer.DIRECTION_LEFT);
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', Hammer.DIRECTION_LEFT);
 
 			// investigate $scope values
 			$scope.FilterOn = board.FilterOn;

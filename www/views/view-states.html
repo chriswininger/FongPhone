@@ -1,18 +1,40 @@
-<div id="statesUI" class="ui-display-area">
-    <div>
-        <button>Restore Defaults</button>
-    </div>
-    <svg width="100%" height="40">
-        <defs>
-            <linearGradient id="gradSwipeStates" x1="30%" y1="70%">
-                <stop offset="0%" stop-color="#ffffff" stop-opacity=".1">
-                    <animate attributeName="stop-opacity" values=".9;.1;.9" dur="30s" repeatCount="indefinite" />
-                </stop>
-                <stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
-                    <animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
-                </stop>
-            </linearGradient>
-        </defs>
-        <rect id="statesSwipeStrip" width="100%" height="40" fill="url(#gradSwipe)" /> Sorry, SVG support is required.
-    </svg>
+<div class="ui-display-area">
+	<div id="statesUI">
+		<!-- DEBUG -->
+		<svg width="100%" height="20">
+			<defs>
+				<linearGradient id="gradTop" x1="30%" y1="70%">
+					<stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
+						<animate attributeName="stop-opacity" values=".9;.8;.9" dur="30s" repeatCount="indefinite" />
+					</stop>
+					<stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+						<animate attributeName="stop-opacity" values=".8;.9;.8" dur="33s" repeatCount="indefinite" />
+					</stop>
+				</linearGradient>
+			</defs>
+			<rect width="100%" height="20" fill="url(#gradTop)" />
+		</svg>
+
+		<!--CONTENT-->
+		<div style="margin-top: 25px; margin-left: 10px;">
+			<a class="btn" ng-click="restoreAllDefaults()">Restore Defaults</a>
+		</div>
+		<!------------->
+
+	</div>
+
+	<!--- BOTTOM SWIPE -->
+	<svg width="100%" height="40">
+		<defs>
+			<linearGradient id="gradSwipeStates" x1="30%" y1="70%">
+				<stop offset="0%" stop-color="#ffffff" stop-opacity=".1">
+					<animate attributeName="stop-opacity" values=".9;.1;.9" dur="30s" repeatCount="indefinite" />
+				</stop>
+				<stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+					<animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
+				</stop>
+			</linearGradient>
+		</defs>
+		<rect id="statesSwipeStrip" width="100%" height="40" fill="url(#gradSwipeStates)" /> Sorry, SVG support is required.
+	</svg>
 </div>

@@ -1,1 +1,1 @@
-window.PhonePhong.UI.HelpView = function ($scope, $window) { }
+window.FongPhone.UI.HelpView = function ($scope, $window) { }

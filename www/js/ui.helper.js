@@ -1,8 +1,5 @@
 (function () {
-	window.PhonePhong = window.PhonePhong || {};
-	window.PhonePhong.UI = window.PhonePhong.UI || {};
-	window.PhonePhong.Sound = window.PhonePhong.Sound || {};
-	window.PhonePhong.UI.Helper = {
+	FongPhone.UI.Helper = {
 		registerSwipeNavigation: function (ctrlElement, storageKey, elementID, url, direction) {
 			var uiSwipe = document.getElementById(elementID);
 			var hammerSwipe = new Hammer(uiSwipe, {
@@ -10,14 +7,16 @@
 			});
 
 			// release any previous listeners to avoiding holding onto old dom elements
-			//hammerSwipe.off('pan');
+			hammerSwipe.off('pan');
 			hammerSwipe.on('pan', function (ev) {
 				if (ev.isFinal && ev.direction === direction) {
-					// save state of ctrl
-					try {
-						localStorage.setItem(storageKey, JSON.stringify(ctrlElement.toJSON()));
-					} catch (ex) {
-						console.error('error saving ui pad state: ' + ex);
+					if (ctrlElement.toJSON) {
+						// save state of ctrl
+						try {
+							localStorage.setItem(storageKey, JSON.stringify(ctrlElement.toJSON()));
+						} catch (ex) {
+							console.error('error saving ui pad state: ' + ex);
+						}
 					}
 
 					// set new location
