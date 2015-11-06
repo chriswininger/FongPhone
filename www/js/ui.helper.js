@@ -3,7 +3,7 @@
 	window.PhonePhong.UI = window.PhonePhong.UI || {};
 	window.PhonePhong.Sound = window.PhonePhong.Sound || {};
 	window.PhonePhong.UI.Helper = {
-		registerSwipeNavigation: function (ctrlElement, storageKey, elementID, url, direction, docID) {
+		registerSwipeNavigation: function (ctrlElement, storageKey, elementID, url, direction) {
 			var uiSwipe = document.getElementById(elementID);
 			var hammerSwipe = new Hammer(uiSwipe, {
 				direction: direction
@@ -20,8 +20,6 @@
 						console.error('error saving ui pad state: ' + ex);
 					}
 
-					console.log('!!! ' + ev.direction);
-					$('.page').addClass('swiped-' + (ev.direction ===  Hammer.DIRECTION_RIGHT ? 'right' : 'left'));
 					// set new location
 					window.location = url;
 				}

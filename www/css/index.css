@@ -39,7 +39,6 @@ body {
 	width: 100%;
 	position: fixed;
 	color: #ffffff;
-	background-color: #0B8793;
 }
 
 
@@ -265,25 +264,3 @@ td.ui-map-note-map-toggle {
 	opacity: 0.5;
 	border: 0;
 }
-
-/* slide in from the bottom */
-@keyframes slideOutLeft {
-	to      { transform: translateX(-100%); }
-}
-
-@keyframes slideOutRight {
-	to      { transform: translateX(100%); }
-}
-
-@-webkit-keyframes slideOutLeft {
-	to      { transform: translateX(-100%); }
-}
-
-@-webkit-keyframes slideOutRight {
-	to      { transform: translateX(100%); }
-}
-
-.swiped-right.ng-leave { animation: slideOutRight 0.5s both ease-in; z-index: 9999; }
-.swiped-left.ng-leave { animation: slideOutLeft 0.5s both ease-in; z-index: 9999; }
-.swiped-right.ng-leave { -webkit-animation: slideOutRight 0.5s both ease-in; z-index: 9999; }
-.swiped-left.ng-leave { -webkit-animation: slideOutLeft 0.5s both ease-in; z-index: 9999; }
