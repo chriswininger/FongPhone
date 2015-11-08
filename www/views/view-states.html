@@ -16,8 +16,23 @@
 		</svg>
 
 		<!--CONTENT-->
-		<div style="margin-top: 25px; margin-left: 10px;">
-			<a class="btn" ng-click="restoreAllDefaults()">Restore Defaults</a>
+		<div class="ui-states-state-list">
+			<div class="ui-states-state-list-flex">
+
+					<div class="split">
+						<a class="ui-states-btn" ng-click="restoreAllDefaults()">Restore Defaults</a>
+					</div>
+					<div class="split">
+						<a class="ui-states-btn" ng-click="saveCurrentState()">Save Current State</a>
+					</div>
+
+			</div>
+			<div class="ui-states-state-list-entry">
+				<div>
+					<a class="ui-states-btn" ng-click="restoreAllDefaults()">Sample State 1</a>
+				</div>
+			</div>
+
 		</div>
 		<!------------->
 

@@ -265,7 +265,7 @@ td.ui-map-note-map-toggle {
 	border: 0;
 }
 
-.btn {
+.ui-states-btn {
 	font-family: Arial;
 	color: #f8f8ff;
 	font-size: 20px;
@@ -274,7 +274,39 @@ td.ui-map-note-map-toggle {
 	text-decoration: none;
 }
 
-.btn:active {
+.ui-states-btn:active {
 	padding: 15px;
 	border: solid #f8f8ff 2px;
+}
+
+.ui-states-state-list {
+	margin-top: 25px;
+}
+
+.ui-states-state-list-flex, .ui-states-state-list-entry {
+	width: 100%;
+	display: flex;
+	display: -webkit-flex;
+	-webkit-flex-direction: row;
+	flex-direction: row;
+	justify-content: space-around;
+	-webkit-justify-content: space-around;
+}
+
+.ui-states-state-list-flex > div, .ui-states-state-list-entry > div {
+	-webkit-flex: 50% 50%;
+	-webkit-transition: width 0.7s ease-out;
+	transition: width 0.7s ease-out;
+	justify-content: space-around;
+	-webkit-justify-content: space-around;
+}
+
+.ui-states-state-list-entry {
+	margin-top: 30px;
+}
+
+.ui-states-state-list-flex .ui-states-btn, .ui-states-state-list-entry .ui-states-btn {
+	width: 600px;
+	display: block;
+	text-align: center;
 }
