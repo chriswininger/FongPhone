@@ -20,10 +20,6 @@
 				var lst = this.getStateList();
 				lst.push(name);
 
-				if (this.$scope) {
-					this.$scope.storedList = this.storedList;
-				}
-
 				localStorage.setItem(_stateListKey, JSON.stringify(lst));
 			} catch (ex) {
 				console.error('error saving local state list: ' + ex);
@@ -51,22 +47,25 @@
 			};
 
 			this.$scope.saveCurrentState = function() {
-				if (navigator.notification && navigator.notification.prompt) {
-					navigator.notification.prompt(
-						'name',
-						function (results) {
-							if (results && results.buttonIndex === 1) {
-								self.saveAll(results.input1);
-							}
-						},
-						'Save State',
-						['Save', 'Cancel']);
-				} else {
-					// fallback for desktop testing
-					var name = prompt('name: ');
-					if (name)
-						self.saveAll(name);
-				}
+				vex.dialog.open({
+					message: 'Name:',
+					input: '<input name="name" type="text" placeholder="please enter a name"/>',
+					buttons: [
+						$.extend({}, vex.dialog.buttons.YES, {
+							text: 'Save'
+						}),
+						$.extend({}, vex.dialog.buttons.NO, {
+							text: 'Cancel'
+						})
+					],
+					callback: function(data) {
+						if (data === false) return;
+						if (data.name) {
+							self.saveAll.call(self, data.name);
+							if (self.$scope) self.$scope.$apply();
+						}
+					}
+				});
 			};
 
 			this.$scope.restoreState = function($index) {

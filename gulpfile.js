@@ -22,7 +22,8 @@ var clientDependencies = [
 	'localforage#1.2.x',
 	'jquery-knob',
 	'ngDraggable',
-	'js-signals'
+	'js-signals',
+	'vex#2.3.3'
 ];
 function initialize (complete) {
 	async.waterfall([

@@ -3,6 +3,8 @@ var logicBoard;
 var GLOBAL_NOTE_MAP;
 (function () {
 	console.log('starting...');
+	vex.defaultOptions.className = 'vex-theme-wireframe';
+
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 		document.URL.indexOf('https://') === -1);
 
