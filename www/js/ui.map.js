@@ -1,17 +1,14 @@
 // TODO (CAW) Store the notemaps on the ui.fong.js not the board fongs, then we can restore the notemaps into selected fongs
 //  on restore
 (function () {
-	window.PhonePhong.UI.NoteMap = function(logicBoard, state) {
-		window.FongPhone.utils.createGetSet(this, 'selectedFong', this.getSelectedFong, this.setSelectedFong);
-		window.FongPhone.utils.createGetSet(this, 'selectedFongIndex', this.getSelectedFongIndex, this.setSelectedFongIndex);
+	FongPhone.UI.NoteMap = function(logicBoard, state) {
+		FongPhone.utils.createGetSet(this, 'selectedFong', this.getSelectedFong, this.setSelectedFong);
+		FongPhone.utils.createGetSet(this, 'selectedFongIndex', this.getSelectedFongIndex, this.setSelectedFongIndex);
 
 		this.fongs = logicBoard.fongs;
 		this.selectedFongIndex = 0;
 
-		_.each(state.fongs, function(_fong, i) {
-			// todo (caw) do with ids
-			_.extend(this.fongs[i].NoteMapInfo, _fong.NoteMapInfo);
-		}, this);
+		this.set(state);
 
 		var f = this.fongs[0];
 		if (!f.NoteMapInfo.NoteMap) {
@@ -23,7 +20,7 @@
 		}
 	};
 
-	_.extend(window.PhonePhong.UI.NoteMap.prototype, {
+	_.extend(FongPhone.UI.NoteMap.prototype, {
 		attachToDom: function($scope) {
 			console.log('height: %s, max-height: %s', (window.innerHeight - 40) + "px", window.innerHeight + "px");
 			$('#mapSubUI').css('height', (window.innerHeight - 63) + "px");
@@ -52,7 +49,7 @@
 			$scope.onNoteHover = function($event) {
 				console.log('!!! foo');
 				angular.element(e.target).addClass('hover');
-			}
+			};
 
 			$scope.onNoteDropComplete = function($index, $data) {
 				// find the index of the note that drug based on frequency
@@ -120,9 +117,6 @@
 				self.selectedFong.NoteMapInfo.LoopDuration = loopDuration;
 			}
 
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT, 'swipeleft');
-			PhonePhong.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/sound', Hammer.DIRECTION_RIGHT, 'swiperight');
-			
 			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
 			$(".dial").attr('disabled', 'disabled');
@@ -130,6 +124,9 @@
 			FongPhone.utils.createGetSet(this, 'loopDuration', getLoopDuration, setLoopDuration);
 
 			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
+
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {
@@ -197,10 +194,16 @@
 		resetOctaveForMap: function(fong) {
 			this.changeOctaveForScale(fong);
 			fong.NoteMapInfo.NoteMap = this.buildMap(fong.NoteMapInfo.availableNotes);
+		},
+		set: function(state) {
+			_.each(state.fongs, function(_fong, i) {
+				// todo (caw) do with ids
+				_.extend(this.fongs[i].NoteMapInfo, _fong.NoteMapInfo);
+			}, this);
 		}
 	});
 
-	FongPhone.Utils.Mixins.ToJSON.applyMixin(window.PhonePhong.UI.NoteMap.prototype, [
+	FongPhone.Utils.Mixins.ToJSON.applyMixin(FongPhone.UI.NoteMap.prototype, [
 		'selectedFong'
 	]);
 })();

@@ -44,6 +44,7 @@ function initialize (complete) {
 		},
 		function _addCordovaModules(next) {
 			console.log('add module crosswalk');
+			console.log('cordova plugin add org.apache.cordova.dialogs')
 			next();
 		}
 	], function _complete() {

@@ -1,7 +1,5 @@
 var _filterOn = true;
-
-window.PhonePhong = window.PhonePhong || {};
-window.PhonePhong.BoardLogic = function (audCtx, opts) {
+FongPhone.Logic.BoardLogic = function (audCtx, opts) {
 	// instantiate audio sources
 	this.audCtx = audCtx;
 	this.mainVol = audCtx.createGain();
@@ -30,7 +28,7 @@ window.PhonePhong.BoardLogic = function (audCtx, opts) {
 	this.FilterOn = _filterOn;
 };
 
-var $class = PhonePhong.BoardLogic.prototype;
+var $class = FongPhone.Logic.BoardLogic.prototype;
 
 var mainInterval;
 $class.start = function () {
