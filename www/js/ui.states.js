@@ -20,9 +20,8 @@
 				var lst = this.getStateList();
 				lst.push(name);
 
-				this.storedList = lst;
 				if (this.$scope) {
-					this.$scope.storedStates = this.storedList;
+					this.$scope.storedList = this.storedList;
 				}
 
 				localStorage.setItem(_stateListKey, JSON.stringify(lst));
@@ -55,9 +54,9 @@
 				if (navigator.notification && navigator.notification.prompt) {
 					navigator.notification.prompt(
 						'name',
-						function (index, name) {
-							if (index === 1) {
-								self.saveAll(name);
+						function (results) {
+							if (results && results.buttonIndex === 1) {
+								self.saveAll(results.input1);
 							}
 						},
 						'Save State',
