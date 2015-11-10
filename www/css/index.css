@@ -278,8 +278,10 @@ td.ui-map-note-map-toggle {
 	border: solid #f8f8ff 2px;
 }
 
-.ui-states-state-list {
-	margin-top: 25px;
+#statesContentWrapper {
+	margin-top: 5px;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 
 .ui-states-state-list-flex, .ui-states-state-list-entry {
@@ -312,6 +314,7 @@ td.ui-map-note-map-toggle {
 .ui-states-state-list-entry {
 	margin-top: 1em;
 	padding-left: 1em;
+	overflow: scroll;
 }
 
 .ui-states-state-list-entry > .selected {

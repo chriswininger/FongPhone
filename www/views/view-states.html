@@ -1,7 +1,7 @@
 <div class="ui-display-area">
 	<div id="statesUI">
 		<!-- DEBUG -->
-		<svg width="100%" height="20">
+		<svg id="svgLog" width="100%" height="20">
 			<defs>
 				<linearGradient id="gradTop" x1="30%" y1="70%">
 					<stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
@@ -16,9 +16,8 @@
 		</svg>
 
 		<!--CONTENT-->
-		<div class="ui-states-state-list">
-			<div class="ui-states-state-list-flex">
-
+		<div id="statesContentWrapper" class="ui-states-state-list">
+			<div id="stateControls" class="ui-states-state-list-flex">
 					<div class="split">
 						<a class="ui-states-btn" ng-click="restoreAllDefaults()">Restore Defaults</a>
 					</div>
@@ -27,7 +26,7 @@
 					</div>
 
 			</div>
-			<div class="ui-states-state-list-entry">
+			<div id="listOfStates" class="ui-states-state-list-entry">
 				<div ng-repeat="state in storedList">
 					<a class="ui-states-btn {{ selectedState === state ? 'selected' : '' }}"
 					   ng-click="restoreState($index)">
@@ -42,7 +41,7 @@
 	</div>
 
 	<!--- BOTTOM SWIPE -->
-	<svg width="100%" height="40">
+	<svg id="svgSwipe" width="100%" height="40">
 		<defs>
 			<linearGradient id="gradSwipeStates" x1="30%" y1="70%">
 				<stop offset="0%" stop-color="#ffffff" stop-opacity=".1">

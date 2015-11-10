@@ -29,8 +29,21 @@
 			var self = this;
 			this.$scope = $scope;
 			$scope.pageClass = 'view-states';
-			$('#statesUI').css('max-height', (window.innerHeight - 40) + "px");
-			$('#statesUI').css('height', (window.innerHeight - 40) + "px");
+			var statesUI = $('#statesUI');
+			var stateControls = $('#stateControls');
+			var swipePad = $('#svgSwipe');
+			var logPad = $('#svgLog');
+			var statesContentWrapper = $('#statesContentWrapper');
+			var statesHeight = window.innerHeight - stateControls.outerHeight() - swipePad.outerHeight() - logPad.outerHeight() - 60;
+			var listOfStates = $('#listOfStates');
+
+			statesUI.css('max-height', (window.innerHeight - 40) + "px");
+			statesUI.css('height', (window.innerHeight - 40) + "px");
+			statesContentWrapper.css('height', (window.innerHeight - 67) + "px");
+			statesContentWrapper.css('max-height', (window.innerHeight - 67) + "px");
+
+			//listOfStates.css('height', statesHeight + 'px');
+			//listOfStates.css('max-height', statesHeight + 'px');
 			$('.ui-states-state-list-flex .ui-states-btn').css('width', (window.innerWidth/2 - 67) + 'px');
 
 			var style = $('<style>.ui-states-state-list-entry .ui-states-btn { width: ' +
