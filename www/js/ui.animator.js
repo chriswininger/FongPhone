@@ -12,6 +12,7 @@ function render(time) {
 					fd.offsetX = 0;
 					fd.offsetY = 0;
 					
+					// hacky fix for iOS
 					if (lp.targetTouches.length == 1)
 					{
 						lp.targetTouches = [];
