@@ -11,6 +11,20 @@ function render(time) {
 				if (time - lp.time > fd.boardInput.NoteMapInfo.LoopDuration) {
 					fd.offsetX = 0;
 					fd.offsetY = 0;
+					
+					if (lp.targetTouches.length == 1)
+					{
+						lp.targetTouches = [];
+						lp.targetTouches.push({
+							pageX: lp.x,
+							pageY: lp.y
+						});
+					}
+					else
+					{
+						// todo
+					}
+					
 					fd.handleTouchMoveHelper(lp.targetTouches, lp.targetFong, false);
 
 					lp.targetFong.setAttribute("cx", fd.x);
