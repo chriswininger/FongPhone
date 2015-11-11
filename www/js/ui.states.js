@@ -1,10 +1,11 @@
-(function() {
+var st;
+(function () {
 	var _soundKey = 'ui.sound.state';
 	var _mapKey = 'ui.map.state';
 	var _padKey = 'ui.pad.state';
 	var _stateListKey = 'ui.states.list';
 
-	FongPhone.UI.StatesController = function(uiMap, uiPad, uiSoundSettings) {
+	FongPhone.UI.StatesController = function (uiMap, uiPad, uiSoundSettings) {
 		FongPhone.utils.createGetSet(this, 'selectedState', this.getSelectedState, this.setSelectedState);
 
 		this.uiMap = uiMap;
@@ -12,6 +13,7 @@
 		this.uiSoundSettings = uiSoundSettings;
 		this.selectedState = '';
 		this.storedList = this.getStateList();
+		
 	}
 
 	_.extend(FongPhone.UI.StatesController.prototype, {
@@ -50,6 +52,48 @@
 				(window.innerWidth - 67) +
 				'px; }</style>');
 			$('html > head').append(style);
+			
+			var a = [];
+			var storedTable = [];
+			var columns = Math.floor(window.innerWidth / 50) - 1;
+			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 2;
+			var cellWidth = 45;
+			var cellHeight = 45;
+			for (var i = 0; i < rows; i++)
+			{
+				a = [];
+				for (var j = 0; j < columns; j++)
+				{
+					var index = i * columns + j;
+					if (index < this.storedList.length)
+					{						
+						var name = this.storedList[index];
+						a.push({
+							preset: name,
+							width: cellWidth + "px",
+							height: cellHeight + "px",
+							index: index,
+							i: i,
+							j: j
+						});
+					}
+					else
+					{
+						a.push({
+							preset: null,
+							width: cellWidth + "px",
+							height: cellHeight + "px",
+							index: index,
+							i: i,
+							j: j
+						});
+					}
+				}
+				storedTable.push(a);
+			}
+			
+			st = storedTable;
+			this.$scope.storedTable = storedTable;
 
 			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
 			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
@@ -58,8 +102,11 @@
 			this.$scope.restoreAllDefaults = function() {
 				self.restoreDefaults();
 			};
-
-			this.$scope.saveCurrentState = function() {
+			this.$scope.applyPreset = function (item) {
+				self.restoreState(item.preset);				
+			}
+			
+			this.$scope.saveCurrentState = function () {
 				vex.dialog.open({
 					message: 'Name:',
 					input: '<input name="name" type="text" placeholder="please enter a name"/>',
@@ -83,7 +130,32 @@
 
 			this.$scope.restoreState = function($index) {
 				self.restoreState(this.storedList[$index]);
-			};
+			};		
+			
+			$(document).ready(function () {
+				// Handler for .ready() called.
+				setTimeout(function () {
+					//console.log($(".test").length);
+					$(".test").on('taphold',
+						function (event) {
+							var index = event.target.id.replace("state", "");
+						
+							for (var i = 0; i < self.$scope.storedTable.length; i++)
+							{
+								for (var j = 0; j < self.$scope.storedTable[i].length; j++)
+								{
+									if (index == self.$scope.storedTable[i][j].index)
+									{
+										self.$scope.storedTable[i][j].preset = index;
+										self.$scope.$apply();
+									}
+								}	
+							}
+						
+							self.saveAll(index);
+						});
+				}, 100);
+			});
 		},
 		clearAll: function() {
 			this.clearMap();
