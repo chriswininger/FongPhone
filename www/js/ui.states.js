@@ -96,9 +96,15 @@ var st;
 
 			st = storedTable;
 			this.$scope.storedTable = storedTable;
-
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
+			if (navByClick)
+			{
+				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound');
+			}
+			else
+			{
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
+			}
 
 			this.$scope.storedList = this.storedList;
 			this.$scope.restoreAllDefaults = function () {				

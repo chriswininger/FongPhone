@@ -29,8 +29,15 @@
 			var self = this;
 			this.$scope = $scope;
 
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', Hammer.DIRECTION_LEFT);
+			if (navByClick)
+			{
+				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/');
+			}
+			else
+			{
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', Hammer.DIRECTION_LEFT);
+			}
 
 			// investigate $scope values
 			$scope.FilterOn = board.FilterOn;
