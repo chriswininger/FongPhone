@@ -46,7 +46,7 @@
 
 		<div class="statesTable">
 			<div ng-repeat='rows in storedTable track by $index'>
-				<div id="state{{item.index}}" class="state {{ item.preset != null ? '' : 'stateUnused' }}" 
+				<div id="state{{item.index}}" class="{{ item.preset != null ? 'state' : 'stateUnused' }}" 
 					 ng-repeat='item in rows' 
 					 ng-click="applyPreset(item)"
 					 style="width: {{item.width}};height: {{item.height}};opacity:{{ item.preset != null ? .4 : .15 }};">

@@ -281,7 +281,11 @@ td.ui-map-note-map-toggle {
 }
 
 .stateUnused {
-	
+	background-color: white;
+	border-radius: 5px;
+	display: inline-block;
+	margin: 5px;
+	padding: 0px;
 }
 
 .ui-states-btn {

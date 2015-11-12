@@ -90,7 +90,7 @@ var st;
 			$("#stateDefault").height(cellHeight + "px");
 			$("#stateDefault").width((((cellWidth + 10) * columns) - 10) + "px");
 			$("#stateDefault").click(function () {
-				self.fadeStateDiv(event.target, .4);
+				self.fadeStateDiv(event.target, .6);
 				self.restoreDefaults();
 			});
 
@@ -116,7 +116,7 @@ var st;
 					self.restoreDefaults();
 				}
 				else if (item.preset) {
-					self.fadeStateDiv(event.target, .4);
+					self.fadeStateDiv(event.target, .6);
 					self.restoreState(item.preset);
 				}
 			}
@@ -253,7 +253,8 @@ var st;
 			this.uiMap.set(this.getMapState(name));
 			this.selectedState = name;
 		},
-		fadeStateDiv: function (target, targetOpacity) {			
+		fadeStateDiv: function (target, targetOpacity) {	
+			$('.state').css('opacity', .4);
 			$(target).animate({
 				opacity: .8
 			}, 50, function () {
