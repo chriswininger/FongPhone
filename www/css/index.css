@@ -272,16 +272,16 @@ td.ui-map-note-map-toggle {
 	padding-top: 10px;
 }
 
-.test {
-	background-color: rgba(255, 255, 255, .4);
+.state {
+	background-color: white;
 	border-radius: 5px;
 	display: inline-block;
 	margin: 5px;
 	padding: 0px;
 }
 
-.testno {
-	background-color: rgba(255, 255, 255, .15);
+.stateUnused {
+	
 }
 
 .ui-states-btn {
