@@ -56,7 +56,7 @@ var st;
 			var a = [];
 			var storedTable = [];
 			var columns = Math.floor(window.innerWidth / 50) - 1;
-			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 2;
+			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 3;
 			var cellWidth = 45;
 			var cellHeight = 45;
 			for (var i = 0; i < rows; i++) {
@@ -86,6 +86,13 @@ var st;
 				}
 				storedTable.push(a);
 			}
+			
+			$("#stateDefault").height(cellHeight + "px");
+			$("#stateDefault").width((((cellWidth + 10) * columns) - 10) + "px");
+			$("#stateDefault").click(function () {
+				self.fadeStateDiv(event.target, .4);
+				self.restoreDefaults();
+			});
 
 			st = storedTable;
 			this.$scope.storedTable = storedTable;
@@ -94,12 +101,16 @@ var st;
 			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
 
 			this.$scope.storedList = this.storedList;
-			this.$scope.restoreAllDefaults = function () {
+			this.$scope.restoreAllDefaults = function () {				
 				self.restoreDefaults();
 			};
 			this.$scope.applyPreset = function (item) {
-				if (item.preset) {
-					self.fadeStateDiv(event.target);
+				if (!item)
+				{
+					self.restoreDefaults();
+				}
+				else if (item.preset) {
+					self.fadeStateDiv(event.target, .4);
 					self.restoreState(item.preset);
 				}
 			}
@@ -136,7 +147,7 @@ var st;
 					//console.log($(".test").length);
 					$(".state").on('taphold', function (event) {
 
-						self.fadeStateDiv(event.target);
+						self.fadeStateDiv(event.target, .6);
 
 						var index = event.target.id.replace("state", "");
 
@@ -236,12 +247,12 @@ var st;
 			this.uiMap.set(this.getMapState(name));
 			this.selectedState = name;
 		},
-		fadeStateDiv: function (target) {
+		fadeStateDiv: function (target, targetOpacity) {			
 			$(target).animate({
 				opacity: .8
 			}, 50, function () {
 				$(target).animate({
-					opacity: .4
+					opacity: targetOpacity
 				}, 5000, function () {
 					// Animation complete.
 				});
