@@ -5,3 +5,4 @@
     ctx.FongPhone.Logic = {};
 })(window);
 var navByClick = true;
+var navBySwipe = true;

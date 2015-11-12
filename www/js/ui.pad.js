@@ -59,7 +59,7 @@ var uiPad;
 			{
 				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map');
 			}
-			else
+			if (navBySwipe)
 			{
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT);
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT);

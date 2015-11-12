@@ -100,7 +100,7 @@ var st;
 			{
 				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound');
 			}
-			else
+			if (navBySwipe)
 			{
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);

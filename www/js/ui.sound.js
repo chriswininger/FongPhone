@@ -33,7 +33,7 @@
 			{
 				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/');
 			}
-			else
+			if (navBySwipe)
 			{
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', Hammer.DIRECTION_LEFT);

@@ -129,7 +129,7 @@
 			{
 				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states');
 			}
-			else
+			if (navBySwipe)
 			{
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);

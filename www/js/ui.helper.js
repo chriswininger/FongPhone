@@ -26,7 +26,9 @@
 		},
 		registerClickNavigation: function (ctrlElement, storageKey, elementID, url) {
 			var uiSwipe = document.getElementById(elementID);
-			$(uiSwipe).click(function() {
+			
+			//var hammer = new Hammer(document.getElementById(elementID));
+			var hammertime = Hammer(document.getElementById(elementID)).on("tap", function(event) {
 				if (ctrlElement.toJSON) {
 					// save state of ctrl
 					try {
