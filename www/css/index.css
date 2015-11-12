@@ -265,6 +265,25 @@ td.ui-map-note-map-toggle {
 	border: 0;
 }
 
+.statesTable {
+	margin: 0px;
+	padding: 0px;
+	text-align:center;vertical-align:center;
+	padding-top: 10px;
+}
+
+.state {
+	background-color: white;
+	border-radius: 5px;
+	display: inline-block;
+	margin: 5px;
+	padding: 0px;
+}
+
+.stateUnused {
+	
+}
+
 .ui-states-btn {
 	font-family: Arial;
 	color: #f8f8ff;
@@ -276,6 +295,10 @@ td.ui-map-note-map-toggle {
 .ui-states-btn:active {
 	padding: 15px;
 	border: solid #f8f8ff 2px;
+}
+
+.ui-states-entry {
+	font-size: x-large;
 }
 
 #statesContentWrapper {
@@ -319,6 +342,7 @@ td.ui-map-note-map-toggle {
 
 .ui-states-state-list-entry > .selected {
 	font-weight: bold;
+	
 }
 
 
@@ -326,4 +350,5 @@ td.ui-map-note-map-toggle {
 	width: 600px;
 	display: block;
 	text-align: center;
+	
 }

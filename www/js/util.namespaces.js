@@ -4,3 +4,4 @@
     ctx.FongPhone.Uitls = {};
     ctx.FongPhone.Logic = {};
 })(window);
+var navByClick = true;

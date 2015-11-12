@@ -55,8 +55,15 @@ var uiPad;
 		},
 		createComponents: function () {
 			$('#' + this.svgElementID).height(window.innerHeight);
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT);
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT);
+			if (navByClick)
+			{
+				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map');
+			}
+			else
+			{
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/note-map', Hammer.DIRECTION_RIGHT);
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', Hammer.DIRECTION_LEFT);
+			}
 
 			this.backgroundPad = document.getElementById(this.svgElementID);
 

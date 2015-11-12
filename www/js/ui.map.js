@@ -125,8 +125,15 @@
 
 			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
 
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);
+			if (navByClick)
+			{
+				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states');
+			}
+			else
+			{
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);
+			}
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {

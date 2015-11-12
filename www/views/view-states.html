@@ -16,7 +16,7 @@
 		</svg>
 
 		<!--CONTENT-->
-		<div id="statesContentWrapper" class="ui-states-state-list">
+		<!--<div id="statesContentWrapper" class="ui-states-state-list">
 			<div id="stateControls" class="ui-states-state-list-flex">
 					<div class="split">
 						<a class="ui-states-btn" ng-click="restoreAllDefaults()">Restore Defaults</a>
@@ -35,7 +35,30 @@
 				</div>
 			</div>
 
+		</div>-->
+		<!--<table id="states">
+			<tr id="statesRow">
+				<td class="test"></td><td class="test testno"></td><td class="test testno"></td><td class="test testno"></td>
+				<td class="test testno"></td><td class="test testno"></td><td class="test testno"></td><td class="test testno"></td>
+				<td class="test testno">
+			</tr>			
+		</table>-->
+
+		<div class="statesTable">
+			<div ng-repeat='rows in storedTable track by $index'>
+				<div id="state{{item.index}}" class="state {{ item.preset != null ? '' : 'stateUnused' }}" 
+					 ng-repeat='item in rows' 
+					 ng-click="applyPreset(item)"
+					 style="width: {{item.width}};height: {{item.height}};opacity:{{ item.preset != null ? .4 : .15 }};">
+				</div>
+			</div>
+			<div style="margin: auto;margin-top:5px;">
+				<div id="stateDefault" 
+					 style="opacity:.4;background-color:white;border-radius:5px;margin: auto;"></div>
+			</div>
 		</div>
+
+
 		<!------------->
 
 	</div>

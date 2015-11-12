@@ -23,6 +23,22 @@
 					window.location = url;
 				}
 			});
+		},
+		registerClickNavigation: function (ctrlElement, storageKey, elementID, url) {
+			var uiSwipe = document.getElementById(elementID);
+			$(uiSwipe).click(function() {
+				if (ctrlElement.toJSON) {
+					// save state of ctrl
+					try {
+						localStorage.setItem(storageKey, JSON.stringify(ctrlElement.toJSON()));
+					} catch (ex) {
+						console.error('error saving ui pad state: ' + ex);
+					}
+				}
+
+				// set new location
+				window.location = url;
+			});
 		}
 	};
 })();
