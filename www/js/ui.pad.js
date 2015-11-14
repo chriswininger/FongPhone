@@ -8,8 +8,6 @@
  *   double tab dot will turn it off/on
  * @type {{}|*|Window.PhonePhong}
  */
-var bVersionDisplayed;
-var uiPad;
 (function () {
 	FongPhone.UI.Pad = function (board, state) {
 		var self = this;

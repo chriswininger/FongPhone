@@ -1,4 +1,3 @@
-var st;
 (function () {
 	var _soundKey = 'ui.sound.state';
 	var _mapKey = 'ui.map.state';
