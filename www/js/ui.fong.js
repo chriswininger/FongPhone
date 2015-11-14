@@ -122,13 +122,15 @@ var loopType = 1;
 						
 				if (addLoopPosition && this.boardInput.NoteMapInfo.LoopOn && loopType == 1)
 				{
-					this.loopPositions.push({
-						x: this.x,
-						y: this.y,
-						time: window.performance.now(),
-						targetTouches: targetTouches,
-						targetFong: targetFong,
-					});
+					if (!makeLoopChunky || Math.random() < loopChunkinessFactor) {
+						this.loopPositions.push({
+							x: this.x,
+							y: this.y,
+							time: window.performance.now(),
+							targetTouches: targetTouches,
+							targetFong: targetFong,
+						});
+					}
 				}
 			} else if (targetTouches.length == 2) {
 				if (this.lastPinchDist === undefined) this.lastPinchDist = 0;
