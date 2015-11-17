@@ -39,6 +39,9 @@
 				
 				$("#chunkinessControl").val(parseInt(this.selectedFong.NoteMapInfo.loopChunkinessFactor * 100));
 				$("#chunkinessControl").trigger('change');
+				
+				$("#pullChunkinessControl").val(parseInt(this.selectedFong.NoteMapInfo.pullChunkiness * 100));
+				$("#pullChunkinessControl").trigger('change');
 			};
 						
 			// Fired when a note in the map is clicked
@@ -91,8 +94,11 @@
 			};
 			
 			$scope.toggleChunkyClick = function () {
-				//self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;
 				self.selectedFong.NoteMapInfo.makeLoopChunky  = !self.selectedFong.NoteMapInfo.makeLoopChunky;
+			};
+			
+			$scope.togglePullChunkyClick = function () {
+				self.selectedFong.NoteMapInfo.pullLoopChunky  = !self.selectedFong.NoteMapInfo.pullLoopChunky;
 			};
 
 			$scope.IsSelectedScale = function (scale) {
@@ -131,6 +137,13 @@
 			function setLoopChunkinessFactor(loopChunkinessFactor) {
 				self.selectedFong.NoteMapInfo.loopChunkinessFactor = loopChunkinessFactor / 100.0;
 			}
+			
+			function getLoopPullChunkiness() {
+				return self.selectedFong.NoteMapInfo.pullChunkiness;
+			}
+			function setLoopPullChunkiness(pullChunkiness) {
+				self.selectedFong.NoteMapInfo.pullChunkiness = pullChunkiness / 100.0;
+			}
 
 			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
@@ -138,9 +151,11 @@
 
 			FongPhone.utils.createGetSet(this, 'loopDuration', getLoopDuration, setLoopDuration);
 			FongPhone.utils.createGetSet(this, 'loopChunkinessFactor', getLoopChunkinessFactor, setLoopChunkinessFactor);
+			FongPhone.utils.createGetSet(this, 'loopPullChunkiness', getLoopPullChunkiness, setLoopPullChunkiness);
 
 			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
 			FongPhone.utils.registerKnob('#chunkinessControl', 'loopChunkinessFactor', this.selectedFong.NoteMapInfo.loopChunkinessFactor, this);
+			FongPhone.utils.registerKnob('#pullChunkinessControl', 'loopPullChunkiness', this.selectedFong.NoteMapInfo.pullChunkiness, this);
 
 			if (navByClick)
 			{

@@ -11,28 +11,33 @@ function render(time) {
 				if (time - lp.time > fd.boardInput.NoteMapInfo.LoopDuration) {
 					fd.offsetX = 0;
 					fd.offsetY = 0;
-					
-					// hacky fix for iOS
-					if (lp.targetTouches.length == 1)
-					{
-						lp.targetTouches = [];
-						lp.targetTouches.push({
-							pageX: lp.x,
-							pageY: lp.y
-						});
+
+					if (fd.boardInput.NoteMapInfo.pullLoopChunky && Math.random() < fd.boardInput.NoteMapInfo.pullChunkiness) {
+						//console.log("updating fong...");
+						
+						// hacky fix for iOS
+						if (lp.targetTouches.length == 1) {
+							lp.targetTouches = [];
+							lp.targetTouches.push({
+								pageX: lp.x,
+								pageY: lp.y
+							});
+						} else {
+							// todo
+						}
+
+						fd.handleTouchMoveHelper(lp.targetTouches, lp.targetFong, false);
+
+						lp.targetFong.setAttribute("cx", fd.x);
+						lp.targetFong.setAttribute("cy", fd.y)
+
 					}
 					else
 					{
-						// todo
+						//console.log("skipping this iteration...");
 					}
-					
-					fd.handleTouchMoveHelper(lp.targetTouches, lp.targetFong, false);
-
-					lp.targetFong.setAttribute("cx", fd.x);
-					lp.targetFong.setAttribute("cy", fd.y)
-					
 					lp.time += fd.boardInput.NoteMapInfo.LoopDuration;
-					
+
 					break;
 				}
 			}
