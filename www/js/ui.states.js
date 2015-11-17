@@ -54,8 +54,19 @@
 
 			var a = [];
 			var storedTable = [];
-			var columns = Math.floor(window.innerWidth / 50) - 1;
+			var columns = Math.floor(window.innerWidth / 50) - 1;			
 			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 3;
+			
+			//console.log(columns);
+			//console.log(rows);
+			//console.log(window.innerWidth);
+			//console.log(window.innerHeight);
+			
+			if ((window.innerWidth - columns * 50) < 70)
+			{
+				columns--;
+			}
+			
 			var cellWidth = 45;
 			var cellHeight = 45;
 			for (var i = 0; i < rows; i++) {
@@ -120,7 +131,7 @@
 				}
 			}
 
-			this.$scope.saveCurrentState = function () {
+			this.$scope.saveCurrentState = function () {				
 				vex.dialog.open({
 					message: 'Name:',
 					input: '<input name="name" type="text" placeholder="please enter a name"/>',
