@@ -66,6 +66,10 @@
 			{
 				columns--;
 			}
+			if ((window.innerHeight - rows * 60) < 70)
+			{
+				rows--;
+			}
 			
 			var cellWidth = 45;
 			var cellHeight = 45;
