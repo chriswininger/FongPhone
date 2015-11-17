@@ -150,8 +150,8 @@
 				// Handler for .ready() called.
 				setTimeout(function () {
 					//console.log($(".test").length);
-					$(".state").on('taphold', function (event) {
-
+					$(".state,.stateUnused").on('taphold', function (event) {
+console.log("saving");
 						self.fadeStateDiv(event.target, .6);
 
 						var index = event.target.id.replace("state", "");
