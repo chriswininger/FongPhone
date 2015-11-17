@@ -157,6 +157,17 @@
 						</td>
 						<td class="ui-map-note-map-scale" width="25%"></td>
 					</tr>
+					<tr>
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.makeLoopChunky ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%;" colspan="2" ng-click="toggleChunkyClick()">
+							Chunky {{ selectedFong.NoteMapInfo.makeLoopChunky ? '' : 'Off' }}
+						</td>
+						<td class="ui-map-note-map-toggle" colspan="1">
+							<div style="position:relative;">
+								<input id="chunkinessControl" type="text" class="dial" data-min="1" data-max="100" data-width="80">
+							</div>
+						</td>
+						<td class="ui-map-note-map-scale" width="25%"></td>
+					</tr>
 				</table>
 			</div>
 		</div>

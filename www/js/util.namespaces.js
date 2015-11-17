@@ -9,5 +9,3 @@ var navBySwipe = true;
 var bVersionDisplayed;
 var uiPad;
 var st;
-var makeLoopChunky = false;
-var loopChunkinessFactor = .1;

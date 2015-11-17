@@ -36,8 +36,11 @@
 				self.selectedFongIndex = i;
 				$("#loopDurationControl").val(this.selectedFong.NoteMapInfo.LoopDuration);
 				$("#loopDurationControl").trigger('change');
+				
+				$("#chunkinessControl").val(parseInt(this.selectedFong.NoteMapInfo.loopChunkinessFactor * 100));
+				$("#chunkinessControl").trigger('change');
 			};
-
+						
 			// Fired when a note in the map is clicked
 			$scope.noteClick = function (index) {
 				self.selectedFong.NoteMapInfo.availableNotes[index].on = !self.selectedFong.NoteMapInfo.availableNotes[index].on;
@@ -86,6 +89,11 @@
 			$scope.toggleLoopingClick = function () {
 				self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;
 			};
+			
+			$scope.toggleChunkyClick = function () {
+				//self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;
+				self.selectedFong.NoteMapInfo.makeLoopChunky  = !self.selectedFong.NoteMapInfo.makeLoopChunky;
+			};
 
 			$scope.IsSelectedScale = function (scale) {
 				return scale === self.selectedFong.NoteMapInfo.SelectedScale;
@@ -116,14 +124,23 @@
 			function setLoopDuration(loopDuration) {
 				self.selectedFong.NoteMapInfo.LoopDuration = loopDuration;
 			}
+			
+			function getLoopChunkinessFactor() {
+				return self.selectedFong.NoteMapInfo.loopChunkinessFactor;
+			}
+			function setLoopChunkinessFactor(loopChunkinessFactor) {
+				self.selectedFong.NoteMapInfo.loopChunkinessFactor = loopChunkinessFactor / 100.0;
+			}
 
 			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
 			$(".dial").attr('disabled', 'disabled');
 
 			FongPhone.utils.createGetSet(this, 'loopDuration', getLoopDuration, setLoopDuration);
+			FongPhone.utils.createGetSet(this, 'loopChunkinessFactor', getLoopChunkinessFactor, setLoopChunkinessFactor);
 
 			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
+			FongPhone.utils.registerKnob('#chunkinessControl', 'loopChunkinessFactor', this.selectedFong.NoteMapInfo.loopChunkinessFactor, this);
 
 			if (navByClick)
 			{
