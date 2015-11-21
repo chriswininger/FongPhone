@@ -1,6 +1,5 @@
 // TODO (CAW) Namespace these
 var logicBoard;
-var GLOBAL_NOTE_MAP;
 (function () {
 	console.log('starting...');
 	vex.defaultOptions.className = 'vex-theme-wireframe';
@@ -29,7 +28,7 @@ var GLOBAL_NOTE_MAP;
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
 	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState());
 	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
-	var noteMap = GLOBAL_NOTE_MAP = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState());
+	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState());
 	stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;
 	stateController.uiSoundSettings = soundUI;
@@ -101,6 +100,10 @@ var GLOBAL_NOTE_MAP;
 
 	function _onPause() {
 		stateController.saveAll();
+	}
+
+	FongPhone.Debugging.dumpAllStateToConsole = function() {
+		console.log(JSON.stringify(stateController.getAllStates(), null, 4));
 	}
 })();
 

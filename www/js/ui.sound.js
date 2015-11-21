@@ -1,7 +1,7 @@
 (function () {
-	FongPhone.UI.Sound = function (board, pad, state) {
+	FongPhone.UI.Sound = function (logicBoard, pad, state) {
 		var svgElementID = 'soundControls';
-		this.board = board;
+		this.board = logicBoard;
 
 		FongPhone.utils.createGetSet(this, 'osc1EnvType', getOsc1EnvType, setOsc1EnvType);
 		FongPhone.utils.createGetSet(this, 'osc2EnvType', getOsc2EnvType, setOsc2EnvType);

@@ -214,7 +214,22 @@ console.log("saving");
 				console.error('error clearing sound settings: ' + ex);
 			}
 		},
-		getMapState: function (name) {
+
+		// returns a json object containing all stored states (adding for debugging/dev use)
+		getAllStates: function() {
+			var stateList = this.getStateList();
+			var rtn = {};
+			_.each(stateList, function _sndStateItr(stateKey) {
+				rtn[stateKey] = {
+					soundSettings: this.getSoundState(stateKey),
+					padSettings: this.getPadState(stateKey),
+					noteSettings: this.getMapState(stateKey)
+				};
+			}, this);
+
+			return rtn;
+		},
+		getMapState: function(name) {
 			name = name || '';
 			if (name) name = name + '_';
 			return _getStoredState(name + _mapKey, FongPhone.UI.Defaults.noteMapSettings);
