@@ -34,14 +34,8 @@
 
 			$scope.toggleSelectedFong = function (i) {
 				self.selectedFongIndex = i;
-				$("#loopDurationControl").val(this.selectedFong.NoteMapInfo.LoopDuration);
-				$("#loopDurationControl").trigger('change');
 				
-				$("#chunkinessControl").val(parseInt(this.selectedFong.NoteMapInfo.loopChunkinessFactor * 100));
-				$("#chunkinessControl").trigger('change');
-				
-				$("#pullChunkinessControl").val(parseInt(this.selectedFong.NoteMapInfo.pullChunkiness * 100));
-				$("#pullChunkinessControl").trigger('change');
+				updateKnobs();
 			};
 						
 			// Fired when a note in the map is clicked
@@ -144,6 +138,17 @@
 			function setLoopPullChunkiness(pullChunkiness) {
 				self.selectedFong.NoteMapInfo.pullChunkiness = pullChunkiness / 100.0;
 			}
+			function updateKnobs() {
+				$("#loopDurationControl").val(self.selectedFong.NoteMapInfo.LoopDuration);
+				$("#loopDurationControl").trigger('change');
+
+				$("#chunkinessControl").val(parseInt(self.selectedFong.NoteMapInfo.loopChunkinessFactor * 100));
+				$("#chunkinessControl").trigger('change');
+
+				$("#pullChunkinessControl").val(parseInt(self.selectedFong.NoteMapInfo.pullChunkiness * 100));
+				$("#pullChunkinessControl").trigger('change');
+			}
+			
 
 			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
@@ -156,6 +161,8 @@
 			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
 			FongPhone.utils.registerKnob('#chunkinessControl', 'loopChunkinessFactor', this.selectedFong.NoteMapInfo.loopChunkinessFactor, this);
 			FongPhone.utils.registerKnob('#pullChunkinessControl', 'loopPullChunkiness', this.selectedFong.NoteMapInfo.pullChunkiness, this);
+			
+			updateKnobs();
 
 			if (navByClick)
 			{
