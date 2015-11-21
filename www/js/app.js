@@ -29,6 +29,7 @@ var logicBoard;
 	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState());
 	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
 	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState());
+
 	stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;
 	stateController.uiSoundSettings = soundUI;

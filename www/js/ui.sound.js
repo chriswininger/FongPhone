@@ -40,7 +40,7 @@
 			}
 
 			// investigate $scope values
-			$scope.FilterOn = this.board.FilterOn;
+			$scope.FilterOn = logicBoard.FilterOn;
 
 			$scope.toggleFilterClick = function () {
 				$scope.FilterOn = !$scope.FilterOn;

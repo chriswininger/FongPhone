@@ -11,6 +11,8 @@
 (function () {
 	FongPhone.UI.Pad = function (board, state) {
 		var self = this;
+
+		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
 		this.svgElementID = 'phongUIGrid';
 
