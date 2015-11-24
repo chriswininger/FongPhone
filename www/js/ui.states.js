@@ -166,11 +166,8 @@
 				setTimeout(function () {
 					//console.log($(".test").length);
 					$(".state,.stateUnused").on('taphold', function (event) {
-console.log("saving");
 						self.fadeStateDiv(event.target, .6);
-
 						var index = event.target.id.replace("state", "");
-
 						for (var i = 0; i < self.$scope.storedTable.length; i++) {
 							for (var j = 0; j < self.$scope.storedTable[i].length; j++) {
 								if (index == self.$scope.storedTable[i][j].index) {
@@ -179,7 +176,6 @@ console.log("saving");
 								}
 							}
 						}
-
 						self.saveAll(index);
 					});
 				}, 100);
