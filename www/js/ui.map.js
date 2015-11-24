@@ -84,7 +84,7 @@
 			};
 			
 			$scope.toggleLoopingClick = function () {
-				self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;
+				self.selectedFong.NoteMapInfo.LoopOn = !self.selectedFong.NoteMapInfo.LoopOn;								
 			};
 			
 			$scope.toggleChunkyClick = function () {
@@ -173,6 +173,25 @@
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
 				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);
 			}
+			$("#loopingToggle").on('taphold', function (event) {
+				//$('#loopingToggle').css('background-color', "rgba(255,255,255,.8)");
+				$(event.target).animate({
+					"background-opacity": .8
+				}, 50, function () {
+					$(event.target).animate({
+						"background-opacity": 0
+					}, 5000, function () {
+						// Animation complete.
+					});
+				});
+
+				//not how this should be done but we have a design problem here
+				for (var i = 0; i < uiPad.fongDots.length; i++) {
+					if (uiPad.fongDots[i].boardInput == self.selectedFong) {
+						uiPad.fongDots[i].loopPositions = [];
+					}
+				}
+			});
 		},
 		// the map is all notes minus the ones turned off
 		buildMap: function(notes) {
