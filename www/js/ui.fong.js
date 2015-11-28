@@ -2,10 +2,9 @@ var gradientFades = true;
 var loopType = 1;
 
 (function () {
-	window.FongPhone = window.FongPhone || {};
-	window.FongPhone.UI = window.FongPhone.UI || {};
+	var MAX_RADIUS = 150;
 
-	window.FongPhone.UI.Fong = function (board, state) {
+	FongPhone.UI.Fong = function (board, state) {
 		window.FongPhone.utils.createGetSet(this, 'x', this.getX, this.setX);
 		window.FongPhone.utils.createGetSet(this, 'y', this.getY, this.setY);
 		window.FongPhone.utils.createGetSet(this, 'radius', this.getRadius, this.setRadius);
@@ -18,7 +17,7 @@ var loopType = 1;
 
 		this.offsetX = null;
 		this.offsetY = null;
-		this.lastPinchDist = 0;
+		this.lastPinchDist = undefined;
 
 		this.domCtxID = state.domCtxID;
 		this.elementID = state.elementID;
@@ -147,15 +146,14 @@ var loopType = 1;
 				var dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 				var change = dist - this.lastPinchDist;
 
-				if (change > 0 && r <= 98) r += 2;
-				else if (r >= 62) r -= 2;
+				if (change > 0 && this.radius <= MAX_RADIUS) this.radius += 2;
+				else if (this.radius >= 62) this.radius -= 2;
 
-				this.radius = r;
-
+				console.log('!!! radius: ' + this.radius);
 				this.lastPinchDist = dist;
 			}
-			if (this.boardInput.NoteMapInfo.LoopOn && loopType == 0)
-			{
+
+			if (this.boardInput.NoteMapInfo.LoopOn && loopType == 0) {
 				var f = this;
 				setTimeout(function() {
 					f.offsetX = 0;
