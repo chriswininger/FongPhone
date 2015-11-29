@@ -149,7 +149,6 @@ var loopType = 1;
 				if (change > 0 && this.radius <= MAX_RADIUS) this.radius += 2;
 				else if (this.radius >= 62) this.radius -= 2;
 
-				console.log('!!! radius: ' + this.radius);
 				this.lastPinchDist = dist;
 			}
 

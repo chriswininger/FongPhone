@@ -47,7 +47,6 @@
 
 			// Fired when dragging a note in the map into position over another
 			$scope.onNoteHover = function($event) {
-				console.log('!!! foo');
 				angular.element(e.target).addClass('hover');
 			};
 

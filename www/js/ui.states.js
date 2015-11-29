@@ -12,8 +12,7 @@
 		this.uiSoundSettings = uiSoundSettings;
 		this.selectedState = '';
 		this.storedList = this.getStateList();
-
-	}
+	};
 
 	_.extend(FongPhone.UI.StatesController.prototype, {
 		addToStateList: function (name) {
@@ -32,35 +31,23 @@
 			$scope.pageClass = 'view-states';
 			var statesUI = $('#statesUI');
 			var stateControls = $('#stateControls');
-			var swipePad = $('#svgSwipe');
-			var logPad = $('#svgLog');
 			var statesContentWrapper = $('#statesContentWrapper');
-			var statesHeight = window.innerHeight - stateControls.outerHeight() - swipePad.outerHeight() - logPad.outerHeight() - 60;
-			var listOfStates = $('#listOfStates');
 
 			statesUI.css('max-height', (window.innerHeight - 40) + "px");
 			statesUI.css('height', (window.innerHeight - 40) + "px");
-			statesContentWrapper.css('height', (window.innerHeight - 67) + "px");
-			statesContentWrapper.css('max-height', (window.innerHeight - 67) + "px");
+			if (navByClick) {
+				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound');
+			}
+			if (navBySwipe) {
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
+				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
+			}
 
-			//listOfStates.css('height', statesHeight + 'px');
-			//listOfStates.css('max-height', statesHeight + 'px');
-			$('.ui-states-state-list-flex .ui-states-btn').css('width', (window.innerWidth / 2 - 67) + 'px');
-
-			var style = $('<style>.ui-states-state-list-entry .ui-states-btn { width: ' +
-				(window.innerWidth - 67) +
-				'px; }</style>');
-			$('html > head').append(style);
-
+			// build state selection board
 			var a = [];
 			var storedTable = [];
-			var columns = Math.floor(window.innerWidth / 50) - 1;			
+			var columns = Math.floor(window.innerWidth / 50) - 1;
 			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 3;
-			
-			//console.log(columns);
-			//console.log(rows);
-			//console.log(window.innerWidth);
-			//console.log(window.innerHeight);
 			
 			if ((window.innerWidth - columns * 50) < 70)
 			{
@@ -100,86 +87,49 @@
 				}
 				storedTable.push(a);
 			}
-			
-			$("#stateDefault").height(cellHeight + "px");
-			$("#stateDefault").width((((cellWidth + 10) * columns) - 10) + "px");
+
+			// events
 			$("#stateDefault").click(function () {
 				self.fadeStateDiv(event.target, .6);
 				self.restoreDefaults();
 			});
 
-			st = storedTable;
 			this.$scope.storedTable = storedTable;
-			if (navByClick)
-			{
-				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound');
-			}
-			if (navBySwipe)
-			{
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
-			}
-
 			this.$scope.storedList = this.storedList;
 			this.$scope.restoreAllDefaults = function () {				
 				self.restoreDefaults();
 			};
+
 			this.$scope.applyPreset = function (item) {
-				if (!item)
-				{
+				if (!item) {
 					self.restoreDefaults();
-				}
-				else if (item.preset) {
+				} else if (item.preset) {
 					self.fadeStateDiv(event.target, .6);
 					self.restoreState(item.preset);
 				}
-			}
-
-			this.$scope.saveCurrentState = function () {				
-				vex.dialog.open({
-					message: 'Name:',
-					input: '<input name="name" type="text" placeholder="please enter a name"/>',
-					buttons: [
-						$.extend({}, vex.dialog.buttons.YES, {
-							text: 'Save'
-						}),
-						$.extend({}, vex.dialog.buttons.NO, {
-							text: 'Cancel'
-						})
-					],
-					callback: function (data) {
-						if (data === false) return;
-						if (data.name) {
-							self.saveAll.call(self, data.name);
-							if (self.$scope) self.$scope.$apply();
-						}
-					}
-				});
 			};
 
 			this.$scope.restoreState = function ($index) {
 				self.restoreState(this.storedList[$index]);
 			};
 
-			$(document).ready(function () {
-				// Handler for .ready() called.
-				setTimeout(function () {
-					//console.log($(".test").length);
-					$(".state,.stateUnused").on('taphold', function (event) {
-						self.fadeStateDiv(event.target, .6);
-						var index = event.target.id.replace("state", "");
-						for (var i = 0; i < self.$scope.storedTable.length; i++) {
-							for (var j = 0; j < self.$scope.storedTable[i].length; j++) {
-								if (index == self.$scope.storedTable[i][j].index) {
-									self.$scope.storedTable[i][j].preset = index;
-									self.$scope.$apply();
-								}
+			$(document).on('taphold', ".state,.stateUnused", function (event) {
+				// wrap in $apply so that angular knows to update ui bindings
+				self.$scope.$apply(function() {
+					self.fadeStateDiv(event.target, .6);
+					var index = event.target.id.replace("state", "");
+					for (var i = 0; i < self.$scope.storedTable.length; i++) {
+						for (var j = 0; j < self.$scope.storedTable[i].length; j++) {
+							if (index == self.$scope.storedTable[i][j].index) {
+								self.$scope.storedTable[i][j].preset = index;
 							}
 						}
-						self.saveAll(index);
-					});
-				}, 100);
+					}
+
+					self.saveAll(index);
+				});
 			});
+
 		},
 		clearAll: function () {
 			this.clearMap();
