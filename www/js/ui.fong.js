@@ -366,6 +366,7 @@ var loopType = 1;
 		'offsetY',
 		'lastPinchDist',
 		'domElement',
-		'fadeElement'
+		'fadeElement',
+		'loopPositions'
 	]);
 })();
