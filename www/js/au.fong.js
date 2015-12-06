@@ -86,7 +86,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.delayGain = audCtx.createGain();
 	this.delayGain.gain.value = this.board.delayVolume;
 
-	this.oscVol.connect(this.delayGain);
+	this.oscVol.connect(this.delay);
 	this.oscVol.connect(this.filter);
 	this.delay.connect(this.delayGain);
 	this.delayGain.connect(this.feedback);
@@ -97,8 +97,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	//this.oscPanCtrl.connect(mainVol);
 	//this.oscVolOffset.connect(mainVol);
 	this.filter.connect(this.oscVolOffset);
-	this.delay.connect(this.oscVolOffset);
-
+	this.delayGain.connect(this.oscVolOffset); // should be delayGain to oscVolOffset
 
 	this.oscVolOffset.connect(this.oscPanCtrl);
 	this.oscPanCtrl.connect(mainVol);
