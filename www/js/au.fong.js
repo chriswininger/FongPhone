@@ -86,22 +86,25 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.delayGain = audCtx.createGain();
 	this.delayGain.gain.value = this.board.delayVolume;
 
-	this.oscVol.connect(this.delay);
+	//this.oscVol.connect(this.delay);
 	this.oscVol.connect(this.filter);
 	this.delay.connect(this.delayGain);
 	this.delayGain.connect(this.feedback);
 	this.feedback.connect(this.delay);
 
-	//this.oscPanCtrl.connect(this.delay);
-
 	//this.oscPanCtrl.connect(mainVol);
 	//this.oscVolOffset.connect(mainVol);
 	this.filter.connect(this.oscVolOffset);
+
+	// connect final output with all filters/fades applied back into delay/feedback loop
+	this.oscVolOffset.connect(this.delay);
+
 	this.delayGain.connect(this.oscVolOffset); // should be delayGain to oscVolOffset
 
 	this.oscVolOffset.connect(this.oscPanCtrl);
-	this.oscPanCtrl.connect(mainVol);
 
+	// TODO (CAW) This should not happen each we initialize a fong
+	this.oscPanCtrl.connect(mainVol);
 	mainVol.connect(audCtx.destination);
 
 	this.start = function () {
