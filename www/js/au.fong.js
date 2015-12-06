@@ -68,18 +68,8 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.oscVol.connect(this.filter);
 
-
-	//this.filter.connect(this.oscPanCtrl);
-
-
-	//this.oscVolOffset.connect(this.oscPanCtrl);
-
 	this.delay = audCtx.createDelay(10);
 	this.delay.delayTime.value = this.board.delayTime;
-
-
-
-
 	this.feedback = audCtx.createGain();
 	this.feedback.gain.value = this.board.delayFeedback;
 
@@ -103,9 +93,7 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.oscVolOffset.connect(this.oscPanCtrl);
 
-	// TODO (CAW) This should not happen each we initialize a fong
 	this.oscPanCtrl.connect(mainVol);
-	mainVol.connect(audCtx.destination);
 
 	this.start = function () {
 		this.osc.start(0);
@@ -114,7 +102,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		for (var i = 0; i < this.oscsCount; i++) {
 			this.oscs[i].start();
 		}
-	}
+	};
 
 	this.setOscType = function (type) {
 		this.osc.type = type;
@@ -124,7 +112,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.waveIntOsc++;
 		if (this.waveIntOsc >= this.waves.length) this.waveIntOsc = 0;
 		this.setOscType(this.waves[this.waveIntOsc]);
-	}
+	};
 
 	this.stopOscPulse = function () {
 		this.oscGainCtrl.disconnect(this.oscVol.gain);
@@ -139,16 +127,11 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.toggleOscPulse = function () {
 		if (this.oscPulseOn) this.stopOscPulse();
 		else this.startOscPulse();
-	}
+	};
 
 	this.setOscVol = function (vol) {
 		vol = vol / 3;
-
-		console.log('!!! setting vol to: ' + vol);
 		this.oscVol.gain.value = vol;
-		//this.oscVolOffset.gain.value = vol;
-		//this.oscVol.gain.value = 1;
-		//this.oscVolOffset.gain.value = 1;
 	};
 
 	this.setOscFreq = function (freq) {

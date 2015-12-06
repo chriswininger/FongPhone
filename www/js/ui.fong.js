@@ -122,7 +122,7 @@ var loopType = 1;
 				if (addLoopPosition && this.boardInput.NoteMapInfo.LoopOn && loopType == 1)
 				{
 					var addPosition = !this.boardInput.NoteMapInfo.makeLoopChunky || Math.random() < this.boardInput.NoteMapInfo.loopChunkinessFactor;
-					console.log(addPosition);
+					//console.log(addPosition);
 					//console.log(this.boardInput.NoteMapInfo.makeLoopChunky);
 					//console.log(this.boardInput.NoteMapInfo.loopChunkinessFactor);
 					if (addPosition) {
