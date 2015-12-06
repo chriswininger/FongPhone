@@ -198,6 +198,7 @@
 				fongJSON.handleFongSelected = this.roleHandlers[fongJSON.fongRole].handleFongSelected;
 				fongJSON.selectedClassChangedHandler = this.roleHandlers[fongJSON.fongRole].classTypeChangeHandler;
 				fongJSON.stateChangedHandler = this.roleHandlers[fongJSON.fongRole].stateChangedHandler;
+				fongJSON.radiusChangeHandler = this.roleHandlers[fongJSON.fongRole].radiusChangeHandler;
 				fongJSON.initializer = this.roleHandlers[fongJSON.fongRole].initializer;
 
 				var fongUI = new FongPhone.UI.Fong(this.board, fongJSON);
