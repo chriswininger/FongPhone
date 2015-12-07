@@ -18,6 +18,8 @@ npm install
 
 gulp initialize
 
+cordova add module crosswalk
+
 #### In Browser Testing
 
 - While intended for use as a mobile app, this can be testing locally in a browser such as Chrome, using the server.js file in [project dir]/server
