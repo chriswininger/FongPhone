@@ -104,8 +104,19 @@
 			});
 		},
 		handleFadeChanged: function (fong) {
-			// TODO (CAW) -- range should reflect size of outer sphere
-			fong.boardInput.setFade(map(fong.fadeOffset, -35, 35, -2, 2));
+
+
+			var val = map(fong.fadeOffset, -(Math.floor(fong.radius/2)), Math.floor(fong.radius/2), -45, 45);
+
+			var xDeg = val;
+			var zDeg = xDeg + 90;
+			if (zDeg > 90) {
+				zDeg = 180 - zDeg;
+			}
+			var x = Math.sin(xDeg * (Math.PI / 180));
+			var z = Math.sin(zDeg * (Math.PI / 180));
+
+			fong.boardInput.setFade(x, 0, z);
 		},
 		handlePositionChangedPrimary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
