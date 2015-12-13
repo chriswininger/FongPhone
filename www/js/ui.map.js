@@ -163,15 +163,8 @@
 			
 			updateKnobs();
 
-			if (navByClick)
-			{
-				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states');
-			}
-			if (navBySwipe)
-			{
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', Hammer.DIRECTION_LEFT);
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/states', Hammer.DIRECTION_RIGHT);
-			}
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', '#/states');
+
 			$("#loopingToggle").on('taphold', function (event) {
 				//$('#loopingToggle').css('background-color', "rgba(255,255,255,.8)");
 				$(event.target).animate({

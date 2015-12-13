@@ -1,14 +1,32 @@
 (function () {
+	var navByClick = true;
+	var navBySwipe = true;
+
 	FongPhone.UI.Helper = {
-		registerSwipeNavigation: function (ctrlElement, storageKey, elementID, url, direction) {
+		registerSwipeNavigation: function (ctrlElement, storageKey, elementID, urlLeft, urlRight) {
 			var uiSwipe = document.getElementById(elementID);
-			var hammerSwipe = new Hammer(uiSwipe, {
-				direction: direction
+			var hammerSwipeLeft = new Hammer(uiSwipe, {
+				direction: Hammer.DIRECTION_LEFT
 			});
+			var hammerSwipeRight = new Hammer(uiSwipe, {
+				direction: Hammer.DIRECTION_RIGHT
+			});
+			var hammerTap = new Hammer(uiSwipe, {});
 
 			// release any previous listeners to avoiding holding onto old dom elements
-			hammerSwipe.off('pan');
-			hammerSwipe.on('pan', function (ev) {
+			hammerSwipeLeft.off('pan');
+			hammerSwipeRight.off('pan');
+			hammerTap.off('tap');
+
+			if (navBySwipe) {
+				hammerSwipeLeft.on('pan', _.partial(_swipeNavFunc, Hammer.DIRECTION_LEFT, urlLeft));
+				hammerSwipeRight.on('pan', _.partial(_swipeNavFunc, Hammer.DIRECTION_RIGHT, urlRight));
+			}
+
+			if (navByClick)
+				hammerTap.on("tap", _tapNavFunc);
+
+			function _swipeNavFunc(direction, url, ev) {
 				if (ev.isFinal && ev.direction === direction) {
 					if (ctrlElement.toJSON) {
 						// save state of ctrl
@@ -22,13 +40,9 @@
 					// set new location
 					window.location = url;
 				}
-			});
-		},
-		registerClickNavigation: function (ctrlElement, storageKey, elementID, url) {
-			var uiSwipe = document.getElementById(elementID);
-			
-			//var hammer = new Hammer(document.getElementById(elementID));
-			var hammertime = Hammer(document.getElementById(elementID)).on("tap", function(event) {
+			}
+
+			function _tapNavFunc(event) {
 				if (ctrlElement.toJSON) {
 					// save state of ctrl
 					try {
@@ -38,9 +52,12 @@
 					}
 				}
 
-				// set new location
-				window.location = url;
-			});
+				var right = event.center.x < window.innerWidth / 2;
+				if (right)
+					window.location = urlRight;
+				else
+					window.location = urlLeft;
+			}
 		}
 	};
 })();

@@ -35,13 +35,8 @@
 
 			statesUI.css('max-height', (window.innerHeight - 40) + "px");
 			statesUI.css('height', (window.innerHeight - 40) + "px");
-			if (navByClick) {
-				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound');
-			}
-			if (navBySwipe) {
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/sound', Hammer.DIRECTION_RIGHT);
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', Hammer.DIRECTION_LEFT);
-			}
+
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', '#/sound');
 
 			// build state selection board
 			var a = [];
@@ -96,7 +91,7 @@
 
 			this.$scope.storedTable = storedTable;
 			this.$scope.storedList = this.storedList;
-			this.$scope.restoreAllDefaults = function () {				
+			this.$scope.restoreAllDefaults = function () {
 				self.restoreDefaults();
 			};
 

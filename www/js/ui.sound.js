@@ -29,15 +29,10 @@
 			var self = this;
 			this.$scope = $scope;
 
-			if (navByClick)
-			{
-				FongPhone.UI.Helper.registerClickNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/');
-			}
-			if (navBySwipe)
-			{
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/', Hammer.DIRECTION_RIGHT);
-				FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', Hammer.DIRECTION_LEFT);
-			}
+			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', '#/');
+
+			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
+			$('.page').css('max-height', window.innerHeight + "px");
 
 			// investigate $scope values
 			$scope.FilterOn = logicBoard.FilterOn;
@@ -51,8 +46,6 @@
 			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
 			$(".dial").attr('disabled', 'disabled');
 
-			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
-			$('.page').css('max-height', window.innerHeight + "px");
 
 			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance, this);
 			this.registerKnob('#env1Control', 'env1Control', this.env1Control, this);
