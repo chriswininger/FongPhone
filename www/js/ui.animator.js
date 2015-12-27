@@ -12,7 +12,7 @@ function render(time) {
 					fd.offsetX = 0;
 					fd.offsetY = 0;
 
-					if (fd.boardInput.NoteMapInfo.pullLoopChunky && Math.random() < fd.boardInput.NoteMapInfo.pullChunkiness) {
+					if (!fd.boardInput.NoteMapInfo.pullLoopChunky || Math.random() < fd.boardInput.NoteMapInfo.pullChunkiness) {
 						//console.log("updating fong...");
 						
 						// hacky fix for iOS
