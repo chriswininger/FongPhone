@@ -93,6 +93,25 @@
 			$scope.togglePullChunkyClick = function () {
 				self.selectedFong.NoteMapInfo.pullLoopChunky  = !self.selectedFong.NoteMapInfo.pullLoopChunky;
 			};
+			
+			$scope.clearLoopClick = function () {
+				for (var i = 0; i < uiPad.fongDots.length; i++) {
+					if (uiPad.fongDots[i].boardInput == self.selectedFong) {
+						uiPad.fongDots[i].loopPositions = [];
+					}
+				}
+				
+				var target = event.target;
+				$(target).animate({
+					"opacity": .0
+				}, 50, function () {
+					$(target).animate({
+						"opacity": .8
+					}, 500, function () {
+						// Animation complete.
+					});
+				});
+			};
 
 			$scope.IsSelectedScale = function (scale) {
 				return scale === self.selectedFong.NoteMapInfo.SelectedScale;
