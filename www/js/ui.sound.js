@@ -224,7 +224,7 @@
 		function setFilterResonance(filterRes) {
 			self._filterResonance = filterRes;
 			for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setOscFilterResonance(self._filterResonance * 10);
+				logicBoard.fongs[i].setOscFilterResonance(self._filterResonance);
 			}
 		}
 
