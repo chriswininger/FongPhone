@@ -14,7 +14,9 @@ function fong(audCtx, mainVol, x, y, board) {
 		availableNotes: [],
 		NoteMapOn: false,
 		FilterNoteMapOn: false,
-		LoopDuration: 15000
+		LoopDuration: 15000,
+		loopChunkinessFactor: .5,
+		pullChunkiness: .5
 	});
 	this.NoteMapInfo.changed.add(function() {
 		// fire a note map changed event when changes occur
