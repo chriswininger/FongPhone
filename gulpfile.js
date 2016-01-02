@@ -23,7 +23,8 @@ var clientDependencies = [
 	'jquery-knob',
 	'ngDraggable',
 	'js-signals',
-	'vex#2.3.3'
+	'vex#2.3.3',
+	'save-svg-as-png'
 ];
 function initialize (complete) {
 	async.waterfall([
