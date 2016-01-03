@@ -39,59 +39,40 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.oscsCount = 0;
 	this.oscsIncrement = 2;
 
-	for (var i = 0; i < this.oscsCount; i++) {
-		this.oscs[i] = audCtx.createOscillator();
-		this.oscs[i].type = 'sine';
-	}
-
 	this.oscPanCtrl = audCtx.createPanner();
 	this.oscVol = audCtx.createGain();
 	this.oscVolOffset = audCtx.createGain();
+	this.oscGainCtrl = audCtx.createOscillator();
+	this.feedback = audCtx.createGain();
+	this.filter = audCtx.createBiquadFilter();
+	this.delayGain = audCtx.createGain();
+	this.delayGain.gain.value = this.board.delayVolume;
+
 
 	this.oscVolOffset.gain.value = 1.0;
-
-	this.oscGainCtrl = audCtx.createOscillator();
-
 	this.oscGainCtrl.type = 'square';
-
-	this.oscGainCtrl.connect(this.oscVol.gain);
-
-	this.filter = audCtx.createBiquadFilter();
-
 	this.filter.type = 'lowpass'; // In this case it's a lowshelf filter
 	this.filter.frequency.value = 200;
 	this.filter.Q.value = 0;
 	this.filter.gain.value = 1;
-
-	this.osc.connect(this.filter);
-
-	for (var i = 0; i < this.oscsCount; i++) {
-		this.oscs[i].connect(this.filter);
-	}
-
-	this.filter.connect(this.oscVol);
-	this.oscVol.connect(this.oscVolOffset);
-
-	this.oscVolOffset.connect(this.oscPanCtrl);
-
 	this.delay = audCtx.createDelay(10);
 	this.delay.delayTime.value = this.board.delayTime;
-
-	this.feedback = audCtx.createGain();
 	this.feedback.gain.value = this.board.delayFeedback;
 
-	this.delayGain = audCtx.createGain();
-	this.delayGain.gain.value = this.board.delayVolume;
 
+	this.oscGainCtrl.connect(this.oscVol.gain);
+	this.osc.connect(this.filter);
+	this.filter.connect(this.oscVol);
+	this.oscVol.connect(this.oscVolOffset);
+	this.oscVolOffset.connect(this.oscPanCtrl);
 	this.delay.connect(this.delayGain);
 	this.delayGain.connect(this.feedback);
 	this.feedback.connect(this.delay);
-
 	this.oscPanCtrl.connect(this.delay);
-
 	this.oscPanCtrl.connect(mainVol);
 	this.delay.connect(mainVol);
 
+	// TODO (CAW) This should only happen once
 	mainVol.connect(audCtx.destination);
 
 	this.start = function () {
@@ -101,7 +82,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		for (var i = 0; i < this.oscsCount; i++) {
 			this.oscs[i].start();
 		}
-	}
+	};
 
 	this.setOscType = function (type) {
 		this.osc.type = type;
@@ -111,7 +92,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.waveIntOsc++;
 		if (this.waveIntOsc >= this.waves.length) this.waveIntOsc = 0;
 		this.setOscType(this.waves[this.waveIntOsc]);
-	}
+	};
 
 	this.stopOscPulse = function () {
 		this.oscGainCtrl.disconnect(this.oscVol.gain);
@@ -126,7 +107,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.toggleOscPulse = function () {
 		if (this.oscPulseOn) this.stopOscPulse();
 		else this.startOscPulse();
-	}
+	};
 
 	this.setOscVol = function (vol) {
 		vol = vol / 3;
