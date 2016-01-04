@@ -5,6 +5,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.mainVol = mainVol;
 	this.x = x;
 	this.y = y;
+	var panIsAtEndOfAudioChain = false;
 
 	this.noteMapChanged = new signals.Signal();
 	this.NoteMapInfo = new FongPhone.Logic.NoteMapInfo({
@@ -18,7 +19,7 @@ function fong(audCtx, mainVol, x, y, board) {
 		loopChunkinessFactor: .5,
 		pullChunkiness: .5
 	});
-	this.NoteMapInfo.changed.add(function() {
+	this.NoteMapInfo.changed.add(function () {
 		// fire a note map changed event when changes occur
 		self.noteMapChanged.dispatch(this);
 	});
@@ -38,7 +39,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.oscs = [];
 	this.oscsCount = 0;
 	this.oscsIncrement = 2;
-	
+
 	for (var i = 0; i < this.oscsCount; i++) {
 		this.oscs[i] = audCtx.createOscillator();
 		this.oscs[i].type = 'sine';
@@ -64,10 +65,9 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.delay.delayTime.value = this.board.delayTime;
 	this.feedback.gain.value = this.board.delayFeedback;
 
-
 	this.oscGainCtrl.connect(this.oscVol.gain);
 	this.osc.connect(this.filter);
-	
+
 	// connect extra oscillators if they exist
 	for (var i = 0; i < this.oscsCount; i++) {
 		this.oscs[i].connect(this.filter);
@@ -75,13 +75,22 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
-	this.oscVolOffset.connect(this.oscPanCtrl);
+	
 	this.delay.connect(this.delayGain);
 	this.delayGain.connect(this.feedback);
 	this.feedback.connect(this.delay);
-	this.oscPanCtrl.connect(this.delay);
+	
+	this.oscVolOffset.connect(this.oscPanCtrl);
+	
+	if (panIsAtEndOfAudioChain) {		
+		this.oscVolOffset.connect(this.delay);
+		this.delay.connect(this.oscPanCtrl);
+	} else {
+		this.oscPanCtrl.connect(this.delay);
+		this.delay.connect(mainVol);
+	}	
+	
 	this.oscPanCtrl.connect(mainVol);
-	this.delay.connect(mainVol);
 
 	// TODO (CAW) This should only happen once
 	mainVol.connect(audCtx.destination);
@@ -132,14 +141,12 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.oscFreq = freq;
 		if (this.board.portamento > 0) {
 			var dur = this.board.portamento / 1000.0;
-			if (freq > 0)
-			{
+			if (freq > 0) {
 				this.osc.frequency.exponentialRampToValueAtTime(freq, this.audCtx.currentTime + dur);
 			}
 
 			for (var i = 0; i < this.oscsCount; i++) {
-				if (freq * (i + 1 * this.oscsIncrement) > 0)
-				{
+				if (freq * (i + 1 * this.oscsIncrement) > 0) {
 					this.oscs[i].frequency.exponentialRampToValueAtTime(freq * (i + 1 * this.oscsIncrement), this.audCtx.currentTime + dur);
 				}
 			}
