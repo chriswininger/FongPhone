@@ -38,6 +38,11 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.oscs = [];
 	this.oscsCount = 0;
 	this.oscsIncrement = 2;
+	
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i] = audCtx.createOscillator();
+		this.oscs[i].type = 'sine';
+	}
 
 	this.oscPanCtrl = audCtx.createPanner();
 	this.oscVol = audCtx.createGain();
@@ -62,6 +67,12 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.oscGainCtrl.connect(this.oscVol.gain);
 	this.osc.connect(this.filter);
+	
+	// connect extra oscillators if they exist
+	for (var i = 0; i < this.oscsCount; i++) {
+		this.oscs[i].connect(this.filter);
+	}
+
 	this.filter.connect(this.oscVol);
 	this.oscVol.connect(this.oscVolOffset);
 	this.oscVolOffset.connect(this.oscPanCtrl);
