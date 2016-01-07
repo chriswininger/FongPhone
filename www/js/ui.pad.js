@@ -104,10 +104,7 @@
 			});
 		},
 		handleFadeChanged: function (fong) {
-
-
-			var val = map(fong.fadeOffset, -(Math.floor(fong.radius/2)), Math.floor(fong.radius/2), -45, 45);
-
+			var val = map(fong.fadeOffset, -fong.radius + 1, fong.radius -1, -90, 90);
 			var xDeg = val;
 			var zDeg = xDeg + 90;
 			if (zDeg > 90) {

@@ -213,8 +213,8 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.feedback.gain.value = val;
 	};
 
-	this.setFade = function (val) {
-		this.oscPanCtrl.setPosition(val, 0, 0);
+	this.setFade = function (x, y, z) {
+		this.oscPanCtrl.setPosition(x, y, z);
 	};
 
 	this.setFilterType = function (type) {
