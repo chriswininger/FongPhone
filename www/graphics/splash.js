@@ -6,7 +6,7 @@ function setSplashSize(width, height) {
 function writeSplashScreens() {
 
 	for (var i = 0; i < splashes.length; i++) {
-		setSplashSize(splashes[i].width, splashes[i].height);
+		setSplashSize(splashes[i].w, splashes[i].h);
 		saveSvgAsPng(document.getElementById("splash"), splashes[i].splashName + ".png", {
 			scale: 1
 		});
