@@ -3,17 +3,17 @@ function setSplashSize(width, height) {
 	document.getElementById("splash").style.height = height;
 }
 
-function writeSplashScreensForiOS() {
+function writeSplashScreens() {
 
-	for (var i = 0; i < iOSsplashScreens.length; i++) {
-		setSplashSize(iOSsplashScreens[i].width, iOSsplashScreens[i].height);
-		saveSvgAsPng(document.getElementById("splash"), iOSsplashScreens[i].splashName + ".png", {
+	for (var i = 0; i < splashes.length; i++) {
+		setSplashSize(splashes[i].width, splashes[i].height);
+		saveSvgAsPng(document.getElementById("splash"), splashes[i].splashName + ".png", {
 			scale: 1
 		});
 	}
 }
 
-var iOSsplashScreens = [
+var splashes = [
 	{
 		splashName: "Default",
 		w: 320,

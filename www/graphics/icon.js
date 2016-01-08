@@ -3,17 +3,17 @@ function setIconSize(size) {
 	document.getElementById("icon").style.height = size;
 }
 
-function writeIconsForiOS() {
+function writeIcons() {
 
-	for (var i = 0; i < iOSicons.length; i++) {
-		setIconSize(iOSicons[i].size);
-		saveSvgAsPng(document.getElementById("icon"), iOSicons[i].iconName + ".png", {
+	for (var i = 0; i < icons.length; i++) {
+		setIconSize(icons[i].size);
+		saveSvgAsPng(document.getElementById("icon"), icons[i].iconName + ".png", {
 			scale: 1
 		});
 	}
 }
 
-var iOSicons = [
+var icons = [
 	{
 		iconName: "iTunesArtwork@2x",
 		size: 1024
