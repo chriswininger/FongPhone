@@ -23,6 +23,10 @@ var icons = [
 		size: 512
 	},
 	{
+		iconName: "Icon-60",
+		size: 60
+	},
+	{
 		iconName: "Icon-60@2x",
 		size: 120
 	},
@@ -39,8 +43,16 @@ var icons = [
 		size: 152
 	},
 	{
+		iconName: "Icon-40",
+		size: 40
+	},
+	{
 		iconName: "Icon-Small-40",
 		size: 40
+	},
+	{
+		iconName: "Icon-40@2x",
+		size: 80
 	},
 	{
 		iconName: "Icon-Small-40@2x",
@@ -49,6 +61,14 @@ var icons = [
 	{
 		iconName: "Icon-Small-40@3x",
 		size: 120
+	},
+	{
+		iconName: "Icon-72",
+		size: 72
+	},
+	{
+		iconName: "Icon-72@2x",
+		size: 144
 	},
 	{
 		iconName: "Icon-Small",
