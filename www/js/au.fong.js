@@ -131,6 +131,7 @@ function fong(audCtx, mainVol, x, y, board) {
 
 	this.setOscVol = function (vol) {
 		vol = vol / 3;
+		vol = Math.min(.33, vol);
 		this.oscVol.gain = vol;
 		this.oscVolOffset.gain.value = vol;
 	};
