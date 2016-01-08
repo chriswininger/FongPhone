@@ -61,5 +61,22 @@ var icons = [
 	{
 		iconName: "Icon-Small@3x",
 		size: 87
+	},
+	{
+		iconName: "icon",
+		size: 57
 	}
-	];
+	,
+	{
+		iconName: "icon@2x",
+		size: 114
+	},
+	{
+		iconName: "icon-50",
+		size: 50
+	},
+	{
+		iconName: "icon-50@2x",
+		size: 100
+	}
+];
