@@ -13,6 +13,18 @@ var logicBoard;
 	} else {
 		$(_deviceReady);
 	}
+	
+	// answer to annoying iOS bug found here http://stackoverflow.com/a/34501159/3175029
+	function playInitSound(context) {
+		var source = context.createBufferSource();
+		source.buffer = context.createBuffer(1, 1, 48000);
+		source.connect(context.destination);
+		if (source.start) {
+			source.start(0);
+		} else {
+			source.noteOn(0);
+		}
+	};
 
 	// sound and sound logic layer
 	var context;
@@ -20,6 +32,11 @@ var logicBoard;
 		context = new AudioContext();
 	} else if (typeof webkitAudioContext !== "undefined") {
 		context = new webkitAudioContext();
+		playInitSound(context);
+		if (context.sampleRate === 48000) {
+			context = new webkitAudioContext();
+			playInitSound(context);
+		}
 	} else {
 		return console.error(new Error('AudioContext not supported.'));
 	}
