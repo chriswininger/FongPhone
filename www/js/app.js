@@ -17,7 +17,7 @@ var logicBoard;
 	// answer to annoying iOS bug found here http://stackoverflow.com/a/34501159/3175029
 	function playInitSound(context) {
 		var source = context.createBufferSource();
-		source.buffer = context.createBuffer(1, 1, 48000);
+		source.buffer = context.createBuffer(1, 1, context.sampleRate);
 		source.connect(context.destination);
 		if (source.start) {
 			source.start(0);
