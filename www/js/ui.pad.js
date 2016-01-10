@@ -72,6 +72,8 @@
 					bVersionDisplayed = $(v).fadeOut(10000);
 				});
 			}
+			
+			FongPhone.UI.Helper.registerAlertOnFirstView("padMessage", "A Fong is a musical instrument. Move one around and let's hear what they do. Got it?", 'Fongs', 1000);						
 		},
 		listen: function () {
 			var svgElem = document.getElementById(this.svgElementID);

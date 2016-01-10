@@ -183,7 +183,9 @@
 			updateKnobs();
 
 			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', '#/states');
-
+			
+			FongPhone.UI.Helper.registerAlertOnFirstView("mapMessage", 'The controls on this view allow you to change the musical properties of each Fong such as scales, octaves and looping behavior. Got it?', 'Notes & Loops');
+			
 			$("#loopingToggle").on('taphold', function (event) {
 				//$('#loopingToggle').css('background-color', "rgba(255,255,255,.8)");
 				$(event.target).animate({

@@ -24,7 +24,8 @@ var clientDependencies = [
 	'ngDraggable',
 	'js-signals',
 	'vex#2.3.3',
-	'save-svg-as-png'
+	'save-svg-as-png',
+	'cordova-plugin-dialogs'
 ];
 function initialize (complete) {
 	async.waterfall([

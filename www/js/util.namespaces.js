@@ -8,3 +8,4 @@
 var bVersionDisplayed;
 var uiPad;
 var st;
+var alwaysShowIntroAlerts = false;

@@ -33,7 +33,9 @@
 
 			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
 			$('.page').css('max-height', window.innerHeight + "px");
-
+			
+			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
+			
 			// investigate $scope values
 			$scope.FilterOn = logicBoard.FilterOn;
 

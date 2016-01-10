@@ -107,7 +107,9 @@
 			this.$scope.restoreState = function ($index) {
 				self.restoreState(this.storedList[$index]);
 			};
-
+			
+			FongPhone.UI.Helper.registerAlertOnFirstView("statesMessage", 'Press and hold a square to save a state for later use. Press the bottom rectangle to return the Fongs to their default states. Got it?', 'States');
+			
 			$(document).on('taphold', ".state,.stateUnused", function (event) {
 				// wrap in $apply so that angular knows to update ui bindings
 				self.$scope.$apply(function() {
