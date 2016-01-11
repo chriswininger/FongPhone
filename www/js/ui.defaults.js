@@ -60,11 +60,11 @@
 	  delayVolumeControl: 100,
 	  filterPortamento: 0,
 	  portamentoControl: 0,
-	  env1Control: 10,
+	  env1Control: 2,
 	  filterResonance: 5,
 	  filterOn: true,
 	  filterType: 'lowpass',
-	  env2Control: 8
+	  env2Control: 3
 	},
 	noteMapSettings: {
 		selectedFongIndex: 0,
@@ -73,7 +73,7 @@
 				"NoteMapInfo": {
 					"SelectedScale": "ionian",
 					"baseNote": "a",
-					"octave": 4,
+					"octave": 3,
 					"availableNotes": [
 						{
 							"label": "a",
@@ -111,7 +111,7 @@
 							"on": true
 						}
 					],
-					"NoteMapOn": false,
+					"NoteMapOn": true,
 					"FilterNoteMapOn": false,
 					"NoteMap": [
 						{
@@ -194,7 +194,7 @@
 							"on": true
 						}
 					],
-					"NoteMapOn": false,
+					"NoteMapOn": true,
 					"FilterNoteMapOn": false,
 					"NoteMap": [
 						{
