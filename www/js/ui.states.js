@@ -243,7 +243,8 @@
 			this.uiMap.set(mapState);
 			this.selectedState = name;
 		},
-		fadeStateDiv: function (target, targetOpacity) {	
+		fadeStateDiv: function (target, targetOpacity) {
+			$('.state').stop(true);
 			$('.state').css('opacity', .4);
 			$(target).animate({
 				opacity: .8
