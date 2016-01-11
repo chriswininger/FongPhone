@@ -190,10 +190,10 @@
 		radiusChangeHandler: function(fong) {
 			fong.boardInput.setOscVol(map(fong.radius, 60, 100, 0.9949676394462585, 5));
 		},
-		set: function(json) {
-			this.fongDots = [];
+		set: function(json, keepLoop) {
+			var fongDots = [];
 			// TODO (CAW) more robust would be to store by id (include ids in json and have the id for secondary stored on primary)
-			this.fongDotsByRole = {};
+			var fongDotsByRole = {};
 
 			_.each(json.fongDots || [], function(fongJSON) {
 				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
@@ -205,9 +205,18 @@
 				fongJSON.initializer = this.roleHandlers[fongJSON.fongRole].initializer;
 
 				var fongUI = new FongPhone.UI.Fong(this.board, fongJSON);
-				this.fongDotsByRole[fongUI.fongRole] = fongUI;
-				this.fongDots.push(fongUI);
+
+				// preserver previous loop positions
+				if (keepLoop)
+					fongUI.loopPositions = this.fongDotsByRole[fongUI.fongRole].loopPositions;
+
+				fongDotsByRole[fongUI.fongRole] = fongUI;
+
+				fongDots.push(fongUI);
 			}, this);
+
+			this.fongDots = fongDots;
+			this.fongDotsByRole = fongDotsByRole;
 		},
 		toJSON: function() {
 			var state = { fongDots: [] };
