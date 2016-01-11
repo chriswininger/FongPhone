@@ -113,6 +113,8 @@
 			
 			$(document).on('taphold', ".state,.stateUnused", function (event) {
 				// wrap in $apply so that angular knows to update ui bindings
+				$('.state').stop(true);
+				$('.state').css('opacity', .4);
 				self.$scope.$apply(function() {
 					self.fadeStateDiv(event.target, .6);
 					var index = event.target.id.replace("state", "");
