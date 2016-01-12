@@ -1,20 +1,18 @@
 function render(time) {
-	if (time === undefined) {
-		time = window.performance.now();
-	}
-
-	for (var i = 0; i < uiPad.fongDots.length; i++) {
+	var i, j;
+	var fd, lp;
+	for (i = 0; i < uiPad.fongDots.length; i++) {
 		if (uiPad.fongDots[i].boardInput.NoteMapInfo.LoopOn) {
-			var fd = uiPad.fongDots[i];
-			for (var j = 0; j < fd.loopPositions.length; j++) {
-				var lp = fd.loopPositions[j];
+			fd = uiPad.fongDots[i];
+			for (j = 0; j < fd.loopPositions.length; j++) {
+				lp = fd.loopPositions[j];
 				if (time - lp.time > fd.boardInput.NoteMapInfo.LoopDuration) {
 					fd.offsetX = 0;
 					fd.offsetY = 0;
 
 					if (!fd.boardInput.NoteMapInfo.pullLoopChunky || Math.random() < fd.boardInput.NoteMapInfo.pullChunkiness) {
 						//console.log("updating fong...");
-						
+
 						// hacky fix for iOS
 						if (lp.targetTouches.length == 1) {
 							lp.targetTouches = [];

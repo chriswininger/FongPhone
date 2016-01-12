@@ -9,7 +9,8 @@ var logicBoard;
 
 	if (isCordova) {
 		document.addEventListener('deviceready', _deviceReady, false);
-		document.addEventListener("pause", _onPause, false);
+		document.addEventListener('pause', _onPause, false);
+		document.addEventListener('resume', _onResume, false);
 	} else {
 		$(_deviceReady);
 	}
@@ -114,10 +115,19 @@ var logicBoard;
 		console.log('device ready');
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
+		setTimeout(function () {
+			if (navigator && navigator.splashscreen)
+				navigator.splashscreen.hide();
+		}, 500);
 	}
 
 	function _onPause() {
+		FongPhone.AppState.paused = true;
 		stateController.saveAll();
+	}
+
+	function _onResume() {
+		FongPhone.AppState.paused = false;
 	}
 
 	FongPhone.Debugging.dumpAllStateToConsole = function() {
@@ -129,9 +139,3 @@ var logicBoard;
 function log(message) {
 	$('#log').html(message);
 }
-
-document.addEventListener('deviceready', function () {
-	setTimeout(function () {
-		navigator.splashscreen.hide();
-	}, 500);
-});
