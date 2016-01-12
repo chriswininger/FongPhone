@@ -46,8 +46,10 @@ function initialize (complete) {
 			}, next)
 		},
 		function _addCordovaModules(next) {
-			console.log('add module crosswalk');
-			console.log('cordova plugin add org.apache.cordova.dialogs')
+			console.log('you\'ll need to install the following plugs to properly build and deploy');
+			console.log('   cordova plugin add cordova-plugin-crosswalk-webview');
+			console.log('   cordova plugins add org.apache.cordova.dialogs');
+			console.log('   cordova plugins add cordova-plugin-splashscreen');
 			next();
 		}
 	], function _complete() {
