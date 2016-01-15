@@ -1,1 +1,0 @@
-window.FongPhone.UI.HelpView = function ($scope, $window) { }

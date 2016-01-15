@@ -78,9 +78,6 @@ var logicBoard;
 		}).when('/note-map', {
 			templateUrl: 'views/view-map.html',
 			controller: 'noteMapController'
-		}).when('/help', {
-			templateUrl: 'views/view-help.html',
-			controller: 'helpController'
 		}).when('/sound', {
 			templateUrl: 'views/view-sound.html',
 			controller: 'soundController'
@@ -92,24 +89,32 @@ var logicBoard;
 
 	// initialize angular route controllers
 	fongPhone.controller('padController', ['$scope', function ($scope) {
-		padUI.attachToDom();
-		 $scope.pageClass = 'view-pad';
+		$scope.tabbedNavigationTabs = FongPhone.Navigation.Tabs;
+		$scope.pageClass = 'view-pad';
+		$scope.tabNavigationFunc = FongPhone.Navigation.tabNavigationFunc;
+		padUI.attachToDom($scope);
 	}]);
 
 	fongPhone.controller('soundController', ['$scope', function ($scope) {
-		soundUI.attachToDom($scope);
+		$scope.tabbedNavigationTabs = FongPhone.Navigation.Tabs;
 		$scope.pageClass = 'view-sound';
+		$scope.tabNavigationFunc = FongPhone.Navigation.tabNavigationFunc;
+		soundUI.attachToDom($scope);
 	}]);
 
 	fongPhone.controller('noteMapController', function($scope) {
-		noteMap.attachToDom($scope);
+		$scope.tabbedNavigationTabs = FongPhone.Navigation.Tabs;
 		$scope.pageClass = 'view-map';
+		$scope.tabNavigationFunc = FongPhone.Navigation.tabNavigationFunc;
+		noteMap.attachToDom($scope);
 	});
 
 	fongPhone.controller('stateController', function($scope) {
+		$scope.tabbedNavigationTabs = FongPhone.Navigation.Tabs;
+		$scope.pageClass = 'view-states';
+		$scope.tabNavigationFunc = FongPhone.Navigation.tabNavigationFunc;
 		stateController.attachToDom($scope);
 	});
-	fongPhone.controller('helpController', FongPhone.UI.HelpView);
 
 	function _deviceReady(id) {
 		console.log('device ready');

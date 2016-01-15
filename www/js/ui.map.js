@@ -23,7 +23,14 @@
 	_.extend(FongPhone.UI.NoteMap.prototype, {
 		attachToDom: function($scope) {
 			console.log('height: %s, max-height: %s', (window.innerHeight - 40) + "px", window.innerHeight + "px");
-			$('#mapSubUI').css('height', (window.innerHeight - 63) + "px");
+
+			var heightStatusBar = 20;
+			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
+			if (FongPhone.Globals.isAndroid) {
+				$('.fong-phone-apple-status-bar').hide();
+				heightSub = heightSub - heightStatusBar - 8;
+			}
+			$('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 
 			var self = this;
@@ -181,8 +188,6 @@
 			FongPhone.utils.registerKnob('#pullChunkinessControl', 'loopPullChunkiness', this.selectedFong.NoteMapInfo.pullChunkiness, this);
 			
 			updateKnobs();
-
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'mapPadSwipeDown', '#/', '#/states');
 			
 			FongPhone.UI.Helper.registerAlertOnFirstView("mapMessage", 'The controls on this view allow you to change the musical properties of each Fong such as scales, octaves and looping behavior. Got it?', 'Notes & Loops');
 			

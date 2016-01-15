@@ -34,16 +34,26 @@
 			var stateControls = $('#stateControls');
 			var statesContentWrapper = $('#statesContentWrapper');
 
-			statesUI.css('max-height', (window.innerHeight - 40) + "px");
-			statesUI.css('height', (window.innerHeight - 40) + "px");
+			var heightStatusBar = 20;
+			var heightSub = heightStatusBar + $('.fong-phone-nav-bar-container').height() - 15;
+			if (FongPhone.Globals.isAndroid) {
+				$('.fong-phone-apple-status-bar').hide();
+				heightSub = heightSub - heightStatusBar + 15;
+			}
 
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.map.state', 'statesSwipeStrip', '#/note-map', '#/sound');
+			statesUI.css('max-height', (window.innerHeight - heightSub) + "px");
+			statesUI.css('height', (window.innerHeight - heightSub) + "px");
 
 			// build state selection board
 			var a = [];
 			var storedTable = [];
 			var columns = Math.floor(window.innerWidth / 50) - 1;
-			var rows = Math.floor(($("#statesUI").height() - 20) / 50) - 3;
+
+			var addForRows = -20;
+			if (FongPhone.Globals.isAndroid)
+				addForRows = 10;
+
+			var rows = Math.floor(($("#statesUI").height() + addForRows) / 50) - 3;
 			
 			if ((window.innerWidth - columns * 50) < 70)
 			{

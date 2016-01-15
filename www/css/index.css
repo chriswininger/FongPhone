@@ -159,7 +159,7 @@ h1 {
 	fill: white;
 }
 
-.ui-display-area {
+.ui-display-area-grr {
 	/*background-color: #f9e7e7;*/
 	width: 100%;
 	background: -webkit-linear-gradient(top, #360033 10%, #0b8793 90%);
@@ -172,6 +172,10 @@ h1 {
 	/* Opera 11.10+ */
 	background: linear-gradient(top, #360033 10%, #0b8793 90%);
 	/* W3C */
+}
+
+svg.ui-display-area {
+	display: block;
 }
 
 table,
@@ -309,4 +313,53 @@ td.ui-map-note-map-toggle {
 	margin-top: 5px;
 	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+.fong-phone-nav-bar-container {
+	display: flex;
+	display: -webkit-flex;
+	justify-content: space-between;
+	-webkit-justiy-content: space-between;
+	padding-top: 0.5em;
+	height: 70px;
+	min-height: 70px;
+	background-color: #D2EDF0;
+	color: black;
+}
+
+.fong-phone-button {
+	opacity: 0.5;
+	width: 25%;
+	text-align: center;
+}
+
+.fong-phone-button.fong-phone-button-selected {
+	opacity: 1;
+}
+
+.fong-phone-button>div {
+	min-height: 45px;
+	height: 45px;
+	min-width: 45px;
+	width: 100%;
+	background-size: 45px 45px;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.fong-phone-button-fong>div:nth-child(1) {
+	background-image: url('/img/icons/Initial State-50@2x.png');
+}
+
+.fong-phone-button-sound>div:nth-child(1) {
+	background-image: url('/img/icons/Audio Wave-50@2x.png');
+}
+
+
+.fong-phone-button-loops>div:nth-child(1) {
+	background-image: url('/img/icons/Musical Notes-50@2x.png');
+}
+
+.fong-phone-button-states>div:nth-child(1) {
+	background-image: url('/img/icons/Add to Favorites-50@2x.png');
 }

@@ -28,12 +28,15 @@
 		function attachToDom($scope) {
 			var self = this;
 			this.$scope = $scope;
+			var heightStatusBar = 20;
+			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
+			if (FongPhone.Globals.isAndroid) {
+				$('.fong-phone-apple-status-bar').hide();
+				heightSub = heightSub - heightStatusBar - 8;
+			}
 
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.sound.state', 'soundSettingsSwipeStrip', '#/states', '#/');
-
-			$('#soundControlsDiv').css('max-height', (window.innerHeight - 63) + "px");
+			$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
 			$('.page').css('max-height', window.innerHeight + "px");
-			
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
 			
 			// investigate $scope values
