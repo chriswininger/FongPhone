@@ -348,18 +348,18 @@ td.ui-map-note-map-toggle {
 }
 
 .fong-phone-button-fong>div:nth-child(1) {
-	background-image: url('/img/icons/Initial State-50@2x.png');
+	background-image: url('../img/icons/Initial State-50@2x.png');
 }
 
 .fong-phone-button-sound>div:nth-child(1) {
-	background-image: url('/img/icons/Audio Wave-50@2x.png');
+	background-image: url('../img/icons/Audio Wave-50@2x.png');
 }
 
 
 .fong-phone-button-loops>div:nth-child(1) {
-	background-image: url('/img/icons/Musical Notes-50@2x.png');
+	background-image: url('../img/icons/Musical Notes-50@2x.png');
 }
 
 .fong-phone-button-states>div:nth-child(1) {
-	background-image: url('/img/icons/Add to Favorites-50@2x.png');
+	background-image: url('../img/icons/Add to Favorites-50@2x.png');
 }
