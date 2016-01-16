@@ -147,3 +147,9 @@ var logicBoard;
 function log(message) {
 	$('#log').html(message);
 }
+
+function setWindow(page) {
+	setTimeout(function() {
+		window.location = page;
+	}, 10);
+}
