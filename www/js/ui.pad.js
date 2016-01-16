@@ -148,8 +148,8 @@
 			if (!f.NoteMapInfo.NoteMapOn || !f.NoteMapInfo.NoteMap || f.NoteMapInfo.NoteMap.length == 0) {
 				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
 			} else {
-				// ?? freq2 map(y, (r/2), window.innerHeight - target.getAttribute('height'), 0, self.board.osc1MaxFreq)
-				var noteNumber = Math.floor(y * f.NoteMapInfo.NoteMap.length / window.innerHeight);
+				var noteNumber = Math.floor(y * f.NoteMapInfo.NoteMap.length / window.innerHeight);		
+				noteNumber = Math.max(noteNumber, 0);
 				var note = f.NoteMapInfo.NoteMap[noteNumber];
 				if (!note) note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
 				return note.freq;
@@ -161,6 +161,7 @@
 				return map(x / 2, (r / 2), window.innerWidth - r, 0, this.board.osc1MaxFreq);
 			} else {
 				var fnoteNumber = Math.floor(x * f.NoteMapInfo.NoteMap.length / window.innerWidth);
+				fnoteNumber = Math.max(fnoteNumber, 0);
 				var fnote = f.NoteMapInfo.NoteMap[fnoteNumber];
 				if (!fnote) fnote = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
 				return fnote.freq;
