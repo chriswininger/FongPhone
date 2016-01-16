@@ -38,7 +38,7 @@
 					}
 
 					// set new location
-					window.location = url;
+					setWindow(url);
 				}
 			}
 
@@ -54,9 +54,9 @@
 
 				var right = event.center.x < window.innerWidth / 2;
 				if (right)
-					window.location = urlRight;
+					setWindow(urlRight);
 				else
-					window.location = urlLeft;
+					setWindow(urlLeft);
 			}
 		},
 		registerAlertOnFirstView: function(messageKey, message, title, delay) {
