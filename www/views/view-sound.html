@@ -1,6 +1,6 @@
 <div class="ui-display-area">
 	<div id="soundUI">
-		<svg width="100%" height="20">
+		<svg width="100%" height="20" class="fong-phone-apple-status-bar">
 			<defs>
 				<linearGradient id="gradTop" x1="30%" y1="70%">
 					<stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
@@ -187,17 +187,12 @@
 		</div>
 	</div>
 
-	<svg width="100%">
-		<defs>
-			<linearGradient id="gradSwipe" x1="30%" y1="70%">
-				<stop offset="0%" stop-color="#ffffff" stop-opacity=".1">
-					<animate attributeName="stop-opacity" values=".9;.1;.9" dur="30s" repeatCount="indefinite" />
-				</stop>
-				<stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
-					<animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
-				</stop>
-			</linearGradient>
-		</defs>
-		<rect id="soundSettingsSwipeStrip" width="100%" height="40" fill="url(#gradSwipe)" /> Sorry, SVG support is required.
-	</svg>
+	<div class="fong-phone-nav-bar-container">
+		<div ng-repeat="tab in tabbedNavigationTabs"
+			 class="fong-phone-button {{ tab.tabClass }}
+		 	{{ tab.pageClass === pageClass ? 'fong-phone-button-selected' : '' }}">
+			<div ng-click="tabNavigationFunc(tab.location)"></div>
+			{{ tab.text }}
+		</div>
+	</div>
 </div>

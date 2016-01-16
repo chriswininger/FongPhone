@@ -43,27 +43,28 @@
 	};
 
 	_.extend(FongPhone.UI.Pad.prototype, {
-		attachToDom: function(attachChildren) {
+		attachToDom: function($scope) {
 			// make changes to dom to create ui
 			this.createComponents();
 			// set up dom events
 			this.listen();
 
+			var heightSub = FongPhone.Globals.tabbedNavHeight + 5;
+			if (FongPhone.Globals.isAndroid) {
+				$('.fong-phone-apple-status-bar').hide();
+				heightSub = heightSub - 5;
+			}
+			$('#phongUIGrid').css('height', (window.innerHeight - heightSub) + "px");
+
 			// make sure each fong gets re-attached
 			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
-
 		},
 		createComponents: function () {
-			$('#' + this.svgElementID).height(window.innerHeight);
-
-			FongPhone.UI.Helper.registerSwipeNavigation(this, 'ui.pad.state', 'uiPadSwipeBottom', '#/sound', '#/note-map');
-
+			$('#' + this.svgElementID).height(window.innerHeight - FongPhone.Globals.tabbedNavHeight);
 			this.backgroundPad = document.getElementById(this.svgElementID);
-
-			document.getElementById('uiPadSwipeBottom').setAttribute('y', window.innerHeight - uiPadSwipeBottom.getAttribute('height'));
 			document.getElementById('version').setAttribute('y', window.innerHeight - 50);
 			document.getElementById('version').setAttribute('x', window.innerWidth - 60);
-			
+
 			if (!bVersionDisplayed)
 			{
 				$.get("version.txt", function (data) {
