@@ -3,7 +3,7 @@ function setSplashSize(width, height) {
 	document.getElementById("splash").style.height = height;
 }
 
-function writeSplashScreens() {
+function writeSplashScreens(splashes) {
 
 	for (var i = 0; i < splashes.length; i++) {
 		setSplashSize(splashes[i].w, splashes[i].h);
@@ -13,7 +13,51 @@ function writeSplashScreens() {
 	}
 }
 
-var splashes = [
+
+var splashesAndroid = [
+	{
+		splashName: 'android-ldpi-splash',
+		w: 426,
+		h: 320
+	},
+	{
+		splashName: 'android-mdpi-splash',
+		w: 470,
+		h: 320
+	},
+	{
+		splashName: 'android-hdpi-splash',
+		w: 640,
+		h: 480
+	},
+	{
+		splashName: 'android-xhdpi-splash',
+		w: 960,
+		h: 720
+	},
+	{
+		splashName: 'android-ldpi-splash-tablet',
+		w: 200,
+		h: 320
+	},
+	{
+		splashName: 'android-mdpi-splash-tablet',
+		w: 320,
+		h: 480
+	},
+	{
+		splashName: 'android-hdpi-splash-tablet',
+		w: 480,
+		h: 800
+	},
+	{
+		splashName: 'android-xhdpi-splash-tablet',
+		w: 720,
+		h: 1280
+	}
+];
+
+var iosSplashes = [
 	{
 		splashName: "Default",
 		w: 320,

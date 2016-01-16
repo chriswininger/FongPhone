@@ -7,6 +7,7 @@
 	"lodash": "3.10.x",
 	"recursive-readdir": "1.2.x",
 	"async": "1.4.x",
-	"express": "4.13.1"
+	"express": "4.13.1",
+    "save-svg-as-png": "1.0.2"
   }
 }
