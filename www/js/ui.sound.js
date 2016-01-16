@@ -30,6 +30,8 @@
 			this.$scope = $scope;
 			var heightStatusBar = 20;
 			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
+			var dial = $(".dial");
+
 			if (FongPhone.Globals.isAndroid) {
 				$('.fong-phone-apple-status-bar').hide();
 				heightSub = heightSub - heightStatusBar - 8;
@@ -47,9 +49,9 @@
 				self.filterOn = $scope.FilterOn;
 			};
 
-			$(".dial").attr("data-fgColor", "rgba(255, 255, 255, .5)");
-			$(".dial").attr("data-bgColor", "rgba(255, 255, 255, .1)");
-			$(".dial").attr('disabled', 'disabled');
+			dial.attr("data-fgColor", "rgba(255, 255, 255, .5)");
+			dial.attr("data-bgColor", "rgba(255, 255, 255, .1)");
+			dial.attr('disabled', 'disabled');
 
 
 			this.registerKnob('#filterResonanceControl', 'filterResonance', this.filterResonance, this);

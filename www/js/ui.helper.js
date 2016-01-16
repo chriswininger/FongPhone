@@ -60,22 +60,20 @@
 			}
 		},
 		registerAlertOnFirstView: function(messageKey, message, title, delay) {
-			$(document).ready(function() {
-				setTimeout(function() {
-					try {
-						if (navigator.notification && (alwaysShowIntroAlerts || !localStorage.getItem(messageKey)))
-						{								
-							navigator.notification.confirm(
-								message,
-								null,
-								title,
-								['Got it!']
-							);
-							localStorage.setItem(messageKey, true);
-						}
-					} catch (err) {}
-				}, delay);
-			});
+			setTimeout(function() {
+				try {
+					if (navigator.notification && (alwaysShowIntroAlerts || !localStorage.getItem(messageKey)))
+					{
+						navigator.notification.confirm(
+							message,
+							null,
+							title,
+							['Got it!']
+						);
+						localStorage.setItem(messageKey, true);
+					}
+				} catch (err) {}
+			}, delay);
 		}
 	};
 })();

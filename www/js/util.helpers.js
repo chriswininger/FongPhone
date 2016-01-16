@@ -7,9 +7,10 @@
             ctx.__defineSetter__(key, _.bind(set, ctx));
         },
 		registerKnob: function (selector, attrKey, val, owner) {
-			$(selector).off('change');
-			$(selector).val(val);
-			$(selector).knob({
+			var ctrl = $(selector);
+			ctrl.off('change');
+			ctrl.val(val);
+			ctrl.knob({
 				'stopper': true,
 				'height': 90,
 				'change': function (v) {

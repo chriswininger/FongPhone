@@ -35,7 +35,7 @@ $class.start = function () {
 	this.fong1.start();
 	this.fong2.start();
 	//mainInterval = setInterval(_.bind(this.primaryLoop, this), this.mainTimeOffset);
-	window.requestAnimationFrame(render);
+	window.requestAnimationFrame(FongPhone.render);
 };
 
 var timeOutCnt = 0;
