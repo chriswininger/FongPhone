@@ -22,8 +22,6 @@
 
 	_.extend(FongPhone.UI.NoteMap.prototype, {
 		attachToDom: function($scope) {
-			console.log('height: %s, max-height: %s', (window.innerHeight - 40) + "px", window.innerHeight + "px");
-
 			var heightStatusBar = 20;
 			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
 			if (FongPhone.Globals.isAndroid) {

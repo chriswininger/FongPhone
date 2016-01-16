@@ -52,7 +52,10 @@ var logicBoard;
 	stateController.uiPad = padUI;
 	stateController.uiSoundSettings = soundUI;
 
-	// start the oscillators after all other settings have been initialized to avoid hiccup
+
+	FongPhone.Navigation.tabNavigationFunc = _.partial(FongPhone.Navigation.tabNavigationFunc, stateController);
+
+		// start the oscillators after all other settings have been initialized to avoid hiccup
 	setTimeout(function() {
 		logicBoard.start();
 	}, 1000);

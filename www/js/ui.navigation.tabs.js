@@ -26,7 +26,8 @@
         }
     ];
 
-    FongPhone.Navigation.tabNavigationFunc = function(loc) {
+    FongPhone.Navigation.tabNavigationFunc = function(stateController, loc) {
         window.location.href = loc;
+        stateController.saveAll();
     };
 })();
