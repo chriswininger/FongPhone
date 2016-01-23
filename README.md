@@ -1,8 +1,9 @@
-# FongPhone (Now Available In App Store)
+# FongPhone
+
+#### Now Available In App Store
 [Android](https://play.google.com/store/apps/details?id=com.fongphone), [ios](https://itunes.apple.com/us/app/fongphone/id1073371447?ls=1&mt=8)
 
-# FongPhone (Developer Instructions)
-
+#### Developer Instructions
 For those wanting more than an app store purchase, this project is available here, under gpl v2 as source. You may, modify it, build it, and run it on your devices. The instructions below may not be perfect, but I will continue to update them.
 
 #### Requirements
