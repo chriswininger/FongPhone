@@ -35,7 +35,7 @@
 			var statesContentWrapper = $('#statesContentWrapper');
 
 			var heightStatusBar = 20;
-			var heightSub = heightStatusBar + $('.fong-phone-nav-bar-container').height() - 15;
+			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight - 15;
 			if (FongPhone.Globals.isAndroid) {
 				$('.fong-phone-apple-status-bar').hide();
 				heightSub = heightSub - heightStatusBar + 15;
