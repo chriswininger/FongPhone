@@ -149,7 +149,7 @@
 			var f = fong.boardInput;
 
 			if (!f.NoteMapInfo.NoteMapOn || !f.NoteMapInfo.NoteMap || f.NoteMapInfo.NoteMap.length == 0) {
-				return map(y, 0, this.gridHeight - (r/2), 0, this.board.osc1MaxFreq);
+				return map(y, (r / 2), this.gridHeight - (r/2), 0, this.board.osc1MaxFreq);
 			} else {
 				// radius seems to actually be diameter now
 				var noteNumber = Math.round(map(y, 0, this.gridHeight - (r/2), 0, (f.NoteMapInfo.NoteMap.length - 1)));
