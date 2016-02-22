@@ -56,6 +56,8 @@
 			}
 			$('#phongUIGrid').css('height', (window.innerHeight - heightSub) + "px");
 
+			this.gridHeight = window.innerHeight - heightSub;
+
 			// make sure each fong gets re-attached
 			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
 		},
@@ -145,13 +147,21 @@
 		},
 		getFreq: function (x, y, r, fong) {
 			var f = fong.boardInput;
+
 			if (!f.NoteMapInfo.NoteMapOn || !f.NoteMapInfo.NoteMap || f.NoteMapInfo.NoteMap.length == 0) {
-				return map(y / 2, (r / 2), window.innerHeight - r, 0, this.board.osc1MaxFreq);
+				return map(y, 0, this.gridHeight - (r/2), 0, this.board.osc1MaxFreq);
 			} else {
-				var noteNumber = Math.floor(y * f.NoteMapInfo.NoteMap.length / window.innerHeight);		
-				noteNumber = Math.max(noteNumber, 0);
+				// radius seems to actually be diameter now
+				var noteNumber = Math.round(map(y, 0, this.gridHeight - (r/2), 0, (f.NoteMapInfo.NoteMap.length - 1)));
+
+				if (noteNumber < 0)
+					noteNumber = 0;
+				if (noteNumber >= f.NoteMapInfo.NoteMap.length)
+					noteNumber = f.NoteMapInfo.NoteMap.length - 1;
 				var note = f.NoteMapInfo.NoteMap[noteNumber];
-				if (!note) note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
+				if (!note)
+					note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
+
 				return note.freq;
 			}
 		},
