@@ -3,7 +3,7 @@ function setIconSize(size) {
 	document.getElementById("icon").style.height = size;
 }
 
-function writeIcons() {
+function writeIcons(icons) {
 
 	for (var i = 0; i < icons.length; i++) {
 		setIconSize(icons[i].size);
@@ -13,6 +13,12 @@ function writeIcons() {
 	}
 }
 
+var androidICONS = [
+	{
+		iconName: "playStoreArtwork",
+		size: 512
+	}
+];
 var icons = [
 	{
 		iconName: "iTunesArtwork@2x",

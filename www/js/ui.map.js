@@ -251,16 +251,14 @@
 
 			fong.NoteMapInfo.availableNotes = [];
 			var n = teoria.note(startingNote + octave);
-			var scale = n.scale(scale).simple();
+			var scale = n.scale(scale);
 
-			for (var i = 0; i < scale.length; i++) {
-				var n = {
-					label: scale[i],
-					freq: teoria.note(scale[i] + octave).fq(),
+			for (var i = 1; i <= scale.scale.length; i++) {
+				fong.NoteMapInfo.availableNotes.push({
+					label: scale.get(i).toString(),
+					freq: scale.get(i).fq(),
 					on: true
-				};
-
-				fong.NoteMapInfo.availableNotes.push(n);
+				});
 			}
 		},
 		changeOctaveForScale: function(fong) {

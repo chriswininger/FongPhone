@@ -1,0 +1,8 @@
+{
+  "android": {
+    "release": {
+      "keystore": "../../key_stores/android_release_key_Store.keystore",
+      "alias": "android_release_key_store"
+    }
+  }
+}
