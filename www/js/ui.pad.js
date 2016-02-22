@@ -122,7 +122,6 @@
 		},
 		handlePositionChangedPrimary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
-			console.log('!!! freq prim: ' + freq);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
 
 			fong.boardInput.setOscFreq(freq);
@@ -138,7 +137,6 @@
 		},
 		handlePositionChangedSecondary: function (fong) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
-			console.log('!!! seconary freq: ' + freq);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
 
 			fong.boardInput.setOscFreq(freq);
@@ -154,21 +152,16 @@
 				return map(y, 0, this.gridHeight - (r/2), 0, this.board.osc1MaxFreq);
 			} else {
 				// radius seems to actually be diameter now
-				var noteNumber = Math.floor(map(y, 0, this.gridHeight - (r/2), 0, (f.NoteMapInfo.NoteMap.length-1)));
+				var noteNumber = Math.round(map(y, 0, this.gridHeight - (r/2), 0, (f.NoteMapInfo.NoteMap.length - 1)));
 
 				if (noteNumber < 0)
 					noteNumber = 0;
 				if (noteNumber >= f.NoteMapInfo.NoteMap.length)
 					noteNumber = f.NoteMapInfo.NoteMap.length - 1;
-
-				console.log('!!! note Number: ' + noteNumber);
-				console.log('!!! map: ' + JSON.stringify(f.NoteMapInfo.NoteMap, null, 4));
 				var note = f.NoteMapInfo.NoteMap[noteNumber];
-				if (!note) {
-					console.log('!!! WHAT THE SHIT');
+				if (!note)
 					note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
-				}
-				console.log('!!! at end: ' + note.freq);
+
 				return note.freq;
 			}
 		},
