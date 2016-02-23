@@ -123,7 +123,6 @@
 		handlePositionChangedPrimary: function (fong, oldX, oldY) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
-
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
 
@@ -138,7 +137,6 @@
 		handlePositionChangedSecondary: function (fong) {
 			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
 			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
-
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
 
@@ -159,6 +157,7 @@
 				if (noteNumber >= f.NoteMapInfo.NoteMap.length)
 					noteNumber = f.NoteMapInfo.NoteMap.length - 1;
 				var note = f.NoteMapInfo.NoteMap[noteNumber];
+
 				if (!note)
 					note = f.NoteMapInfo.NoteMap[f.NoteMapInfo.NoteMap.length - 1];
 

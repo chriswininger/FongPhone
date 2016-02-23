@@ -139,7 +139,7 @@
 			}
 			$scope.changeOctave = function (event) {
 				self.selectedFong.NoteMapInfo.octave = parseInt($(event.target).html().trim());
-				//$scope.regenerateMap($scope.selectedFong);			
+				// self.regenerateMap(self.selectedFong);
 				self.resetOctaveForMap(self.selectedFong);
 			}
 			$scope.changeScale = function (event) {
@@ -248,7 +248,6 @@
 			}
 		},
 		generateScale: function(fong, startingNote, octave, scale) {
-
 			fong.NoteMapInfo.availableNotes = [];
 			var n = teoria.note(startingNote + octave);
 			var scale = n.scale(scale);
@@ -262,13 +261,16 @@
 			}
 		},
 		changeOctaveForScale: function(fong) {
+			// change notes in splace, not complete reset
+			var n = teoria.note(fong.NoteMapInfo.baseNote + fong.NoteMapInfo.octave);
+			var scale = n.scale(fong.NoteMapInfo.SelectedScale);
+
 			for (var i = 0; i < fong.NoteMapInfo.availableNotes.length; i++) {
-				var n = {
-					'label': fong.NoteMapInfo.availableNotes[i].label,
-					'freq': teoria.note(fong.NoteMapInfo.availableNotes[i].label + fong.NoteMapInfo.octave).fq(),
-					'on': fong.NoteMapInfo.availableNotes[i].on
+				fong.NoteMapInfo.availableNotes[i] = {
+					label: scale.get(i + 1).toString(),
+					freq: scale.get(i + 1).fq(),
+					on:  fong.NoteMapInfo.availableNotes[i].on
 				};
-				fong.NoteMapInfo.availableNotes[i] = n;
 			}
 		},
 		regenerateMap: function (fong) {
