@@ -12,22 +12,16 @@
 	FongPhone.UI.Pad = function (board, state) {
 		var self = this;
 
-		this._socket = io();
-		this._socket.on('fong:event:pass', function(data){
-			//console.log('!!! data: ' + JSON.stringify(data, null, 4));
-			self.fongDotsByRole[data.fongRole].x = data.x;
-			self.fongDotsByRole[data.fongRole].y = data.y;
-		});
-
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
 		this.svgElementID = 'phongUIGrid';
 
 		this.board = board;
+		this._socket = io();
 
 		this.roleHandlers = {
 			primary: {
-				positionChanged: _.bind(this.handlePositionChangedPrimary, this),
+				positionChanged: _.bind(this.positionChanged, this),
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
@@ -36,7 +30,7 @@
 				initializer: _.bind(this.fongInitializer, this)
 			},
 			secondary: {
-				positionChanged: _.bind(this.handlePositionChangedSecondary, this),
+				positionChanged: _.bind(this.positionChanged, this),
 				fadeChangedHandler: _.bind(this.handleFadeChanged, this),
 				handleFongSelected: _.bind(this.handleFongSelected, this),
 				classTypeChangeHandler: _.bind(this.classTypeChangeHandler, this),
@@ -82,8 +76,8 @@
 					bVersionDisplayed = $(v).fadeOut(10000);
 				});
 			}
-			
-			FongPhone.UI.Helper.registerAlertOnFirstView("padMessage", "A Fong is a musical instrument. Move one around and let's hear what they do. Got it?", 'Fongs', 1000);						
+
+			FongPhone.UI.Helper.registerAlertOnFirstView("padMessage", "A Fong is a musical instrument. Move one around and let's hear what they do. Got it?", 'Fongs', 1000);
 		},
 		listen: function () {
 			var svgElem = document.getElementById(this.svgElementID);
@@ -115,6 +109,9 @@
 				fong.x = fong.x;
 			});
 		},
+		positionChanged: function(fong) {
+			this._socket.emit('fong:event', { eventType: 'position', x: fong.x,  y: fong.y, id: fong.id, fongRole: fong.fongRole });
+		},
 		handleFadeChanged: function (fong) {
 			var val = map(fong.fadeOffset, -fong.radius + 1, fong.radius -1, -90, 90);
 			var xDeg = val;
@@ -127,28 +124,8 @@
 
 			fong.boardInput.setFade(x, 0, z);
 		},
-		handlePositionChangedPrimary: function (fong, oldX, oldY) {
-			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
-			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
-			fong.boardInput.setOscFreq(freq);
-			fong.boardInput.setOscFilterFreq(ffreq);
+		sendChangeEvent: function(fong) {
 
-			// update offsets
-			try {
-				this.board.setPrimaryOffsetFromFong(fong);
-				this.board.setSecondaryOffsetFromFong(this.fongDotsByRole.secondary);
-			} catch (err) {
-				alert(err.message);
-			}
-		},
-		handlePositionChangedSecondary: function (fong) {
-			var freq = this.getFreq(fong.x, fong.y, fong.radius, fong);
-			var ffreq = this.getFilterFrequency(fong.x, fong.y, fong.radius, fong);
-			fong.boardInput.setOscFreq(freq);
-			fong.boardInput.setOscFilterFreq(ffreq);
-
-			// update offsets
-			this.board.setSecondaryOffsetFromFong(fong);
 		},
 		getFreq: function (x, y, r, fong) {
 			var f = fong.boardInput;

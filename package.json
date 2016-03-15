@@ -3,11 +3,14 @@
   "description": "A mobile app for live audio performance and all around weirdness",
   "version": "0.0.1",
   "devDependencies": {
-	"gulp": "^3.9.0",
-	"lodash": "3.10.x",
-	"recursive-readdir": "1.2.x",
-	"async": "1.4.x",
-	"express": "4.13.1",
+    "gulp": "^3.9.0",
+    "lodash": "3.10.x",
+    "recursive-readdir": "1.2.x",
+    "async": "1.4.x",
+    "express": "4.13.1",
     "save-svg-as-png": "1.0.2"
+  },
+  "dependencies": {
+    "socket.io": "^1.4.5"
   }
 }

@@ -1,6 +1,7 @@
 (function() {
   window.FongPhone.UI.Defaults = {
 	fongDots: [{
+	  id: 0,
 	  x: 60,
 	  y: 60,
 	  radius: 60,
@@ -26,6 +27,7 @@
 	  ]
 	},
 	{
+	  id: 1,
 	  x: 200,
 	  y: 200,
 	  radius: 60,

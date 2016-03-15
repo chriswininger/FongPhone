@@ -1,0 +1,46 @@
+<svg width="100%" id="phongUIGrid" class="ui-display-area">
+    <defs>
+        <radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style="stop-color:#d6f0fd;stop-opacity:1">
+                <animate id="grad1Animation" attributeName="stop-color" from="#0b8793" to="#ffffff" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" style="stop-color:#0b8793;stop-opacity:0" />
+        </radialGradient>
+        <radialGradient id="grad2" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style="stop-color:#d6f0fd;stop-opacity:1">
+                <animate id="grad2Animation" attributeName="stop-color" from="#0b8793" to="#ffffff" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" style="stop-color:#0b8793;stop-opacity:0" />
+        </radialGradient>
+        <linearGradient id="gradSwipe" x1="30%" y1="70%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".1">
+                <animate attributeName="stop-opacity" values=".9;.1;.9" dur="30s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+                <animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
+            </stop>
+        </linearGradient>
+        <linearGradient id="gradTop" x1="30%" y1="70%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
+                <animate attributeName="stop-opacity" values=".9;.8;.9" dur="30s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+                <animate attributeName="stop-opacity" values=".8;.9;.8" dur="33s" repeatCount="indefinite" />
+            </stop>
+        </linearGradient>
+    </defs>
+
+    <rect width="100%" height="20" fill="url(#gradTop)" class="fong-phone-apple-status-bar" />
+
+    <rect class="swiper" id="uiPadSwipeTop" cx="0" cy="200" width="100%" height="60" style="visibility:hidden" />
+    <text id="version" fill-opacity=".2" fill="white"></text>
+</svg>
+
+<div class="fong-phone-nav-bar-container">
+    <div ng-repeat="tab in tabbedNavigationTabs"
+         class="fong-phone-button {{ tab.tabClass }}
+		 	{{ tab.pageClass === pageClass ? 'fong-phone-button-selected' : '' }}">
+        <div ng-click="tabNavigationFunc(tab.location)"></div>
+        {{ tab.text }}
+    </div>
+</div>
