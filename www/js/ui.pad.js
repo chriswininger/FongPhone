@@ -10,14 +10,7 @@
  */
 (function () {
 	FongPhone.UI.Pad = function (board, state) {
-		var self = this;
-
-		this._socket = io();
-		this._socket.on('fong:event:pass', function(data){
-			//console.log('!!! data: ' + JSON.stringify(data, null, 4));
-			self.fongDotsByRole[data.fongRole].x = data.x;
-			self.fongDotsByRole[data.fongRole].y = data.y;
-		});
+		this.startRemoteEvents();
 
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
@@ -56,14 +49,22 @@
 			// set up dom events
 			this.listen();
 
-			var heightSub = FongPhone.Globals.tabbedNavHeight + 5;
-			if (FongPhone.Globals.isAndroid) {
+			if (FongPhone.Globals.isGalleryHop) {
+				this.winHeight = window.innerHeight;
+				this.winWidth = window.innerWidth;
 				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - 5;
+				$('.fong-phone-nav-bar-container').hide();
+				$('#phongUIGrid').css('height', window.innerHeight + "px");
+				this.gridHeight = window.innerHeight;
+			} else {
+				var heightSub = FongPhone.Globals.tabbedNavHeight + 5;
+				if (FongPhone.Globals.isAndroid) {
+					$('.fong-phone-apple-status-bar').hide();
+					heightSub = heightSub - 5;
+				}
+				$('#phongUIGrid').css('height', (window.innerHeight - heightSub) + "px");
+				this.gridHeight = window.innerHeight - heightSub;
 			}
-			$('#phongUIGrid').css('height', (window.innerHeight - heightSub) + "px");
-
-			this.gridHeight = window.innerHeight - heightSub;
 
 			// make sure each fong gets re-attached
 			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
@@ -202,6 +203,9 @@
 			if (pulse) fong.boardInput.startOscPulse();
 			else fong.boardInput.stopOscPulse();
 		},
+		map: function(val, x1, x2, y1, y2) {
+			return (val - x1) / (Math.abs(x2 - x1)) * Math.abs(y2 - y1) + y1;
+		},
 		stateChangedHandler: function (fong, index, state) {
 			fong.boardInput.setOscType(state);
 		},
@@ -245,6 +249,9 @@
 			return state;
 		}
 	});
+
+	// --- apply mixins ---
+	_.extend(FongPhone.UI.Pad.prototype, FongPhone.Utils.Mixins.GalleryPad);
 
 	// --- private helper functions ---
 	function map(val, x1, x2, y1, y2) {

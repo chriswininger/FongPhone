@@ -50,14 +50,13 @@
 			// set up dom events
 			this.listen();
 
-			var heightSub = FongPhone.Globals.tabbedNavHeight + 5;
-			if (FongPhone.Globals.isAndroid) {
-				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - 5;
-			}
-			$('#phongUIGrid').css('height', (window.innerHeight - heightSub) + "px");
+			this.winHeight = window.innerHeight;
+			this.winWidth = window.innerWidth;
+			$('#phongUIGrid').css('height', this.winHeight + "px");
+			$('.fong-phone-apple-status-bar').hide();
+			$('.fong-phone-nav-bar-container').hide();
 
-			this.gridHeight = window.innerHeight - heightSub;
+			this.gridHeight = this.winHeight;
 
 			// make sure each fong gets re-attached
 			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
@@ -110,7 +109,22 @@
 			});
 		},
 		positionChanged: function(fong) {
-			this._socket.emit('fong:event', { eventType: 'position', x: fong.x,  y: fong.y, id: fong.id, fongRole: fong.fongRole });
+			var self = this;
+			if (!this.positionChangedDebounce) {
+				this.positionChangedDebounce = _.debounce(function(fong) {
+					self._socket.emit('fong:event', {
+						eventType: 'position',
+						x: fong.x,
+						y: fong.y,
+						id: fong.id,
+						fongRole: fong.fongRole,
+						winHeight: self.winHeight,
+						winWidth: self.winWidth
+					});
+				}, 10)
+			}
+
+			this.positionChangedDebounce(fong);
 		},
 		handleFadeChanged: function (fong) {
 			var val = map(fong.fadeOffset, -fong.radius + 1, fong.radius -1, -90, 90);
