@@ -41,11 +41,6 @@ var logicBoard;
 
 	FongPhone.Navigation.tabNavigationFunc = _.partial(FongPhone.Navigation.tabNavigationFunc, stateController);
 
-	// start the oscillators after all other settings have been initialized to avoid hiccup
-	setTimeout(function() {
-		logicBoard.start();
-	}, 1000);
-
 	var fongPhone = angular.module('fongPhone', ['ngRoute', 'ngAnimate', 'ngDraggable']).directive('ngY', function () {
 		return function (scope, element, attrs) {
 			scope.$watch(attrs.ngY, function (value) {

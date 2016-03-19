@@ -110,8 +110,8 @@
 		},
 		positionChanged: function(fong) {
 			var self = this;
-			if (!this.positionChangedDebounce) {
-				this.positionChangedDebounce = _.debounce(function(fong) {
+			if (!this._positionChangedDebounce) {
+				this._positionChangedDebounce = _.debounce(function(fong) {
 					self._socket.emit('fong:event', {
 						eventType: 'position',
 						x: fong.x,
@@ -124,19 +124,22 @@
 				}, 10)
 			}
 
-			this.positionChangedDebounce(fong);
+			this._positionChangedDebounce(fong);
 		},
 		handleFadeChanged: function (fong) {
-			var val = map(fong.fadeOffset, -fong.radius + 1, fong.radius -1, -90, 90);
-			var xDeg = val;
-			var zDeg = xDeg + 90;
-			if (zDeg > 90) {
-				zDeg = 180 - zDeg;
+			var self = this;
+			if (!this._fadeChangedDebounce) {
+				this._fadeChangedDebounce = _.debounce(function(fong) {
+					self._socket.emit('fong:event', {
+						eventType: 'fade',
+						fadeOffset: fong.fadeOffset,
+						id: fong.id,
+						fongRole: fong.fongRole
+					});
+				}, 10)
 			}
-			var x = Math.sin(xDeg * (Math.PI / 180));
-			var z = Math.sin(zDeg * (Math.PI / 180));
 
-			fong.boardInput.setFade(x, 0, z);
+			this._fadeChangedDebounce(fong);
 		},
 		sendChangeEvent: function(fong) {
 

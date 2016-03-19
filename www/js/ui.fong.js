@@ -249,6 +249,8 @@ var loopType = 1;
 			}
 			// TODO (CAW) Propery store ui state so we don't need this on the board
 			this.boardInput.oscTouchFadeVal = fadeOffset;
+			if (this.fadeChangedHandler)
+				this.fadeChangedHandler(this);
 			//this.fadeElement.setAttribute('cy', this.y);
 		},
 		getX: function() {
