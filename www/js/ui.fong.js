@@ -86,9 +86,6 @@ var loopType = 1;
 					var gradientOffset = Math.max(Math.min(diff * 1. / this.radius + .5, .95), .05);
 					$($("#" + this.gradient)).attr("fx", gradientOffset);
 				}
-				
-				if (this.fadeChangedHandler)
-					this.fadeChangedHandler(this);
 			}
 		},
 		handleLongTouch: function(event) {
@@ -249,6 +246,8 @@ var loopType = 1;
 			}
 			// TODO (CAW) Propery store ui state so we don't need this on the board
 			this.boardInput.oscTouchFadeVal = fadeOffset;
+			if (this.fadeChangedHandler)
+				this.fadeChangedHandler(this);
 			//this.fadeElement.setAttribute('cy', this.y);
 		},
 		getX: function() {
