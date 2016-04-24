@@ -13,6 +13,10 @@
 				switch (data.eventType) {
 					// --- Pad ----
 					case 'position':
+						if (isNaN(data.x))
+							return console.warn('not a number');
+						if (isNaN(data.y))
+							return console.warn('not a number');
 						self.pad.fongDotsByRole[data.fongRole].x =
 							self.pad.map(data.x, 0, data.winWidth, 0, self.pad.winWidth);
 						self.pad.fongDotsByRole[data.fongRole].y =
@@ -41,6 +45,11 @@
 					case 'note-map-change-base-note':
 						break;
 					case 'note-map-change-octave':
+						console.log('!!! received event: ');
+						var fong = self.pad.fongDotsByRole[data.fongRole];
+						fong.boardInput.NoteMapInfo.octave = data.octave;
+						self.noteMap.resetOctaveForMap(fong.boardInput);
+
 						break;
 					case 'note-map-change-scale':
 						self.pad.fongDotsByRole[data.fongRole].NoteMapInfo.SelectedScale = data.SelectedScale;

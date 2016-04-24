@@ -26,7 +26,7 @@ app.use(express.static(__dirname + '/../www'));
 io.on('connection', function(socket){
 	console.log('a user connected');
 	socket.on('fong:event', function(data) {
-		//console.log('!!! data: ' + JSON.stringify(data, null, 4));
+		console.log('!!! data: ' + JSON.stringify(data, null, 4));
 		io.emit('fong:event:pass', data);
 	});
 });

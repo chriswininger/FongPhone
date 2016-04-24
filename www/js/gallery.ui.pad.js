@@ -104,11 +104,6 @@
 			}
 		},
 		fongInitializer: function(fong) {
-			// listen for map info changes on the sound board fong that is associated with this ui/fong
-			fong.boardInput.noteMapChanged.add(function() {
-				// cheep way to trigger position updated and regenerate frequency with new map info
-				fong.x = fong.x;
-			});
 		},
 		positionChanged: function(fong) {
 			var self = this;
