@@ -1,0 +1,204 @@
+<div id="mapUI" style="height:100%" class="ui-display-area">
+	<div id = "view-map-apple-status-bar" class="fong-phone-apple-status-bar">
+		<svg width="100%" height="20">
+			<defs>
+				<linearGradient id="gradSwipe" x1="30%" y1="70%">
+					<stop offset="0%" stop-color="#ffffff" stop-opacity=".1">
+						<animate attributeName="stop-opacity" values=".9;.1;.9" dur="30s" repeatCount="indefinite" />
+					</stop>
+					<stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+						<animate attributeName="stop-opacity" values=".1;.9;.1" dur="33s" repeatCount="indefinite" />
+					</stop>
+				</linearGradient>
+				<linearGradient id="gradTop" x1="30%" y1="70%">
+					<stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
+						<animate attributeName="stop-opacity" values=".9;.8;.9" dur="30s" repeatCount="indefinite" />
+					</stop>
+					<stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+						<animate attributeName="stop-opacity" values=".8;.9;.8" dur="33s" repeatCount="indefinite" />
+					</stop>
+				</linearGradient>
+			</defs>
+			<rect width="100%" height="20" fill="url(#gradTop)" />
+		</svg>
+	</div>
+	<div id="mapSubUI" class="scrollable">
+		<table class="ui-map-table">
+			<tr>
+				<td class="ui-map-note-map-toggle {{ Fong1Selected ? 'map-note-on' : 'map-note-off' }}" style="height:25px;width:50%" colspan="6" ng-click="toggleSelectedFong(0)">
+					Fong 1
+				</td>
+				<td class="ui-map-note-map-toggle {{ Fong2Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(1)">
+					Fong 2
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					a#
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('b') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					b
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('c') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					c
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('c#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					c#
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('d') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					d
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('d#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					d#
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('e') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					e
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('f') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					f
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('f#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					f#
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('g') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					g
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('g#') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
+					g#
+				</td>
+			</tr>
+			<tr>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(2) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					2
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(3) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					3
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(4) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					4
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(5) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					5
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(6) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					6
+				</td>
+				<td class="ui-map-note-map-base-note {{ IsSelectedOctave(7) ? 'selectedScale' : '' }}" ng-click="changeOctave($event)" colspan="2">
+					7
+				</td>
+			</tr>
+		</table>
+		<div id="scrollableContainer">
+			<div style="height:248px;max-height:248px;" class="scrollable">
+				<table class="ui-map-table">
+					<tr ng-repeat="x in selectedFong.NoteMapInfo.availableNotes" class="ui-map-row">
+						<td class="ui-map-column map-note {{ x.on ? 'map-note-on' : 'map-note-off' }}" colspan="12">
+							<div style="width: 50%" ng-click="noteClick($index)" ng-drag="true" data-allow-transform="true" ng-drop="true" ng-drop-success="onNoteDropComplete($index, $data, $event)" ng-drag-data="{{ x }}">
+								{{ x.label }}
+							</div>
+						</td>
+					</tr>
+				</table>
+
+			</div>
+			<div>
+				<table class="ui-map-table">
+					<tr>
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
+							Osc Note Map {{ selectedFong.NoteMapInfo.NoteMapOn ? 'On' : 'Off' }}
+						</td>
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.FilterNoteMapOn ? 'map-note-on' : 'map-note-off' }}" colspan="2" ng-click="toggleFilterNoteMapClick()">
+							Filter Note Map {{ selectedFong.NoteMapInfo.FilterNoteMapOn ? 'On' : 'Off' }}
+						</td>
+					</tr>
+					<tr>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('ionian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							ionian
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('dorian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							dorian
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('aeolian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							aeolian
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('mixolydian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							mixolydian
+						</td>
+					</tr>
+					<tr>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('chromatic') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							chromatic
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('blues') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							blues
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('phrygian') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							phrygian
+						</td>
+						<td class="ui-map-note-map-scale {{ IsSelectedScale('flamenco ') ? 'selectedScale' : '' }}" ng-click="changeScale($event)">
+							flamenco
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="padding-bottom:50px">
+				<table class="ui-map-table">
+					<tr>
+						<td id="loopingToggle" class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.LoopOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%;backround-color:#ffffff;background-opacity:0;" colspan="2" ng-click="toggleLoopingClick()">
+							Looping {{ selectedFong.NoteMapInfo.LoopOn ? '' : 'Off' }}
+						</td>
+						<td class="ui-map-note-map-toggle" colspan="1">
+							<div style="position:relative;">
+								<input id="loopDurationControl" type="text" class="dial" data-min="500" data-max="60000" data-width="80">
+							</div>
+						</td>
+						<td class="ui-map-note-map-scale" width="25%"></td>
+					</tr>
+					<tr>
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.makeLoopChunky ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%;" colspan="2" ng-click="toggleChunkyClick()">
+							In Chunky {{ selectedFong.NoteMapInfo.makeLoopChunky ? '' : 'Off' }}
+						</td>
+						<td class="ui-map-note-map-toggle" colspan="1">
+							<div style="position:relative;">
+								<input id="chunkinessControl" type="text" class="dial" data-min="1" data-max="100" data-width="80">
+							</div>
+						</td>
+						<td class="ui-map-note-map-scale" width="25%"></td>
+					</tr>
+					<tr>
+						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.pullLoopChunky ? 'map-note-on' : 'map-note-off' }}" 
+							style="height:50px;width:50%;" colspan="2" ng-click="togglePullChunkyClick()">
+							Out Chunky {{ selectedFong.NoteMapInfo.pullLoopChunky ? '' : 'Off' }}
+						</td>
+						<td class="ui-map-note-map-toggle" colspan="1">
+							<div style="position:relative;">
+								<input id="pullChunkinessControl" type="text" class="dial" data-min="1" data-max="100" data-width="80">
+							</div>
+						</td>
+						<td class="ui-map-note-map-scale" width="25%"></td>
+					</tr>
+					<tr>
+						<td class="ui-map-note-map-toggle map-note-on" style="height:50px;width:50%;" colspan="2" ng-click="clearLoopClick()">
+							Clear Loop
+						</td>
+						<td class="ui-map-note-map-toggle" colspan="1">							
+						</td>
+						<td class="ui-map-note-map-scale" width="25%"></td>
+					</tr>					
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="fong-phone-nav-bar-container">
+		<div ng-repeat="tab in tabbedNavigationTabs"
+			 class="fong-phone-button {{ tab.tabClass }}
+		 	{{ tab.pageClass === pageClass ? 'fong-phone-button-selected' : '' }}">
+			<div ng-click="tabNavigationFunc(tab.location)"></div>
+			{{ tab.text }}
+		</div>
+	</div>
+</div>

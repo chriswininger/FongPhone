@@ -22,10 +22,15 @@ var loopType = 1;
 		this.domCtxID = state.domCtxID;
 		this.elementID = state.elementID;
 		this.fadeElementID = state.elementID + 'Fade'; // temporary
+		this.fongRole = state.fongRole;
+		this.id = state.id;
 
 		// TODO (CAW) Switch to extend
 		this.boardInputIndex = state.boardInputIndex;
 		this.boardInput = board.fongs[this.boardInputIndex];
+		this.boardInput.fongRole = this.fongRole;
+		this.boardInput.id = this.id;
+
 		this.dur = this.boardInput.dur; // todo (caw) something of hack but maybe ok
 		this.gradient = state.gradient;
 		this.loopPositions = [];

@@ -28,11 +28,12 @@ var logicBoard;
 		return console.error(new Error('AudioContext not supported.'));
 	}
 
+	var socket =  io();
 	var stateController = new FongPhone.UI.StatesController();
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
-	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState());
+	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState(), socket);
 	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
-	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState());
+	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState(), socket);
 
 	stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;
@@ -60,7 +61,7 @@ var logicBoard;
 			templateUrl: 'views/gallery.view.pad.html',
 			controller: 'padController'
 		}).when('/note-map', {
-			templateUrl: 'views/view-map.html',
+			templateUrl: 'views/gallery.view.map.html',
 			controller: 'noteMapController'
 		}).when('/sound', {
 			templateUrl: 'views/view-sound.html',

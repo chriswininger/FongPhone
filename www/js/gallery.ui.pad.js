@@ -9,15 +9,17 @@
  * @type {{}|*|Window.PhonePhong}
  */
 (function () {
-	FongPhone.UI.Pad = function (board, state) {
+	FongPhone.UI.Pad = function (board, state, socket) {
 		var self = this;
+		this._positionDebouncers = {};
+		this._fadeDebouncers = {};
 
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
 		this.svgElementID = 'phongUIGrid';
 
 		this.board = board;
-		this._socket = io();
+		this._socket = socket;
 
 		this.roleHandlers = {
 			primary: {
@@ -110,8 +112,8 @@
 		},
 		positionChanged: function(fong) {
 			var self = this;
-			if (!this._positionChangedDebounce) {
-				this._positionChangedDebounce = _.debounce(function(fong) {
+			if (!this._positionDebouncers[fong.id]) {
+				this._positionDebouncers[fong.id] = _.debounce(function(fong) {
 					self._socket.emit('fong:event', {
 						eventType: 'position',
 						x: fong.x,
@@ -124,12 +126,12 @@
 				}, 10)
 			}
 
-			this._positionChangedDebounce(fong);
+			this._positionDebouncers[fong.id](fong);
 		},
 		handleFadeChanged: function (fong) {
 			var self = this;
-			if (!this._fadeChangedDebounce) {
-				this._fadeChangedDebounce = _.debounce(function(fong) {
+			if (!this._fadeDebouncers[fong.x]) {
+				this._fadeDebouncers[fong.x] = _.debounce(function(fong) {
 					self._socket.emit('fong:event', {
 						eventType: 'fade',
 						fadeOffset: fong.fadeOffset,
@@ -139,7 +141,7 @@
 				}, 10)
 			}
 
-			this._fadeChangedDebounce(fong);
+			this._fadeDebouncers[fong.x](fong);
 		},
 		sendChangeEvent: function(fong) {
 

@@ -10,8 +10,6 @@
  */
 (function () {
 	FongPhone.UI.Pad = function (board, state) {
-		this.startRemoteEvents();
-
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
 		this.svgElementID = 'phongUIGrid';
@@ -249,9 +247,6 @@
 			return state;
 		}
 	});
-
-	// --- apply mixins ---
-	_.extend(FongPhone.UI.Pad.prototype, FongPhone.Utils.Mixins.GalleryPad);
 
 	// --- private helper functions ---
 	function map(val, x1, x2, y1, y2) {
