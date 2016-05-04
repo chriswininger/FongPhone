@@ -1,17 +1,19 @@
 // TODO (CAW) Namespace these
 var logicBoard;
 (function () {
+	var subSpace = $('body').data('subspace');
 	console.log('starting...');
 	vex.defaultOptions.className = 'vex-theme-wireframe';
 
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 	document.URL.indexOf('https://') === -1);
 
-	$(	function _deviceReady(id) {
+	$(function _deviceReady(id) {
 		console.log('device ready');
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 	});
+
 
 	// sound and sound logic layer
 	var context;
@@ -28,7 +30,12 @@ var logicBoard;
 		return console.error(new Error('AudioContext not supported.'));
 	}
 
-	var socket =  io();
+	var socket =  io(subSpace);
+	if (subSpace === '/pad2') {
+		socket.emit('fong:event', {
+			eventType: 'addFongs'
+		});
+	}
 	var stateController = new FongPhone.UI.StatesController();
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
 	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState(), socket);

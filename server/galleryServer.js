@@ -11,27 +11,103 @@ var fs = require('fs');
 var port = 3001;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var jade = require('jade');
 
-// handle manifest on our own to make sure content-type is set correctly
-app.get('/', function(req, res) {
-	res.redirect('/galleryIndex.html');
+// setup sessions
+//mongoose.connect();
+/*app.use(expressSession({
+	secret: 'a4f8071f-c873-4447-8ee2',
+	cookie: { maxAge: 2628000000 },
+	store: new (require('express-sessions'))({
+		storage: 'mongodb',
+		instance: mongoose, // optional
+		host: 'localhost', // optional
+		port: 27017, // optional
+		db: 'test', // optional
+		collection: 'sessions', // optional
+		expire: 86400 // optional
+	})
+}));*/
+
+var slots = {
+	pad1: false,
+	pad2: false,
+	soundBoard: false
+};
+
+app.set('view engine', 'jade');
+app.set('views', __dirname + '/templates');
+app.get('/remote', [_remoteRequest], function(req, res) {
+	var slotKeys = Object.keys(slots);
+	var selectedSubSpace;
+	for (var i = 0; i < slotKeys.length; i++) {
+		if (!slots[slotKeys[i]]) {
+			console.log('found onen slot: ' + slotKeys[i])
+			slots[slotKeys[i]] = true;
+			selectedSubSpace = slotKeys[i];
+			break;
+		}
+	}
+
+	if (!selectedSubSpace) {
+		return res.status(404).send('no available slots');
+	}
+
+	res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+	res.setHeader('Pragma', 'no-cache');
+	res.setHeader('Expires', 0);
+
+	res.render('remote', {
+		subspace: '/' + selectedSubSpace,
+	});
 });
-app.use('/application.manifest', function (req, res, next) {
-	res.type('text/cache-manifest');
-	var readStream = fs.createReadStream(__dirname + '/../www/application.manifest');
-	readStream.pipe(res);
+app.get('/', [_remoteRequest], function(req, res) {
+	res.redirect('/remote');
 });
 app.use(express.static(__dirname + '/../www'));
 
-io.on('connection', function(socket){
-	console.log('a user connected');
+
+var displayNSP = io.of('display').on('connection', function(socket) {
+	console.log('display server connected: ' + socket.id);
+});
+
+io.of('pad1').on('connection', function (socket) {
+	console.log('user pad 1 connected: ' + socket.id);
 	socket.on('fong:event', function(data) {
-		console.log('!!! data: ' + JSON.stringify(data, null, 4));
-		io.emit('fong:event:pass', data);
+		displayNSP.emit('fong:event:pass', data);
+	});
+
+	socket.on('disconnect', function() {
+		console.log('lost user pad 1 connection');
+		slots.pad1 = false;
+	});
+});
+io.of('pad2').on('connection', function (socket) {
+	console.log('user pad 2 connected: ' + socket.id);
+
+	socket.on('fong:event', function(data) {
+		displayNSP.emit('fong:event:pass', data);
+	});
+
+	socket.on('disconnect', function() {
+		console.log('lost user pad 2 connection');
+		slots.pad2 = false;
+	});
+});
+io.of('soundBoard').on('connection', function(socket) {
+	socket.on('disconnect', function() {
+		console.log('lost sound board connection');
+		slots.soundBoard = false;
 	});
 });
 
+/*io.on('connection', function(socket){
 
+});*/
+
+function _remoteRequest(req, req, next) {
+	next();
+}
 
 http.listen(port);
 console.log('listening on port ' + port);

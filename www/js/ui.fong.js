@@ -123,23 +123,6 @@ var loopType = 1;
 
 				this.x = touch.pageX - this.offsetX;
 				this.y = touch.pageY - this.offsetY;
-						
-				if (addLoopPosition && this.boardInput.NoteMapInfo.LoopOn && loopType == 1)
-				{
-					var addPosition = !this.boardInput.NoteMapInfo.makeLoopChunky || Math.random() < this.boardInput.NoteMapInfo.loopChunkinessFactor;
-					//console.log(addPosition);
-					//console.log(this.boardInput.NoteMapInfo.makeLoopChunky);
-					//console.log(this.boardInput.NoteMapInfo.loopChunkinessFactor);
-					if (addPosition) {
-						this.loopPositions.push({
-							x: this.x,
-							y: this.y,
-							time: window.performance.now(),
-							targetTouches: targetTouches,
-							targetFong: targetFong,
-						});
-					}
-				}
 			} else if (targetTouches.length == 2) {
 				if (this.lastPinchDist === undefined) this.lastPinchDist = 0;
 

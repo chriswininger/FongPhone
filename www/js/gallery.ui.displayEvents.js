@@ -8,10 +8,13 @@
 		startRemoteEvents: function() {
 			var self = this;
 
-			this._socket = io();
+			this._socket = io('/display');
 			this._socket.on('fong:event:pass', function (data) {
 				switch (data.eventType) {
 					// --- Pad ----
+					case 'addFongs':
+						console.log('!!! add fongs');
+						break;
 					case 'position':
 						if (isNaN(data.x))
 							return console.warn('not a number');
