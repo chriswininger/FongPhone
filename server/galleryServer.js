@@ -35,6 +35,8 @@ var slots = {
 	soundBoard: false
 };
 
+var displayServers = 0;
+
 app.set('view engine', 'jade');
 app.set('views', __dirname + '/templates');
 app.get('/remote', [_remoteRequest], function(req, res) {
@@ -42,7 +44,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 	var selectedSubSpace;
 	for (var i = 0; i < slotKeys.length; i++) {
 		if (!slots[slotKeys[i]]) {
-			console.log('found onen slot: ' + slotKeys[i])
+			console.log('found open slot: ' + slotKeys[i])
 			slots[slotKeys[i]] = true;
 			selectedSubSpace = slotKeys[i];
 			break;
@@ -61,6 +63,11 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 		subspace: '/' + selectedSubSpace,
 	});
 });
+
+app.get('/states.json', function(req, res) {
+	res.status(200).json({ slots: slots, displayServers: displayServers });
+});
+
 app.get('/', [_remoteRequest], function(req, res) {
 	res.redirect('/remote');
 });
@@ -69,6 +76,12 @@ app.use(express.static(__dirname + '/../www'));
 
 var displayNSP = io.of('display').on('connection', function(socket) {
 	console.log('display server connected: ' + socket.id);
+
+	displayServers++;
+
+	socket.on('disconnect', function() {
+		displayServers--;
+	});
 });
 
 io.of('pad1').on('connection', function (socket) {

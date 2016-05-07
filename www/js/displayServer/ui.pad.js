@@ -214,6 +214,7 @@
 			var fongDots = [];
 			// TODO (CAW) more robust would be to store by id (include ids in json and have the id for secondary stored on primary)
 			var fongDotsByRole = {};
+			var fongDotsByID = {};
 
 			_.each(json.fongDots || [], function(fongJSON) {
 				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
@@ -231,12 +232,14 @@
 					fongUI.loopPositions = this.fongDotsByRole[fongUI.fongRole].loopPositions;
 
 				fongDotsByRole[fongUI.fongRole] = fongUI;
+				fongDotsByID[fongJSON.id] = fongUI;
 
 				fongDots.push(fongUI);
 			}, this);
 
 			this.fongDots = fongDots;
 			this.fongDotsByRole = fongDotsByRole;
+			this.fongDotsByID = fongDotsByID;
 		},
 		toJSON: function() {
 			var state = { fongDots: [] };

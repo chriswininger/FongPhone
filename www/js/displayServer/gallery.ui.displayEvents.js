@@ -1,5 +1,6 @@
 (function() {
-	FongPhone.Utils.GalleryDisplayEvents = function(pad, noteMap) {
+	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap) {
+		this.logicBoard = logicBoard;
 		this.pad = pad;
 		this.noteMap = noteMap;
 	}
@@ -13,7 +14,73 @@
 				switch (data.eventType) {
 					// --- Pad ----
 					case 'addFongs':
-						console.log('!!! add fongs');
+						var primarmyIndex = self.logicBoard.createNewFongs(0.9949676394462585,
+							0.9949676394462585, 440, 1000
+						);
+
+						var fong1 =  new FongPhone.UI.Fong(self.logicBoard, {
+							id: primarmyIndex,
+							x: 100,
+							y: 200,
+							radius: 60,
+							color: "#ded6d6",
+							fadeOffset: 0,
+							selectedClassType: true,
+							selectedState: "sine",
+							gradient: 'grad1',
+							domCtxID: "phongUIGrid",
+							elementID: "oscTouch3",
+							fadeElementID: "oscTouch3Fade",
+							boardInputIndex: primarmyIndex,
+							fongRole: 'primary',
+							states: [
+								"sine",
+								"square",
+								"triangle",
+								"sawtooth"
+							],
+							classes: [
+								true,
+								false
+							]
+						});
+
+						var fong2 =  new FongPhone.UI.Fong(self.logicBoard, {
+							id: primarmyIndex + 1,
+							x: 100,
+							y: 200,
+							radius: 60,
+							color: "#ded6d6",
+							fadeOffset: 0,
+							selectedClassType: true,
+							selectedState: "sine",
+							gradient: 'grad1',
+							domCtxID: "phongUIGrid",
+							elementID: "oscTouch3",
+							fadeElementID: "oscTouch3Fade",
+							boardInputIndex: primarmyIndex + 1,
+							fongRole: 'primary',
+							states: [
+								"sine",
+								"square",
+								"triangle",
+								"sawtooth"
+							],
+							classes: [
+								true,
+								false
+							]
+						});
+
+						self.pad.fongDots.push(fong1);
+						self.pad.fongDots.push(fong2);
+
+						self.pad.fongDotsByID[fong1.id] = fong1;
+						self.pad.fongDotsByID[fong2.id] = fong2;
+
+						fong1.attachToDom();
+						fong2.attachToDom();
+
 						break;
 					case 'position':
 						if (isNaN(data.x))

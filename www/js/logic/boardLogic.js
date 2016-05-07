@@ -13,6 +13,7 @@ FongPhone.Logic.BoardLogic = function (audCtx, opts) {
 	this.fong1 = new fong(audCtx, this.mainVol, 0, 0, this);
 	this.fong2 = new fong(audCtx, this.mainVol, 0, 0, this);
 
+	this.fongs = [];
 	this.fongs.push(this.fong1);
 	this.fongs.push(this.fong2);
 
@@ -30,56 +31,11 @@ FongPhone.Logic.BoardLogic = function (audCtx, opts) {
 
 var $class = FongPhone.Logic.BoardLogic.prototype;
 
-var mainInterval;
 $class.start = function () {
-	this.fong1.start();
-	this.fong2.start();
-};
-
-var timeOutCnt = 0;
-var loopRunning = false;
-//var len = 100;
-
-// TODO (Inactive Code) -- Delete
-$class.primaryLoop = function () {
-	//if (loopRunning) return;
-	loopRunning = true;
-	var len = this.mainTimeOffset > 100 ? 100 : Math.floor(this.mainTimeOffset / 1.75);
-	var pulses = [{
-		osc: this.fong.osc1,
-		gain: this.fong1.oscVol.gain,
-		len: len,
-		currVol: this.fong1.oscVol
-	}];
-	if (timeOutCnt >= this.secondaryOffset) {
-		pulses.push({
-			osc: this.fong2.osc,
-			gain: this.fong2.oscVol.gain,
-			len: len,
-			currVol: this.fong2.oscVol
-		});
-		timeOutCnt = 0;
-	} else {
-		timeOutCnt++;
-	}
-
-	async.each(pulses, _pulse, function () {
-		loopRunning = false;
-	});
-
-	// --- private functions ---
-	function _pulse(opts, complete) {
-		//opts.osc.stop();
-		//opts.osc.start(opts.len);
-		opts.gain.value = 0;
-		setTimeout(function () {
-			opts.gain.value = opts.currVol;
-			complete();
-		}, opts.len);
+	for (var i = 0; i < this.fongs.length; i++) {
+		this.fongs[i].start();
 	}
 };
-
-$class.fongs = [];
 
 $class.setMainVol = function (vol) {
 	this.mainVol.gain.value = vol;
@@ -97,6 +53,25 @@ $class.setFilterStatus = function (b) {
 	_filterOn = b;
 };
 
+$class.createNewFongs = function(osc1Freq, osc2Freq, osc1Vol, osc2Vol) {
+	var fongPrimary = new fong(this.audCtx, this.mainVol, 0, 0, this);
+	var fongSecondary = new fong(this.audCtx, this.mainVol, 0, 0, this);
+	this.fongs.push(fongPrimary);
+	this.fongs.push(fongSecondary);
+
+	fongPrimary.setOscFreq(osc1Freq);
+	fongPrimary.setOscVol(osc1Vol);
+
+	fongSecondary.setOscFreq(osc2Freq);
+	fongSecondary.setOscVol(osc2Vol);
+
+	fongPrimary.start();
+	fongSecondary.start();
+
+	// returns index of primary
+	return (this.fongs.length - 2);
+}
+
 $class.setPrimaryOffsetFromFong = function (fong) {
 	// update offsets
 	var primaryOffset = map(fong.x, (fong.radius / 2), window.innerWidth - fong.radius, 0, this.primaryOffsetMax);
@@ -111,7 +86,7 @@ $class.setPrimaryOffsetFromFong = function (fong) {
 	return this.setPrimaryOffset(primaryOffset);
 }
 
-$class.setPrimaryOffset = function (value) {
+$class.setPrimaryOffset = function (fong, value) {
 	if (isNaN(value)) return;
 	this.mainTimeOffset = value;
 	this.fong1.oscGainCtrl.frequency.value = value / 4;
@@ -136,12 +111,17 @@ $class.setSecondaryOffset = function (value) {
 };
 
 $class.updateBoard = function (values) {
-	this.fong1.setOscVol(values.osc1Vol);
-	this.fong2.setOscVol(values.osc2Vol);
-	this.fong1.setOscFreq(values.osc1Freq);
-	this.fong2.setOscFreq(values.osc2Freq);
-	this.setPrimaryOffset(values.primaryOffset);
+	for (var i = 0; i < this.fongs.length; i++) {
+		if (this.fongs[i].fongRole === 'primary') {
+			this.fongs[i].setOscVol(values.osc1Vol);
+			this.fongs[i].setOscFreq(values.osc1Freq);
+		} else {
+			this.fongs[i].setOscVol(values.osc2Vol);
+			this.fongs[i].setOscFreq(values.osc2Freq);
+		}
+	}
 
+	this.setPrimaryOffset(values.primaryOffset);
 	this.setMainVol(values.mainVol);
 	this.setSecondaryOffset(values.secondaryOffset);
 
