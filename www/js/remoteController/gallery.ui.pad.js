@@ -9,10 +9,11 @@
  * @type {{}|*|Window.PhonePhong}
  */
 (function () {
-	FongPhone.UI.Pad = function (board, state, socket) {
+	FongPhone.UI.Pad = function (subSpace, board, state, socket) {
 		var self = this;
 		this._positionDebouncers = {};
 		this._fadeDebouncers = {};
+		this.subSpace = subSpace;
 
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
 		uiPad = this;
@@ -223,6 +224,7 @@
 			var fongDots = [];
 			// TODO (CAW) more robust would be to store by id (include ids in json and have the id for secondary stored on primary)
 			var fongDotsByRole = {};
+			var fongDotsByID = {};
 
 			_.each(json.fongDots || [], function(fongJSON) {
 				fongJSON.positionChangedHandler = this.roleHandlers[fongJSON.fongRole].positionChanged;
@@ -233,6 +235,9 @@
 				fongJSON.radiusChangeHandler = this.roleHandlers[fongJSON.fongRole].radiusChangeHandler;
 				fongJSON.initializer = this.roleHandlers[fongJSON.fongRole].initializer;
 
+				if (this.subSpace === '/pad2')
+					fongJSON.id += 2;
+
 				var fongUI = new FongPhone.UI.Fong(this.board, fongJSON);
 
 				// preserver previous loop positions
@@ -240,12 +245,13 @@
 					fongUI.loopPositions = this.fongDotsByRole[fongUI.fongRole].loopPositions;
 
 				fongDotsByRole[fongUI.fongRole] = fongUI;
-
+				fongDotsByID[fongUI.id] = fongUI;
 				fongDots.push(fongUI);
 			}, this);
 
 			this.fongDots = fongDots;
 			this.fongDotsByRole = fongDotsByRole;
+			this.fongDotsByID = fongDotsByID;
 		},
 		toJSON: function() {
 			var state = { fongDots: [] };

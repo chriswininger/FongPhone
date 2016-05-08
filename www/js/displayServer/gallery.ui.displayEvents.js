@@ -83,17 +83,18 @@
 
 						break;
 					case 'position':
+						console.log('!!! fong.id: ' + data.id);
 						if (isNaN(data.x))
 							return console.warn('not a number');
 						if (isNaN(data.y))
 							return console.warn('not a number');
-						self.pad.fongDotsByRole[data.fongRole].x =
+						self.pad.fongDotsByID[data.id].x =
 							self.pad.map(data.x, 0, data.winWidth, 0, self.pad.winWidth);
-						self.pad.fongDotsByRole[data.fongRole].y =
+						self.pad.fongDotsByID[data.id].y =
 							self.pad.map(data.y, 0, data.winHeight, 0, self.pad.winHeight);
 						break;
 					case 'fade':
-						self.pad.fongDotsByRole[data.fongRole].fadeOffset = data.fadeOffset;
+						self.pad.fongDotsByID[data.id].fadeOffset = data.fadeOffset;
 						break;
 					// ---- Map ----
 					case 'note-toggle':

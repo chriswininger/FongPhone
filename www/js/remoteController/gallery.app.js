@@ -38,7 +38,7 @@ var logicBoard;
 	}
 	var stateController = new FongPhone.UI.StatesController();
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
-	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState(), socket);
+	var padUI = new FongPhone.UI.Pad(subSpace, logicBoard, stateController.getPadState(), socket);
 	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
 	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState(), socket);
 

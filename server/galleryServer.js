@@ -8,7 +8,7 @@
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var port = 3001;
+var port = 3002;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jade = require('jade');
@@ -87,6 +87,7 @@ var displayNSP = io.of('display').on('connection', function(socket) {
 io.of('pad1').on('connection', function (socket) {
 	console.log('user pad 1 connected: ' + socket.id);
 	socket.on('fong:event', function(data) {
+		console.log('!!! pad1 fong.id: ' + data.id);
 		displayNSP.emit('fong:event:pass', data);
 	});
 
@@ -99,6 +100,7 @@ io.of('pad2').on('connection', function (socket) {
 	console.log('user pad 2 connected: ' + socket.id);
 
 	socket.on('fong:event', function(data) {
+		console.log('!!! pad2 fong.id: ' + data.id);
 		displayNSP.emit('fong:event:pass', data);
 	});
 
