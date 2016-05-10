@@ -182,6 +182,17 @@
 				return fnote.freq;
 			}
 		},
+		getHandlersByRole: function(fongRole) {
+			return {
+				positionChangedHandler: this.roleHandlers[fongRole].positionChanged,
+				fadeChangedHandler: this.roleHandlers[fongRole].fadeChangedHandler,
+				handleFongSelected: this.roleHandlers[fongRole].handleFongSelected,
+				selectedClassChangedHandler: this.roleHandlers[fongRole].classTypeChangeHandler,
+				stateChangedHandler: this.roleHandlers[fongRole].stateChangedHandler,
+				radiusChangeHandler: this.roleHandlers[fongRole].radiusChangeHandler,
+				initializer: this.roleHandlers[fongRole].initializer
+			};
+		},
 		handleBackGroundTouchEnd: function (event) {
 			// TODO (CAW) Shift background touch to here, so it comes after swipe detection
 		},

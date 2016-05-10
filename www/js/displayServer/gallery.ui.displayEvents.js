@@ -18,7 +18,7 @@
 							0.9949676394462585, 440, 1000
 						);
 
-						var fong1 =  new FongPhone.UI.Fong(self.logicBoard, {
+						var fong1 =  new FongPhone.UI.Fong(self.logicBoard, _.extend({
 							id: primarmyIndex,
 							x: 100,
 							y: 200,
@@ -43,12 +43,12 @@
 								true,
 								false
 							]
-						});
+						}, self.pad.getHandlersByRole('primary')));
 
-						var fong2 =  new FongPhone.UI.Fong(self.logicBoard, {
-							id: primarmyIndex + 1,
-							x: 100,
-							y: 200,
+						var fong2 =  new FongPhone.UI.Fong(self.logicBoard, _.extend({
+							id: (primarmyIndex + 1),
+							x: 300,
+							y: 300,
 							radius: 60,
 							color: "#ded6d6",
 							fadeOffset: 0,
@@ -56,10 +56,10 @@
 							selectedState: "sine",
 							gradient: 'grad1',
 							domCtxID: "phongUIGrid",
-							elementID: "oscTouch3",
-							fadeElementID: "oscTouch3Fade",
+							elementID: "oscTouch4",
+							fadeElementID: "oscTouch4Fade",
 							boardInputIndex: primarmyIndex + 1,
-							fongRole: 'primary',
+							fongRole: 'secondary',
 							states: [
 								"sine",
 								"square",
@@ -70,7 +70,7 @@
 								true,
 								false
 							]
-						});
+						}, self.pad.getHandlersByRole('secondary')));
 
 						self.pad.fongDots.push(fong1);
 						self.pad.fongDots.push(fong2);
@@ -83,7 +83,6 @@
 
 						break;
 					case 'position':
-						console.log('!!! fong.id: ' + data.id);
 						if (isNaN(data.x))
 							return console.warn('not a number');
 						if (isNaN(data.y))
