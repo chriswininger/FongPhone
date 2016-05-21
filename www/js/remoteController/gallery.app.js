@@ -12,15 +12,65 @@ var logicBoard;
 		console.log('device ready');
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
+
+		// redirect to correct view based on subspace returned in form
+		switch (subSpace) {
+			case '/soundBoard':
+				window.location.href = '#/sound';
+				break;
+			case '/noteMap':
+				window.location.href = '#/note-map';
+				break;
+			case '/pad1':
+				// fall through
+			case '/pad2':
+				window.location.href = '#/';
+				break;
+		}
 	});
 
-	
+	// connect to websocket over the specified subspace
 	var socket =  io(subSpace);
 	var stateController = new FongPhone.UI.StatesController();
-	///logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
+	socket.on('disconnect', function(msg) {
+		console.log('server dropped connection: ' + msg);
+	});
+
+	// hack around the fact that note map is storing data on au.fong and logic board instead of using pad and ui.fongs
+	var fakeLogicBoard = {
+		filterOn: true,
+		fongs: [
+			{
+				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
+					SelectedScale: 'ionian',
+					baseNote: 'a',
+					octave: 4,
+					availableNotes: [],
+					NoteMapOn: false,
+					FilterNoteMapOn: false,
+					LoopDuration: 15000,
+					loopChunkinessFactor: .5,
+					pullChunkiness: .5
+				})
+			},
+			{
+				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
+					SelectedScale: 'ionian',
+					baseNote: 'a',
+					octave: 4,
+					availableNotes: [],
+					NoteMapOn: false,
+					FilterNoteMapOn: false,
+					LoopDuration: 15000,
+					loopChunkinessFactor: .5,
+					pullChunkiness: .5
+				})
+			}
+		]
+	};
 	var padUI = new FongPhone.UI.Pad(subSpace, null, stateController.getPadState(), socket);
-	//var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
-	//var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState(), socket);
+	var soundUI = new FongPhone.UI.Sound(fakeLogicBoard, padUI, stateController.getSoundState());
+	var noteMap = new FongPhone.UI.NoteMap(fakeLogicBoard, stateController.getMapState(), socket);
 
 	//stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;

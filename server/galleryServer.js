@@ -1,38 +1,23 @@
 /**
- * Simple test server
- *  This can probably be removed from the final project but it simplifies testing
- *  by letting you easily host the public directory of this project over the network
- *  so mobile devices can reach it
+ * Gallery Hop Event Server
+ * 	This server will proxy events from remote devices to the display server for the run jump dev gallery hop
  * @type {*|exports}
  */
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var port = 3002;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jade = require('jade');
 
-// setup sessions
-//mongoose.connect();
-/*app.use(expressSession({
-	secret: 'a4f8071f-c873-4447-8ee2',
-	cookie: { maxAge: 2628000000 },
-	store: new (require('express-sessions'))({
-		storage: 'mongodb',
-		instance: mongoose, // optional
-		host: 'localhost', // optional
-		port: 27017, // optional
-		db: 'test', // optional
-		collection: 'sessions', // optional
-		expire: 86400 // optional
-	})
-}));*/
+var INTERACTION_TIMEOUT = 10000;
+var PORT = 3002;
 
 var slots = {
 	pad1: false,
 	pad2: false,
-	soundBoard: false
+	soundBoard: false,
+	noteMap: false
 };
 
 var displayServers = 0;
@@ -47,8 +32,6 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 			console.log('found open slot: ' + slotKeys[i])
 			slots[slotKeys[i]] = true;
 			selectedSubSpace = slotKeys[i];
-
-			console.log('!!! slots: ' + JSON.stringify(slots, null, 4));
 			break;
 		}
 	}
@@ -62,7 +45,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 	res.setHeader('Expires', 0);
 
 	res.render('remote', {
-		subspace: '/' + selectedSubSpace,
+		subspace: '/' + selectedSubSpace
 	});
 });
 
@@ -86,45 +69,60 @@ var displayNSP = io.of('display').on('connection', function(socket) {
 	});
 });
 
-io.of('pad1').on('connection', function (socket) {
-	console.log('user pad 1 connected: ' + socket.id);
-	socket.on('fong:event', function(data) {
-		displayNSP.emit('fong:event:pass', data);
-	});
 
-	socket.on('disconnect', function() {
-		console.log('lost user pad 1 connection');
-		slots.pad1 = false;
-	});
-});
+var slotKeys = Object.keys(slots);
+for (var i = 0; i < slotKeys.length; i++) {
+	// wrap current slotKey into scope
+	(function(slot) {
+		console.log('listen under name space: ' + slot);
+		var lastInterActionTime;
 
-io.of('pad2').on('connection', function (socket) {
-	console.log('user pad 2 connected: ' + socket.id);
+		io.of(slot).on('connection', function(socket) {
+			console.log('user connected on ' + slot);
+			lastInterActionTime = Date.now();
 
-	socket.on('fong:event', function(data) {
-		console.log('!!! pad2: ' + JSON.stringify(data, null, 4));
-		displayNSP.emit('fong:event:pass', data);
-	});
+			var _checkForInteraction = function() {
+				if (Date.now() - lastInterActionTime > INTERACTION_TIMEOUT) {
+					_freeSlot(true);
+				}
+			};
+			setInterval(_checkForInteraction, 1000);
 
-	socket.on('disconnect', function() {
-		console.log('lost user pad 2 connection');
-		slots.pad2 = false;
-	});
-});
-io.of('soundBoard').on('connection', function(socket) {
-	socket.on('disconnect', function() {
-		console.log('lost sound board connection');
-		slots.soundBoard = false;
-	});
-});
+			socket.on('fong:event', function(data) {
+				// pass events to display server
+				displayNSP.emit('fong:event:pass', data);
+				lastInterActionTime = Date.now();
+			});
 
-/*io.on('connection', function(socket){
+			socket.on('disconnect', function() {
+				console.log('lost user connection on ' + slot);
+				_freeSlot(false);
+			});
 
-});*/
+			function _freeSlot(userConnected) {
+				// free slot
+				slots[slot] = false;
+
+				if (userConnected) {
+					console.log('closing connection on ' + slot + ' due to inactivity');
+					socket.disconnect('closing connection due to inactivity');
+				}
+
+				// TODO (CAW) Send out event to display server to stop sound
+				displayNSP.emit('fong:event:pass', {
+					type: 'disconnect',
+					slot: slot
+				});
+
+				clearInterval(_checkForInteraction);
+			}
+		});
+	})(slotKeys[i]);
+}
 
 function _remoteRequest(req, req, next) {
 	next();
 }
 
-http.listen(port);
-console.log('listening on port ' + port);
+http.listen(PORT);
+console.log('listening on port ' + PORT);

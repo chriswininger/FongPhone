@@ -24,15 +24,14 @@
 	_.extend(FongPhone.UI.NoteMap.prototype, {
 		attachToDom: function($scope) {
 			var heightStatusBar = 20;
-			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
+			var heightSub = heightStatusBar;
 
 			var self = this;
 			this.$scope = $scope;
 
-			if (FongPhone.Globals.isAndroid) {
-				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - heightStatusBar - 8;
-			}
+
+			$('.fong-phone-apple-status-bar').hide();
+			$('.fong-phone-nav-bar-container').hide();
 			$('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 
