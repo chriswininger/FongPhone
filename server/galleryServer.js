@@ -47,6 +47,8 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 			console.log('found open slot: ' + slotKeys[i])
 			slots[slotKeys[i]] = true;
 			selectedSubSpace = slotKeys[i];
+
+			console.log('!!! slots: ' + JSON.stringify(slots, null, 4));
 			break;
 		}
 	}
@@ -95,10 +97,12 @@ io.of('pad1').on('connection', function (socket) {
 		slots.pad1 = false;
 	});
 });
+
 io.of('pad2').on('connection', function (socket) {
 	console.log('user pad 2 connected: ' + socket.id);
 
 	socket.on('fong:event', function(data) {
+		console.log('!!! pad2: ' + JSON.stringify(data, null, 4));
 		displayNSP.emit('fong:event:pass', data);
 	});
 

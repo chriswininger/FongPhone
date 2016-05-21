@@ -9,22 +9,20 @@ FongPhone.Logic.BoardLogic = function (audCtx, opts) {
 	this.delayVolume = 1;
 	this.delayTime = .5;
 	this.delayFeedback = .8;
-
-	this.fong1 = new fong(audCtx, this.mainVol, 0, 0, this);
-	this.fong2 = new fong(audCtx, this.mainVol, 0, 0, this);
-
 	this.fongs = [];
-	this.fongs.push(this.fong1);
-	this.fongs.push(this.fong2);
+
+	this.createNewFongs(0.9949676394462585,
+		0.9949676394462585, 440, 1000
+	);
+	this.createNewFongs(0.9949676394462585,
+		0.9949676394462585, 440, 1000
+	);
 
 	this.mainVol.connect(this.audCtx.destination);
 
 	// defaults
 	if (opts)
 		this.updateBoard(opts);
-
-	this.setPrimaryOffsetFromFong(this.fong1);
-	this.setSecondaryOffsetFromFong(this.fong2);
 
 	this.FilterOn = _filterOn;
 };
@@ -56,6 +54,9 @@ $class.setFilterStatus = function (b) {
 $class.createNewFongs = function(osc1Freq, osc2Freq, osc1Vol, osc2Vol) {
 	var fongPrimary = new fong(this.audCtx, this.mainVol, 0, 0, this);
 	var fongSecondary = new fong(this.audCtx, this.mainVol, 0, 0, this);
+	fongPrimary.secondary = fongSecondary;
+	fongSecondary.primary = fongPrimary;
+
 	this.fongs.push(fongPrimary);
 	this.fongs.push(fongSecondary);
 
@@ -64,6 +65,9 @@ $class.createNewFongs = function(osc1Freq, osc2Freq, osc1Vol, osc2Vol) {
 
 	fongSecondary.setOscFreq(osc2Freq);
 	fongSecondary.setOscVol(osc2Vol);
+
+	this.setPrimaryOffsetFromFong(fongPrimary);
+	this.setSecondaryOffsetFromFong(fongSecondary);
 
 	fongPrimary.start();
 	fongSecondary.start();
@@ -83,13 +87,13 @@ $class.setPrimaryOffsetFromFong = function (fong) {
 	}
 	$(fong.animation).attr("dur", fong.dur);
 
-	return this.setPrimaryOffset(primaryOffset);
+	return this.setPrimaryOffset(fong.boardInput, primaryOffset);
 }
 
 $class.setPrimaryOffset = function (fong, value) {
 	if (isNaN(value)) return;
 	this.mainTimeOffset = value;
-	this.fong1.oscGainCtrl.frequency.value = value / 4;
+	fong.oscGainCtrl.frequency.value = value / 4;
 	return value;
 };
 
@@ -100,13 +104,13 @@ $class.setSecondaryOffsetFromFong = function (fong) {
 		fong.boardInput.dur = fong.dur;
 	}
 	$(fong.animation).attr("dur", fong.dur);
-	return this.setSecondaryOffset(offset);
+	return this.setSecondaryOffset(fong.boardInput, offset);
 }
 
-$class.setSecondaryOffset = function (value) {
+$class.setSecondaryOffset = function (fong, value) {
 	if (isNaN(value)) return;
 	this.secondaryOffset = value;
-	this.fong2.oscGainCtrl.frequency.value = value / 4;
+	fong.oscGainCtrl.frequency.value = value / 4;
 	return value;
 };
 
@@ -115,15 +119,16 @@ $class.updateBoard = function (values) {
 		if (this.fongs[i].fongRole === 'primary') {
 			this.fongs[i].setOscVol(values.osc1Vol);
 			this.fongs[i].setOscFreq(values.osc1Freq);
+			this.setPrimaryOffset(this.fongs[i], values.primaryOffset);
 		} else {
 			this.fongs[i].setOscVol(values.osc2Vol);
 			this.fongs[i].setOscFreq(values.osc2Freq);
+			this.setSecondaryOffset(this.fongs[i], values.secondaryOffset);
 		}
 	}
 
-	this.setPrimaryOffset(values.primaryOffset);
 	this.setMainVol(values.mainVol);
-	this.setSecondaryOffset(values.secondaryOffset);
+
 
 	this.osc1MaxFreq = values.osc1MaxFreq;
 	this.osc2MaxFreq = values.osc2MaxFreq;

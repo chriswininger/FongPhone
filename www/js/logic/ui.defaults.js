@@ -51,7 +51,60 @@
 		true,
 		false
 	  ]
-	}],
+	},
+	{
+		id: 2,
+		x: 100,
+		y: 200,
+		radius: 60,
+		color: "#ded6d6",
+		fadeOffset: 0,
+		selectedClassType: true,
+		selectedState: "sine",
+		gradient: 'grad1',
+		domCtxID: "phongUIGrid",
+		elementID: "oscTouch3",
+		fadeElementID: "oscTouch3Fade",
+		boardInputIndex: 2,
+		fongRole: 'primary',
+		states: [
+			"sine",
+			"square",
+			"triangle",
+			"sawtooth"
+		],
+		classes: [
+			true,
+			false
+		]
+	},
+	{
+		id: 3,
+		x: 300,
+		y: 300,
+		radius: 60,
+		color: "#ded6d6",
+		fadeOffset: 0,
+		selectedClassType: true,
+		selectedState: "sine",
+		gradient: 'grad1',
+		domCtxID: "phongUIGrid",
+		elementID: "oscTouch4",
+		fadeElementID: "oscTouch4Fade",
+		boardInputIndex: 3,
+		fongRole: 'secondary',
+		states: [
+			"sine",
+			"square",
+			"triangle",
+			"sawtooth"
+		],
+		classes: [
+			true,
+			false
+		]
+	}
+	],
 	soundBoardSettings: {
 	  osc1EnvType: 'square',
 	  osc2EnvType: 'square',

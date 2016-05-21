@@ -27,11 +27,17 @@ var loopType = 1;
 
 		// TODO (CAW) Switch to extend
 		this.boardInputIndex = state.boardInputIndex;
-		this.boardInput = board.fongs[this.boardInputIndex];
-		this.boardInput.fongRole = this.fongRole;
-		this.boardInput.id = this.id;
+		if (board)
+			this.boardInput = board.fongs[this.boardInputIndex];
 
-		this.dur = this.boardInput.dur; // todo (caw) something of hack but maybe ok
+		if (this.boardInput) {
+			this.boardInput.fongRole = this.fongRole;
+			this.boardInput.id = this.id;
+		}
+
+		if (this.boardInput)
+			this.dur = this.boardInput.dur; // todo (caw) something of hack but maybe ok
+
 		this.gradient = state.gradient;
 		this.loopPositions = [];
 
@@ -56,6 +62,7 @@ var loopType = 1;
 			this.animation = $("#" + this.gradient + "Animation");
 			$(this.animation).attr("dur", this.dur);
 			this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
+			console.log('!!! initialize fadeElement: ' + this.fadeElementID);
 			this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
 			
 			if (gradientFades)
@@ -140,7 +147,7 @@ var loopType = 1;
 				this.lastPinchDist = dist;
 			}
 
-			if (this.boardInput.NoteMapInfo.LoopOn && loopType == 0) {
+			if (this.boardInput && this.boardInput.NoteMapInfo.LoopOn && loopType == 0) {
 				var f = this;
 				setTimeout(function() {
 					f.offsetX = 0;
@@ -158,7 +165,8 @@ var loopType = 1;
 			this.offsetX = null;
 			this.offsetY = null;
 
-			this.boardInput.portamento = this.boardInput.portamentoStored;
+			if (this.boardInput)
+				this.boardInput.portamento = this.boardInput.portamentoStored;
 
 			if (this.handleFongSelected)
 				this.handleFongSelected(this);
@@ -183,6 +191,9 @@ var loopType = 1;
 				}
 				element.id = id;
 				domCtx.appendChild(element);
+				console.log('!!! craeted: ' + id);
+			} else {
+				console.log('!!! already got element: ' + id);
 			}
 
 			return element;
@@ -232,11 +243,15 @@ var loopType = 1;
 					var gradientOffset = Math.max(Math.min(fadeOffset * 1. / this.radius + .5, .95), .05);
 					$($("#" + this.gradient)).attr("fx", gradientOffset);
 				}
-				
+
+				console.log('!!! fadeElement: ' + this.fadeElement.id);
+				console.log('!!! myID: ' + this.id);
+				console.log('!!! myFade id: ' + this.fadeElementID);
 				this.fadeElement.setAttribute('cx', this.x + fadeOffset);
 			}
 			// TODO (CAW) Propery store ui state so we don't need this on the board
-			this.boardInput.oscTouchFadeVal = fadeOffset;
+			if (this.boardInput)
+				this.boardInput.oscTouchFadeVal = fadeOffset;
 			if (this.fadeChangedHandler)
 				this.fadeChangedHandler(this);
 			//this.fadeElement.setAttribute('cy', this.y);
@@ -253,7 +268,8 @@ var loopType = 1;
 			if (this.fadeElement)
 				this.fadeElement.setAttribute('cx', x + fadeOffset)
 			// TODO (CAW) Propery store ui state so we don't need this on the board
-			this.boardInput.x = x;
+			if (this.boardInput)
+				this.boardInput.x = x;
 			//this.positionChanged.dispatch(this, oldX, this.y);
 			if (this.positionChangedHandler)
 				this.positionChangedHandler(this, oldX, this.y);
@@ -269,7 +285,8 @@ var loopType = 1;
 			if (this.fadeElement)
 				this.fadeElement.setAttribute('cy', y);
 			// TODO (CAW) Property store ui state so we don't need this on the board
-			this.boardInput.y = y;
+			if (this.boardInput)
+				this.boardInput.y = y;
 			if (this.positionChangedHandler)
 				this.positionChangedHandler(this, this.x, oldY);
 		},

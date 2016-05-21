@@ -14,7 +14,7 @@
 				switch (data.eventType) {
 					// --- Pad ----
 					case 'addFongs':
-						var primarmyIndex = self.logicBoard.createNewFongs(0.9949676394462585,
+						/*var primarmyIndex = self.logicBoard.createNewFongs(0.9949676394462585,
 							0.9949676394462585, 440, 1000
 						);
 
@@ -81,7 +81,7 @@
 						fong1.attachToDom();
 						fong2.attachToDom();
 
-						break;
+						break;*/
 					case 'position':
 						if (isNaN(data.x))
 							return console.warn('not a number');

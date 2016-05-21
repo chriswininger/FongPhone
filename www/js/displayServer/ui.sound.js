@@ -221,8 +221,12 @@
 		function setEnv1Control(env) {
 			self._env1Ctrl = env;
 			logicBoard.primaryOffsetMax = env;
-			logicBoard.setPrimaryOffsetFromFong(pad.fongDots[0]);
-			logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
+			for (var i = 0; i < pad.fongDots.length; i++) {
+				if (pad.fongDots[i].fongRole === 'primary')
+					logicBoard.setPrimaryOffsetFromFong(pad.fongDots[i]);
+				else
+					logicBoard.setSecondaryOffsetFromFong(pad.fongDots[i]);
+			}
 		}
 
 		function getFilterResonance() {

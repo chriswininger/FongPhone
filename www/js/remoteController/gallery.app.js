@@ -14,37 +14,17 @@ var logicBoard;
 		angular.bootstrap(domElement, ['fongPhone']);
 	});
 
-
-	// sound and sound logic layer
-	var context;
-	if (typeof AudioContext !== "undefined") {
-		context = new AudioContext();
-	} else if (typeof webkitAudioContext !== "undefined") {
-		context = new webkitAudioContext();
-		playInitSound(context);
-		if (context.sampleRate === 48000) {
-			context = new webkitAudioContext();
-			playInitSound(context);
-		}
-	} else {
-		return console.error(new Error('AudioContext not supported.'));
-	}
-
+	
 	var socket =  io(subSpace);
-	if (subSpace === '/pad2') {
-		socket.emit('fong:event', {
-			eventType: 'addFongs'
-		});
-	}
 	var stateController = new FongPhone.UI.StatesController();
-	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
-	var padUI = new FongPhone.UI.Pad(subSpace, logicBoard, stateController.getPadState(), socket);
-	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
-	var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState(), socket);
+	///logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
+	var padUI = new FongPhone.UI.Pad(subSpace, null, stateController.getPadState(), socket);
+	//var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
+	//var noteMap = new FongPhone.UI.NoteMap(logicBoard, stateController.getMapState(), socket);
 
-	stateController.uiMap = noteMap;
+	//stateController.uiMap = noteMap;
 	stateController.uiPad = padUI;
-	stateController.uiSoundSettings = soundUI;
+	//stateController.uiSoundSettings = soundUI;
 
 
 	FongPhone.Navigation.tabNavigationFunc = _.partial(FongPhone.Navigation.tabNavigationFunc, stateController);
