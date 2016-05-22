@@ -19,7 +19,7 @@ var logicBoard;
 				window.location.href = '#/sound';
 				break;
 			case '/noteMap':
-				window.location.href = '#/note-map';
+				window.location.href = 'F#/note-map';
 				break;
 			case '/pad1':
 				// fall through
@@ -34,6 +34,10 @@ var logicBoard;
 	var stateController = new FongPhone.UI.StatesController();
 	socket.on('disconnect', function(msg) {
 		console.log('server dropped connection: ' + msg);
+		if (msg === 'io server disconnect') {
+			// the server has disconnected due to inactivity or because you lost connection for too long
+			window.location.href = '/thanks-for-playing.html';
+		}
 	});
 
 	// hack around the fact that note map is storing data on au.fong and logic board instead of using pad and ui.fongs

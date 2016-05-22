@@ -62,7 +62,6 @@ var loopType = 1;
 			this.animation = $("#" + this.gradient + "Animation");
 			$(this.animation).attr("dur", this.dur);
 			this.domElement = this.initializeDomElement(this.elementID, 'fong', this.gradient);
-			console.log('!!! initialize fadeElement: ' + this.fadeElementID);
 			this.fadeElement = this.initializeDomElement(this.fadeElementID, 'fong-fade', null);
 			
 			if (gradientFades)
@@ -191,9 +190,6 @@ var loopType = 1;
 				}
 				element.id = id;
 				domCtx.appendChild(element);
-				console.log('!!! craeted: ' + id);
-			} else {
-				console.log('!!! already got element: ' + id);
 			}
 
 			return element;
@@ -244,9 +240,6 @@ var loopType = 1;
 					$($("#" + this.gradient)).attr("fx", gradientOffset);
 				}
 
-				console.log('!!! fadeElement: ' + this.fadeElement.id);
-				console.log('!!! myID: ' + this.id);
-				console.log('!!! myFade id: ' + this.fadeElementID);
 				this.fadeElement.setAttribute('cx', this.x + fadeOffset);
 			}
 			// TODO (CAW) Propery store ui state so we don't need this on the board

@@ -10,7 +10,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jade = require('jade');
 
-var INTERACTION_TIMEOUT = 10000;
+var INTERACTION_TIMEOUT = 60000;
 var PORT = 3002;
 
 var slots = {
@@ -81,12 +81,8 @@ for (var i = 0; i < slotKeys.length; i++) {
 			console.log('user connected on ' + slot);
 			lastInterActionTime = Date.now();
 
-			var _checkForInteraction = function() {
-				if (Date.now() - lastInterActionTime > INTERACTION_TIMEOUT) {
-					_freeSlot(true);
-				}
-			};
-			setInterval(_checkForInteraction, 1000);
+			var _checkInterval = setInterval(_checkForInteraction, 1000);
+			var _closedSocket = false;
 
 			socket.on('fong:event', function(data) {
 				// pass events to display server
@@ -99,7 +95,20 @@ for (var i = 0; i < slotKeys.length; i++) {
 				_freeSlot(false);
 			});
 
+			function _checkForInteraction() {
+				if (Date.now() - lastInterActionTime > INTERACTION_TIMEOUT) {
+					console.log('slot %s has been inactive for more than %s', slot, INTERACTION_TIMEOUT);
+					_freeSlot(true);
+				}
+			}
+
 			function _freeSlot(userConnected) {
+				if (_closedSocket)
+					return; // prevent second pass called on disconnect
+
+				_closedSocket = true;
+				clearInterval(_checkInterval);
+
 				// free slot
 				slots[slot] = false;
 
@@ -114,7 +123,7 @@ for (var i = 0; i < slotKeys.length; i++) {
 					slot: slot
 				});
 
-				clearInterval(_checkForInteraction);
+				console.log('closed socket for: %s (%s)', slot, userConnected);
 			}
 		});
 	})(slotKeys[i]);
