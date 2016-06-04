@@ -12,76 +12,6 @@
 			this._socket = io('/display');
 			this._socket.on('fong:event:pass', function (data) {
 				switch (data.eventType) {
-					// --- Pad ----
-					case 'addFongs':
-						/*var primarmyIndex = self.logicBoard.createNewFongs(0.9949676394462585,
-							0.9949676394462585, 440, 1000
-						);
-
-						var fong1 =  new FongPhone.UI.Fong(self.logicBoard, _.extend({
-							id: primarmyIndex,
-							x: 100,
-							y: 200,
-							radius: 60,
-							color: "#ded6d6",
-							fadeOffset: 0,
-							selectedClassType: true,
-							selectedState: "sine",
-							gradient: 'grad1',
-							domCtxID: "phongUIGrid",
-							elementID: "oscTouch3",
-							fadeElementID: "oscTouch3Fade",
-							boardInputIndex: primarmyIndex,
-							fongRole: 'primary',
-							states: [
-								"sine",
-								"square",
-								"triangle",
-								"sawtooth"
-							],
-							classes: [
-								true,
-								false
-							]
-						}, self.pad.getHandlersByRole('primary')));
-
-						var fong2 =  new FongPhone.UI.Fong(self.logicBoard, _.extend({
-							id: (primarmyIndex + 1),
-							x: 300,
-							y: 300,
-							radius: 60,
-							color: "#ded6d6",
-							fadeOffset: 0,
-							selectedClassType: true,
-							selectedState: "sine",
-							gradient: 'grad1',
-							domCtxID: "phongUIGrid",
-							elementID: "oscTouch4",
-							fadeElementID: "oscTouch4Fade",
-							boardInputIndex: primarmyIndex + 1,
-							fongRole: 'secondary',
-							states: [
-								"sine",
-								"square",
-								"triangle",
-								"sawtooth"
-							],
-							classes: [
-								true,
-								false
-							]
-						}, self.pad.getHandlersByRole('secondary')));
-
-						self.pad.fongDots.push(fong1);
-						self.pad.fongDots.push(fong2);
-
-						self.pad.fongDotsByID[fong1.id] = fong1;
-						self.pad.fongDotsByID[fong2.id] = fong2;
-
-						fong1.attachToDom();
-						fong2.attachToDom();
-
-						break;*/
 					case 'position':
 						if (isNaN(data.x))
 							return console.warn('not a number');
@@ -124,6 +54,79 @@
 					case 'note-map-change-scale':
 						self.pad.fongDotsByRole[data.fongRole].NoteMapInfo.SelectedScale = data.SelectedScale;
 						self.noteMap.regenerateMap(self.selectedFong);
+						break;
+				}
+			});
+
+			this._socket.on('sound:event:pass', function(data) {
+				var fong;
+
+				if (typeof data.id === 'number')
+					fong = self.pad.fongDotsByID[data.id];
+
+				switch (data.eventType) {
+					case 'osc:env:type':
+						if (!fong) return console.warn('no fong for event ' + data.eventType);
+						fong.boardInput.oscGainCtrl.type = data.value;
+						break;
+					case 'osc:type':
+						if (!fong) return console.warn('no fong for event ' + data.eventType);
+						fong.selectedStateIndex = fong.states.indexOf(data.value)
+						fong.selectedState = data.value;
+						break;
+					case 'delay:feedback':
+						logicBoard.delayFeedback = data.value / 10.0;
+						for (var i = 0; i < logicBoard.fongs.length; i++) {
+							logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
+						}
+						break;
+					case 'delay:time':
+						logicBoard.delayTime = data.value / 1000.0;
+						for (var i = 0; i < logicBoard.fongs.length; i++) {
+							logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
+						}
+						break;
+					case 'delay:volume':
+						logicBoard.delayVolume = data.value / 100.0;
+						for (var i = 0; i < logicBoard.fongs.length; i++) {
+							logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
+						}
+						break;
+					case 'portamento:filter':
+						logicBoard.filterPortamento = data.value;
+						break;
+					case 'portamento':
+						logicBoard.portamento = data.value;
+						break;
+					case 'env':
+						if (fong.fongRole === 'primary') {
+							logicBoard.primaryOffsetMax = data.value;
+						} else {
+							logicBoard.secondaryOffsetMax = data.value;
+						}
+
+						for (var i = 0; i < self.pad.fongDots.length; i++) {
+							if (self.pad.fongDots[i].fongRole === 'primary')
+								logicBoard.setPrimaryOffsetFromFong(self.pad.fongDots[i]);
+							else
+								logicBoard.setSecondaryOffsetFromFong(self.pad.fongDots[i]);
+						}
+
+						break;
+					case 'filter:resonance':
+						for (var i = 0; i < logicBoard.fongs.length; i++) {
+							logicBoard.fongs[i].setOscFilterResonance(data.value);
+						}
+
+						break;
+					case 'filter:on':
+						console.log('!!! on: ' + data.value + ' (' + (typeof data.value) + ')');
+						logicBoard.setFilterStatus(data.value);
+						break;
+					case 'filter:type':
+						for (var i = 0; i < logicBoard.fongs.length; i++) {
+							logicBoard.fongs[i].setFilterType(data.value);
+						}
 						break;
 				}
 			});

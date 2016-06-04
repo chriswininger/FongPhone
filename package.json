@@ -11,6 +11,7 @@
     "save-svg-as-png": "1.0.2"
   },
   "dependencies": {
+    "debug": "^2.2.0",
     "express-sessions": "^1.0.5",
     "jade": "^1.11.0",
     "mongoose": "^4.4.14",

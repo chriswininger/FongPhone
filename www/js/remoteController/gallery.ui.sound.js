@@ -1,7 +1,11 @@
 (function () {
-	FongPhone.UI.Sound = function (logicBoard, pad, state) {
+	FongPhone.UI.Sound = Sound;
+	function Sound(logicBoard, pad, state, socket) {
+		this._socket = socket;
+		this._messageDebouncers = {};
 		var svgElementID = 'soundControls';
-		this.board = logicBoard;
+		this.logicBoard = logicBoard;
+		var self = this;
 
 		FongPhone.utils.createGetSet(this, 'osc1EnvType', getOsc1EnvType, setOsc1EnvType);
 		FongPhone.utils.createGetSet(this, 'osc2EnvType', getOsc2EnvType, setOsc2EnvType);
@@ -17,15 +21,159 @@
 		FongPhone.utils.createGetSet(this, 'filterResonance', getFilterResonance, setFilterResonance);
 		FongPhone.utils.createGetSet(this, 'filterOn', getFilterOn, setFilterOn);
 		FongPhone.utils.createGetSet(this, 'filterType', getFilterType, setFilterType);
-		this.set = set;
-		this.attachToDom = attachToDom;
 		this.registerKnob = FongPhone.utils.registerKnob;
-		_.bindAll(this, 'set', 'attachToDom', 'registerKnob');
+		_.bindAll(self, 'registerKnob');
 
 		this.set(state);
 
+		// ==== Member Methods ====
+		this.toJSON = function() {
+			var exclued = { board: true, $scope: true };
+			var out = {};
+			_.each(this, function(val, key) {
+				if (key[0] !== '_' && !_.isFunction(val) && !exclued[key])
+					out[key] = _.clone(val);
+			});
 
-		function attachToDom($scope) {
+			return out;
+		};
+
+		// ==== Getters and Setters ====
+		function getOsc2EnvType() {
+			return self._osc2EnvType;
+		}
+		function setOsc2EnvType(oscEnvType) {
+			self._osc2EnvType = oscEnvType;
+			self.sendEvent(pad.getFongByID(1), 'osc:env:type', oscEnvType);
+		}
+
+		function getOsc1EnvType() {
+			return self._osc1EnvType;
+		}
+		function setOsc1EnvType(oscEnvType) {
+			self._osc1EnvType = oscEnvType;
+			self.sendEvent(pad.getFongByID(0), 'osc:env:type', oscEnvType);
+		}
+
+		function getOsc2Type() {
+			return self._osc2Type;
+		}
+		function setOsc2Type(oscType) {
+			self._osc2Type = oscType;
+			self.sendEvent(pad.getFongByID(1), 'osc:type', oscType);
+		}
+
+		function getOsc1Type() {
+			return self._osc1Type;
+		}
+		function setOsc1Type(oscType) {
+			self._osc1Type = oscType;
+			self.sendEvent(pad.getFongByID(0), 'osc:type', oscType);
+		}
+
+		function getDelayFeedbackControl() {
+			return parseInt(self._delayFeedbackCtrl);
+		}
+		function setDelayFeedbackControl(delayFeedBackControl) {
+			self._delayFeedbackCtrl = delayFeedBackControl;
+			self.sendEvent(null, 'delay:feedback', delayFeedBackControl);
+		}
+
+		function getDelayTimeControl() {
+			return self._delayTimeCtrl;
+		}
+		function setDelayTimeControl(delayTimeControl) {
+			self._delayTimeCtrl = delayTimeControl;
+			self.sendEvent(null, 'delay:time', delayTimeControl);
+		}
+
+		function getDelayVolumeControl() {
+			return self._delayVolumeCtrl;
+		}
+
+		function setDelayVolumeControl(delayVolControl) {
+			self._delayVolumeCtrl = delayVolControl;
+			self.sendEvent(null, 'delay:volume', delayVolControl);
+		}
+
+		function getFilterPortamento() {
+			return self._filterPortamento;
+		}
+
+		function setFilterPortamento(portamento) {
+			self._filterPortamento = portamento;
+			self.sendEvent(null, 'portamento:filter', portamento);
+		}
+
+		function getPortamentoControl() {
+			return self._portamento;
+		}
+		function setPortamentoControl(portamento) {
+			self._portamento = portamento;
+			self.sendEvent(null, 'portamento', portamento);
+		}
+
+		function getEnv2Control() {
+			return self._env2Ctrl;
+		}
+		function setEnv2Control(env) {
+			self._env2Ctrl = env;
+			self.sendEvent(pad.getFongByID(1), 'env', env);
+		}
+
+		function getEnv1Control() {
+			return self._env1Ctrl;
+		}
+		function setEnv1Control(env) {
+			self._env1Ctrl = env;
+			self.sendEvent(pad.getFongByID(0), 'env', env);
+		}
+
+		function getFilterResonance() {
+			return self._filterResonance;
+		}
+		function setFilterResonance(filterRes) {
+			self._filterResonance = filterRes;
+			self.sendEvent(null, 'filter:resonance', filterRes);
+		}
+
+		function getFilterOn() {
+			return self._filterOn;
+		}
+		function setFilterOn(on) {
+			self._filterOn = on;
+			self.sendEvent(null, 'filter:on', on);
+		}
+
+		function getFilterType() {
+			return self._filterType;
+		}
+		function setFilterType(filterType) {
+			self._filterType = filterType;
+			self.sendEvent(null, 'filter:type', filterType);
+		}
+		// --- END Getters and Setters ---
+	}
+
+	_.extend(Sound.prototype, {
+		sendEvent: function(fong, event, value) {
+			var self = this;
+			if (!this._messageDebouncers[event]) {
+				this._messageDebouncers[event] = _.debounce(function(fong, event, value) {
+					self._socket.emit('sound:event', {
+						eventType: event,
+						value: value,
+						id: (!!fong ? fong.id : null)
+					});
+				}, 10)
+			}
+
+			this._messageDebouncers[event](fong, event, value);
+		},
+		set: function(state) {
+			_.extend(this, state);
+		},
+		attachToDom: function($scope) {
 			var self = this;
 			this.$scope = $scope;
 			var heightStatusBar = 20;
@@ -40,9 +188,9 @@
 			$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
 			$('.page').css('max-height', window.innerHeight + "px");
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
-			
+
 			// investigate $scope values
-			$scope.FilterOn = logicBoard.FilterOn;
+			$scope.FilterOn = self.logicBoard.FilterOn;
 
 			$scope.toggleFilterClick = function () {
 				$scope.FilterOn = !$scope.FilterOn;
@@ -73,6 +221,7 @@
 			}
 
 			$scope.IsSelectedOsc1Type = function (type) {
+				return self.osc1Type === type;
 				//return logicBoard.fongs[0].osc.type == type;
 			}
 
@@ -81,6 +230,7 @@
 			}
 
 			$scope.IsSelectedOsc2Type = function (type) {
+				return self.osc2Type === type;
 				//return logicBoard.fongs[1].osc.type == type;
 			}
 
@@ -89,10 +239,12 @@
 			}
 
 			$scope.IsSelectedOsc1EnvType = function (envType) {
+				return self.osc1EnvType === envType;
 				//return logicBoard.fongs[0].oscGainCtrl.type == envType;
 			}
 
 			$scope.IsSelectedOsc2EnvType = function (envType) {
+				return self.osc2EnvType === envType;
 				//return logicBoard.fongs[1].oscGainCtrl.type == envType;
 			}
 
@@ -103,159 +255,6 @@
 			$scope.changeOsc2EnvType = function (event) {
 				self.osc2EnvType = $(event.target).html().trim();
 			}
-			
-		}		
-
-		// ==== Member Methods ====
-		this.toJSON = function() {
-			var exclued = { board: true, $scope: true };
-			var out = {};
-			_.each(this, function(val, key) {
-				if (key[0] !== '_' && !_.isFunction(val) && !exclued[key])
-					out[key] = _.clone(val);
-			});
-
-			return out;
-		};
-
-		function set(state) {
-			_.extend(this, state);
 		}
-
-		// ==== Getters and Setters ====
-		function getOsc2EnvType() {
-			return self._osc2EnvType;
-		}
-		function setOsc2EnvType(oscEnvType) {
-			self._osc2EnvType = oscEnvType;
-			//logicBoard.fongs[1].oscGainCtrl.type = oscEnvType;
-		}
-
-		function getOsc1EnvType() {
-			return self._osc1EnvType;
-		}
-		function setOsc1EnvType(oscEnvType) {
-			self._osc1EnvType = oscEnvType;
-			//logicBoard.fongs[0].oscGainCtrl.type = oscEnvType;
-		}
-
-		function getOsc2Type() {
-			return self._osc2Type;
-		}
-		function setOsc2Type(oscType) {
-			self._osc2Type = oscType;
-			pad.fongDots[1].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
-		}
-
-		function getOsc1Type() {
-			return self._osc1Type;
-		}
-		function setOsc1Type(oscType) {
-			self._osc1Type = oscType;
-			//logicBoard.fongs[0].osc.type = oscType;
-			pad.fongDots[0].selectedStateIndex = pad.fongDots[0].states.indexOf(oscType);
-			pad.fongDots[0].selectedState = oscType;
-		}
-
-		function getDelayFeedbackControl() {
-			return parseInt(self._delayFeedbackCtrl);
-		}
-		function setDelayFeedbackControl(delayFeedBackControl) {
-			self._delayFeedbackCtrl = delayFeedBackControl;
-			//logicBoard.delayFeedback = delayFeedBackControl / 10.0;
-			/*for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
-			}*/
-		}
-
-		function getDelayTimeControl() {
-			return self._delayTimeCtrl;
-		}
-		function setDelayTimeControl(delayTimeControl) {
-			self._delayTimeCtrl = delayTimeControl;
-			/*logicBoard.delayTime = delayTimeControl / 1000.0;
-			for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
-			}*/
-		}
-
-		function getDelayVolumeControl() {
-			return self._delayVolumeCtrl;
-		}
-		function setDelayVolumeControl(delayVolControl) {
-			self._delayVolumeCtrl = delayVolControl;
-			/*logicBoard.delayVolume = delayVolControl / 100.0;
-			for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
-			}*/
-		}
-
-		function getFilterPortamento() {
-			return self._filterPortamento;
-		}
-		function setFilterPortamento(portamento) {
-			self._filterPortamento = portamento;
-			//logicBoard.filterPortamento = portamento;
-		}
-
-		function getPortamentoControl() {
-			return self._portamento;
-		}
-		function setPortamentoControl(portamento) {
-			self._portamento = portamento;
-			//logicBoard.portamento = portamento;
-		}
-
-		function getEnv2Control() {
-			return self._env2Ctrl;
-		}
-		function setEnv2Control(env) {
-			self._env2Ctrl = env;
-			//logicBoard.secondaryOffsetMax = env;
-			//logicBoard.setSecondaryOffsetFromFong(pad.fongDots[1]);
-		}
-
-		function getEnv1Control() {
-			return self._env1Ctrl;
-		}
-		function setEnv1Control(env) {
-			self._env1Ctrl = env;
-			//logicBoard.primaryOffsetMax = env;
-			/*for (var i = 0; i < pad.fongDots.length; i++) {
-				if (pad.fongDots[i].fongRole === 'primary')
-					logicBoard.setPrimaryOffsetFromFong(pad.fongDots[i]);
-				else
-					logicBoard.setSecondaryOffsetFromFong(pad.fongDots[i]);
-			}*/
-		}
-
-		function getFilterResonance() {
-			return self._filterResonance;
-		}
-		function setFilterResonance(filterRes) {
-			self._filterResonance = filterRes;
-			/*for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setOscFilterResonance(self._filterResonance);
-			}*/
-		}
-
-		function getFilterOn() {
-			return self._filterOn;
-		}
-		function setFilterOn(on) {
-			self._filterOn = on;
-			//logicBoard.setFilterStatus(on);
-		}
-
-		function getFilterType() {
-			return self._filterType;
-		}
-		function setFilterType(filterType) {
-			self._filterType = filterType;
-			/*for (var i = 0; i < logicBoard.fongs.length; i++) {
-				logicBoard.fongs[i].setFilterType(filterType);
-			}*/
-		}
-		// --- END Getters and Setters ---
-	};
+	});
 })();

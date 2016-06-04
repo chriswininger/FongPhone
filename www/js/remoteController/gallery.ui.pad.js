@@ -144,6 +144,9 @@
 
 			this._positionDebouncers[fong.id](fong);
 		},
+		getFongByID: function(id) {
+			return this.fongDotsByID[id];	
+		},
 		handleFadeChanged: function (fong) {
 			var self = this;
 			if (!this._fadeDebouncers[fong.x]) {

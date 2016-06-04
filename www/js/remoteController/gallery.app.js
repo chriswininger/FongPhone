@@ -8,6 +8,7 @@ var logicBoard;
 	var isCordova = (document.URL.indexOf('http://') === -1 &&
 	document.URL.indexOf('https://') === -1);
 
+	console.log('using sub space: ' + subSpace);
 	$(function _deviceReady(id) {
 		console.log('device ready');
 		var domElement = document.querySelector('body');
@@ -19,7 +20,7 @@ var logicBoard;
 				window.location.href = '#/sound';
 				break;
 			case '/noteMap':
-				window.location.href = 'F#/note-map';
+				window.location.href = '#/note-map';
 				break;
 			case '/pad1':
 				// fall through
@@ -29,8 +30,14 @@ var logicBoard;
 		}
 	});
 
+	if (document.visibilityState === 'prerender') {
+		// don't connect to sockets, this is chrome trying to pre-load the page
+		console.log('short circuit for preview mode');
+		return;
+	}
+
 	// connect to websocket over the specified subspace
-	var socket =  io(subSpace);
+	var socket = io(subSpace);
 	var stateController = new FongPhone.UI.StatesController();
 	socket.on('disconnect', function(msg) {
 		console.log('server dropped connection: ' + msg);
@@ -38,6 +45,11 @@ var logicBoard;
 			// the server has disconnected due to inactivity or because you lost connection for too long
 			window.location.href = '/thanks-for-playing.html';
 		}
+	});
+	socket.on('spot:taken', function() {
+		// this spot was full (two users requesting at once), try again
+		console.log('the requested spot was taken: ' + subSpace);
+		window.location.href = '/';
 	});
 
 	// hack around the fact that note map is storing data on au.fong and logic board instead of using pad and ui.fongs
@@ -73,7 +85,7 @@ var logicBoard;
 		]
 	};
 	var padUI = new FongPhone.UI.Pad(subSpace, null, stateController.getPadState(), socket);
-	var soundUI = new FongPhone.UI.Sound(fakeLogicBoard, padUI, stateController.getSoundState());
+	var soundUI = new FongPhone.UI.Sound(fakeLogicBoard, padUI, stateController.getSoundState(), socket);
 	var noteMap = new FongPhone.UI.NoteMap(fakeLogicBoard, stateController.getMapState(), socket);
 
 	//stateController.uiMap = noteMap;

@@ -9,6 +9,7 @@ var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jade = require('jade');
+var debug = require('debug')('server');
 
 var INTERACTION_TIMEOUT = 60000;
 var PORT = 3002;
@@ -27,22 +28,22 @@ app.set('views', __dirname + '/templates');
 app.get('/remote', [_remoteRequest], function(req, res) {
 	var slotKeys = Object.keys(slots);
 	var selectedSubSpace;
+	var key = Math.random() * 100;
 	for (var i = 0; i < slotKeys.length; i++) {
 		if (!slots[slotKeys[i]]) {
-			console.log('found open slot: ' + slotKeys[i])
-			slots[slotKeys[i]] = true;
+			console.log('found open slot: ' + slotKeys[i] + ' (' + key + ')');
 			selectedSubSpace = slotKeys[i];
 			break;
 		}
 	}
 
-	if (!selectedSubSpace) {
-		return res.status(404).send('no available slots');
-	}
-
 	res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
 	res.setHeader('Pragma', 'no-cache');
 	res.setHeader('Expires', 0);
+
+	if (!selectedSubSpace) {
+		return res.status(404).send('no available slots');
+	}
 
 	res.render('remote', {
 		subspace: '/' + selectedSubSpace
@@ -54,6 +55,7 @@ app.get('/states.json', function(req, res) {
 });
 
 app.get('/', [_remoteRequest], function(req, res) {
+	debug('handling request: ' + req.url);
 	res.redirect('/remote');
 });
 app.use(express.static(__dirname + '/../www'));
@@ -76,17 +78,33 @@ for (var i = 0; i < slotKeys.length; i++) {
 	(function(slot) {
 		console.log('listen under name space: ' + slot);
 		var lastInterActionTime;
+		var ns = 'fong:event';
+		if (slot === 'soundBoard')
+			ns = 'sound:event';
+		var nsPass = ns + ':pass';
 
 		io.of(slot).on('connection', function(socket) {
 			console.log('user connected on ' + slot);
+			if (slots[slot]) {
+				// a user already connected to this slot
+				console.log('removing a second user from slot ' + slot);
+				socket.emit('spot:taken');
+				return;
+			}
+
+			console.log('slot ' + slot + ' is now occupied');
+			// the slot is now taken
+			slots[slot] = true;
+
 			lastInterActionTime = Date.now();
 
 			var _checkInterval = setInterval(_checkForInteraction, 1000);
 			var _closedSocket = false;
 
-			socket.on('fong:event', function(data) {
+			socket.on(ns, function(data) {
+				debug('received event for ' + slot + ' => ' + data.eventType + ' (' +  data.id + ')');
 				// pass events to display server
-				displayNSP.emit('fong:event:pass', data);
+				displayNSP.emit(nsPass, data);
 				lastInterActionTime = Date.now();
 			});
 
