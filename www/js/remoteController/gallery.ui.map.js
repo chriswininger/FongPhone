@@ -51,7 +51,8 @@
 						
 			// Fired when a note in the map is clicked
 			$scope.noteClick = function (index) {
-				self._socket.emit('fong:event', {
+				console.log('!!! self.selectedFong.id: ' +  self.selectedFong.id);
+				self._socket.emit('map:event', {
 					eventType: 'note-toggle',
 					availableNotesIndex: index,
 					on: !self.selectedFong.NoteMapInfo.availableNotes[index].on,
@@ -79,21 +80,31 @@
 				// if dropped on self ignore
 				if ($index === $data) return;
 
-				self._socket.emit('fong:event', {
+
+				self.selectedFong.NoteMapInfo.availableNotes.splice($index, 0, $data);
+
+				if ($index < dragIndex) {
+					// moved back in array
+					self.selectedFong.NoteMapInfo.availableNotes.splice(dragIndex +1, 1);
+				} else {
+					self.selectedFong.NoteMapInfo.availableNotes.splice(dragIndex, 1);
+				}
+
+				// create a note map in the new order, minus disabled notes
+				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
+				
+				self._socket.emit('map:event', {
 					eventType: 'note-drop',
 					noteIndex: $index,
 					dragIndex: dragIndex,
+					$data: $data,
 					id: self.selectedFong.id,
 					fongRole: self.selectedFong.fongRole
 				});
-
-				self.selectedFong.NoteMapInfo.availableNotes[index].on = !self.selectedFong.NoteMapInfo.availableNotes[index].on;
-				// update mapped notes
-				self.selectedFong.NoteMapInfo.NoteMap = self.buildMap(self.selectedFong.NoteMapInfo.availableNotes);
 			};
 
 			$scope.toggleNoteMapClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-enable',
 					NoteMapOn: !self.selectedFong.NoteMapInfo.NoteMapOn,
 					id: self.selectedFong.id,
@@ -103,7 +114,7 @@
 				self.selectedFong.NoteMapInfo.NoteMapOn = !self.selectedFong.NoteMapInfo.NoteMapOn;
 			};
 			$scope.toggleFilterNoteMapClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-filter-toggle',
 					FilterNodeMapOn: !self.selectedFong.NoteMapInfo.FilterNoteMapOn,
 					id: self.selectedFong.id,
@@ -114,7 +125,7 @@
 			};
 			
 			$scope.toggleLoopingClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-looping-toggle',
 					LoopOn: !self.selectedFong.NoteMapInfo.LoopOn,
 					id: self.selectedFong.id,
@@ -123,7 +134,7 @@
 			};
 			
 			$scope.toggleChunkyClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-chunky-toggle',
 					makeLoopChunky: !self.selectedFong.NoteMapInfo.makeLoopChunky,
 					id: self.selectedFong.id,
@@ -132,7 +143,7 @@
 			};
 			
 			$scope.togglePullChunkyClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-chunky-pull-toggle',
 					pullLoopChunky: !self.selectedFong.NoteMapInfo.pullLoopChunky,
 					id: self.selectedFong.id,
@@ -141,7 +152,7 @@
 			};
 			
 			$scope.clearLoopClick = function () {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-clear-loop',
 					id: self.selectedFong.id,
 					fongRole: self.selectedFong.fongRole
@@ -149,7 +160,7 @@
 			};
 
 			$scope.changeBaseNote = function (event) {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-change-base-note',
 					baseNote: self.selectedFong.NoteMapInfo.baseNote,
 					id: self.selectedFong.id,
@@ -161,7 +172,7 @@
 			}
 
 			$scope.changeOctave = function (event) {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-change-octave',
 					octave: parseInt($(event.target).html().trim()),
 					id: self.selectedFong.id,
@@ -173,7 +184,7 @@
 				self.resetOctaveForMap(self.selectedFong);
 			}
 			$scope.changeScale = function (event) {
-				self._socket.emit('fong:event', {
+				self._socket.emit('map:event', {
 					eventType: 'note-map-change-scale',
 					SelectedScale: $(event.target).html().trim(),
 					id: self.selectedFong.id,

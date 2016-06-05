@@ -57,6 +57,7 @@ var logicBoard;
 		filterOn: true,
 		fongs: [
 			{
+				id: 0,
 				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
 					SelectedScale: 'ionian',
 					baseNote: 'a',
@@ -70,6 +71,7 @@ var logicBoard;
 				})
 			},
 			{
+				id: 1,
 				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
 					SelectedScale: 'ionian',
 					baseNote: 'a',

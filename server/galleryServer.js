@@ -37,10 +37,6 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 		}
 	}
 
-	res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-	res.setHeader('Pragma', 'no-cache');
-	res.setHeader('Expires', 0);
-
 	if (!selectedSubSpace) {
 		return res.status(404).send('no available slots');
 	}
@@ -81,6 +77,9 @@ for (var i = 0; i < slotKeys.length; i++) {
 		var ns = 'fong:event';
 		if (slot === 'soundBoard')
 			ns = 'sound:event';
+		else if (slot === 'noteMap')
+			ns = 'map:event';
+
 		var nsPass = ns + ':pass';
 
 		io.of(slot).on('connection', function(socket) {
@@ -147,7 +146,11 @@ for (var i = 0; i < slotKeys.length; i++) {
 	})(slotKeys[i]);
 }
 
-function _remoteRequest(req, req, next) {
+function _remoteRequest(req, res, next) {
+	// disable caching as these routes return dynamic data
+	res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+	res.setHeader('Pragma', 'no-cache');
+	res.setHeader('Expires', 0);
 	next();
 }
 

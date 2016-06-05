@@ -25,37 +25,7 @@
 					case 'fade':
 						self.pad.fongDotsByID[data.id].fadeOffset = data.fadeOffset;
 						break;
-					// ---- Map ----
-					case 'note-toggle':
-						break;
-					case 'note-drop':
-						break;
-					case 'note-map-enable':
-						break;
-					case 'note-map-filter-toggle':
-						break;
-					case 'note-map-looping-toggle':
-						break;
-					case 'note-map-chunky-toggle':
-						break;
-					case 'note-map-chunky-pull-toggle':
-						break;
-					case 'note-map-clear-loop':
-						break;
-					case 'note-map-change-base-note':
-						break;
-					case 'note-map-change-octave':
-						console.log('!!! received event: ');
-						var fong = self.pad.fongDotsByRole[data.fongRole];
-						fong.boardInput.NoteMapInfo.octave = data.octave;
-						self.noteMap.resetOctaveForMap(fong.boardInput);
-
-						break;
-					case 'note-map-change-scale':
-						self.pad.fongDotsByRole[data.fongRole].NoteMapInfo.SelectedScale = data.SelectedScale;
-						self.noteMap.regenerateMap(self.selectedFong);
-						break;
-				}
+				};
 			});
 
 			this._socket.on('sound:event:pass', function(data) {
@@ -120,13 +90,76 @@
 
 						break;
 					case 'filter:on':
-						console.log('!!! on: ' + data.value + ' (' + (typeof data.value) + ')');
 						logicBoard.setFilterStatus(data.value);
 						break;
 					case 'filter:type':
 						for (var i = 0; i < logicBoard.fongs.length; i++) {
 							logicBoard.fongs[i].setFilterType(data.value);
 						}
+						break;
+				}
+			});
+
+			this._socket.on('map:event:pass', function(data) {
+				var fong;
+
+				if (typeof data.id === 'number')
+					fong = self.pad.fongDotsByID[data.id];
+
+				if (!fong) return console.warn('no fong for event ' + data.eventType);
+
+				switch (data.eventType) {
+					// ---- Map ----
+					case 'note-toggle':
+						fong.boardInput.NoteMapInfo.availableNotes[data.availableNotesIndex].on = data.on;
+
+						// update mapped notes
+						fong.boardInput.NoteMapInfo.NoteMap = self.noteMap.buildMap(fong.boardInput.NoteMapInfo.availableNotes);
+						break;
+					case 'note-drop':
+						fong.boardInput.NoteMapInfo.availableNotes.splice(data.noteIndex, 0, data.$data);
+
+						if (data.noteIndex < data.dragIndex) {
+							// moved back in array
+							fong.boardInput.NoteMapInfo.availableNotes.splice(data.dragIndex +1, 1);
+						} else {
+							fong.boardInput.NoteMapInfo.availableNotes.splice(data.dragIndex, 1);
+						}
+
+						// create a note map in the new order, minus disabled notes
+						fong.boardInput.NoteMapInfo.NoteMap = self.noteMap.buildMap(fong.boardInput.NoteMapInfo.availableNotes);
+
+						break;
+					case 'note-map-enable':
+						fong.boardInput.NoteMapInfo.NoteMapOn = data.NoteMapOn;
+						break;
+					case 'note-map-filter-toggle':
+						fong.boardInput.NoteMapInfo.FilterNoteMapOn = data.FilterNodeMapOn;
+						break;
+					case 'note-map-looping-toggle':
+						return console.warn('looping not supported');
+						break;
+					case 'note-map-chunky-toggle':
+						return console.warn('looping not supported');
+						break;
+					case 'note-map-chunky-pull-toggle':
+						return console.warn('looping not supported');
+						break;
+					case 'note-map-clear-loop':
+						return console.warn('looping not supported');
+						break;
+					case 'note-map-change-base-note':
+						fong.boardInput.NoteMapInfo.baseNote = data.baseNote;
+						self.noteMap.regenerateMap(fong.boardInput);
+						break;
+					case 'note-map-change-octave':
+						fong.boardInput.NoteMapInfo.octave = data.octave;
+						self.noteMap.resetOctaveForMap(fong.boardInput);
+
+						break;
+					case 'note-map-change-scale':
+						fong.boardInput.NoteMapInfo.SelectedScale = data.SelectedScale;
+						self.noteMap.regenerateMap(fong.boardInput);
 						break;
 				}
 			});
