@@ -179,6 +179,9 @@ var logicBoard;
 
 	FongPhone.Debugging.dumpAllStateToConsole = function() {
 		console.log(JSON.stringify(stateController.getAllStates(), null, 4));
+		console.log('------CURRENT STATE-------');
+		console.log(JSON.stringify(noteMap.toJSON(), null, 4));
+		console.log('--------------------------');
 	}
 })();
 

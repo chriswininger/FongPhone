@@ -34,10 +34,11 @@
 			$('.fong-phone-nav-bar-container').hide();
 			$('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
+			var noteMapSelectionCtrl = $('#noteMapSelections');
+			var scaleSettingsContainer = $('#scaleSettingsContainer');
+			noteMapSelectionCtrl.css('height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
+			noteMapSelectionCtrl.css('max-height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
 
-			var loopDurationControl = $('#loopDurationControl');
-			var chunkinessControl = $('#chunkinessControl');
-			var pullChunkinessControl = $('#pullChunkinessControl');
 			var dials = $('.dial');
 
 			// re-initialize values with scope set to make sure they propagate to ui
@@ -45,13 +46,10 @@
 
 			$scope.toggleSelectedFong = function (i) {
 				self.selectedFongIndex = i;
-				
-				updateKnobs();
 			};
 						
 			// Fired when a note in the map is clicked
 			$scope.noteClick = function (index) {
-				console.log('!!! self.selectedFong.id: ' +  self.selectedFong.id);
 				self._socket.emit('map:event', {
 					eventType: 'note-toggle',
 					availableNotesIndex: index,
@@ -123,41 +121,6 @@
 
 				self.selectedFong.NoteMapInfo.FilterNoteMapOn = !self.selectedFong.NoteMapInfo.FilterNoteMapOn;
 			};
-			
-			$scope.toggleLoopingClick = function () {
-				self._socket.emit('map:event', {
-					eventType: 'note-map-looping-toggle',
-					LoopOn: !self.selectedFong.NoteMapInfo.LoopOn,
-					id: self.selectedFong.id,
-					fongRole: self.selectedFong.fongRole
-				});
-			};
-			
-			$scope.toggleChunkyClick = function () {
-				self._socket.emit('map:event', {
-					eventType: 'note-map-chunky-toggle',
-					makeLoopChunky: !self.selectedFong.NoteMapInfo.makeLoopChunky,
-					id: self.selectedFong.id,
-					fongRole: self.selectedFong.fongRole
-				});
-			};
-			
-			$scope.togglePullChunkyClick = function () {
-				self._socket.emit('map:event', {
-					eventType: 'note-map-chunky-pull-toggle',
-					pullLoopChunky: !self.selectedFong.NoteMapInfo.pullLoopChunky,
-					id: self.selectedFong.id,
-					fongRole: self.selectedFong.fongRole
-				});
-			};
-			
-			$scope.clearLoopClick = function () {
-				self._socket.emit('map:event', {
-					eventType: 'note-map-clear-loop',
-					id: self.selectedFong.id,
-					fongRole: self.selectedFong.fongRole
-				});
-			};
 
 			$scope.changeBaseNote = function (event) {
 				self._socket.emit('map:event', {
@@ -225,30 +188,11 @@
 			function setLoopPullChunkiness(pullChunkiness) {
 				self.selectedFong.NoteMapInfo.pullChunkiness = pullChunkiness / 100.0;
 			}
-			function updateKnobs() {
-				loopDurationControl.val(self.selectedFong.NoteMapInfo.LoopDuration);
-				loopDurationControl.trigger('change');
-
-				chunkinessControl.val(parseInt(self.selectedFong.NoteMapInfo.loopChunkinessFactor * 100));
-				chunkinessControl.trigger('change');
-
-				pullChunkinessControl.val(parseInt(self.selectedFong.NoteMapInfo.pullChunkiness * 100));
-				pullChunkinessControl.trigger('change');
-			}
 
 			dials.attr("data-fgColor", "rgba(255, 255, 255, .5)");
 			dials.attr("data-bgColor", "rgba(255, 255, 255, .1)");
 			dials.attr('disabled', 'disabled');
-
-			FongPhone.utils.createGetSet(this, 'loopDuration', getLoopDuration, setLoopDuration);
-			FongPhone.utils.createGetSet(this, 'loopChunkinessFactor', getLoopChunkinessFactor, setLoopChunkinessFactor);
-			FongPhone.utils.createGetSet(this, 'loopPullChunkiness', getLoopPullChunkiness, setLoopPullChunkiness);
-
-			FongPhone.utils.registerKnob('#loopDurationControl', 'loopDuration', this.selectedFong.NoteMapInfo.LoopDuration, this);
-			FongPhone.utils.registerKnob('#chunkinessControl', 'loopChunkinessFactor', this.selectedFong.NoteMapInfo.loopChunkinessFactor, this);
-			FongPhone.utils.registerKnob('#pullChunkinessControl', 'loopPullChunkiness', this.selectedFong.NoteMapInfo.pullChunkiness, this);
-			
-			updateKnobs();
+		
 			
 			FongPhone.UI.Helper.registerAlertOnFirstView("mapMessage", 'The controls on this view allow you to change the musical properties of each Fong such as scales, octaves and looping behavior. Got it?', 'Notes & Loops');
 			
@@ -305,18 +249,32 @@
 				this.$scope.Fong2Selected = (index === 1);
 			}
 		},
-		generateScale: function(fong, startingNote, octave, scale) {
+		generateScale: function(fong, startingNote, octave, scaleName) {
 			fong.NoteMapInfo.availableNotes = [];
 			var n = teoria.note(startingNote + octave);
-			var scale = n.scale(scale);
+			var scale = n.scale(scaleName);
+			var maxNote = scale.scale.length;
 
-			for (var i = 1; i <= scale.scale.length; i++) {
+			for (var i = 1; i <= maxNote; i++) {
 				fong.NoteMapInfo.availableNotes.push({
 					label: scale.get(i).toString(),
 					freq: scale.get(i).fq(),
 					on: true
 				});
 			}
+
+			// go up a second octave
+			n = teoria.note(startingNote + (octave + 1));
+			scale = n.scale(scaleName);
+			maxNote = scale.scale.length;
+			for (var i = 1; i <= maxNote; i++) {
+				fong.NoteMapInfo.availableNotes.push({
+					label: scale.get(i).toString(),
+					freq: scale.get(i).fq(),
+					on: true
+				});
+			}
+
 		},
 		changeOctaveForScale: function(fong) {
 			// change notes in splace, not complete reset

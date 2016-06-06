@@ -126,166 +126,314 @@
 			fongs: [
 				{
 					"NoteMapInfo": {
-						"SelectedScale": "ionian",
+						"SelectedScale": "blues",
 						"baseNote": "a",
 						"octave": 3,
 						"availableNotes": [
 							{
-								"label": "a",
+								"label": "a3",
+								"freq": 220,
+								"on": true,
+								"$$hashKey": "object:47"
+							},
+							{
+								"label": "c4",
+								"freq": 261.6255653005986,
+								"on": true,
+								"$$hashKey": "object:48"
+							},
+							{
+								"label": "d4",
+								"freq": 293.6647679174076,
+								"on": true,
+								"$$hashKey": "object:49"
+							},
+							{
+								"label": "d#4",
+								"freq": 311.12698372208087,
+								"on": true,
+								"$$hashKey": "object:50"
+							},
+							{
+								"label": "e4",
+								"freq": 329.6275569128699,
+								"on": true,
+								"$$hashKey": "object:51"
+							},
+							{
+								"label": "g4",
+								"freq": 391.99543598174927,
+								"on": true,
+								"$$hashKey": "object:52"
+							},
+							{
+								"label": "a4",
 								"freq": 440,
 								"on": true,
+								"$$hashKey": "object:53"
 							},
 							{
-								"label": "b",
-								"freq": 493.8833012561241,
+								"label": "c5",
+								"freq": 523.2511306011972,
 								"on": true,
+								"$$hashKey": "object:54"
 							},
 							{
-								"label": "c#",
-								"freq": 277.1826309768721,
+								"label": "d5",
+								"freq": 587.3295358348151,
 								"on": true,
+								"$$hashKey": "object:55"
 							},
 							{
-								"label": "d",
-								"freq": 293.6647679174076,
-								"on": true
+								"label": "d#5",
+								"freq": 622.2539674441618,
+								"on": true,
+								"$$hashKey": "object:56"
 							},
 							{
-								"label": "e",
-								"freq": 329.6275569128699,
-								"on": true
+								"label": "e5",
+								"freq": 659.2551138257398,
+								"on": true,
+								"$$hashKey": "object:57"
 							},
 							{
-								"label": "f#",
-								"freq": 369.9944227116344,
-								"on": true
-							},
-							{
-								"label": "g#",
-								"freq": 415.3046975799451,
-								"on": true
+								"label": "g5",
+								"freq": 783.9908719634985,
+								"on": true,
+								"$$hashKey": "object:58"
 							}
 						],
 						"NoteMapOn": true,
 						"FilterNoteMapOn": false,
 						"NoteMap": [
 							{
-								"label": "a",
-								"freq": 440,
-								"on": true
+								"label": "a3",
+								"freq": 220,
+								"on": true,
+								"$$hashKey": "object:47"
 							},
 							{
-								"label": "b",
-								"freq": 493.8833012561241,
-								"on": true
+								"label": "c4",
+								"freq": 261.6255653005986,
+								"on": true,
+								"$$hashKey": "object:48"
 							},
 							{
-								"label": "c#",
-								"freq": 277.1826309768721,
-								"on": true
-							},
-							{
-								"label": "d",
+								"label": "d4",
 								"freq": 293.6647679174076,
-								"on": true
+								"on": true,
+								"$$hashKey": "object:49"
 							},
 							{
-								"label": "e",
+								"label": "d#4",
+								"freq": 311.12698372208087,
+								"on": true,
+								"$$hashKey": "object:50"
+							},
+							{
+								"label": "e4",
 								"freq": 329.6275569128699,
-								"on": true
+								"on": true,
+								"$$hashKey": "object:51"
 							},
 							{
-								"label": "f#",
-								"freq": 369.9944227116344,
-								"on": true
+								"label": "g4",
+								"freq": 391.99543598174927,
+								"on": true,
+								"$$hashKey": "object:52"
 							},
 							{
-								"label": "g#",
-								"freq": 415.3046975799451,
-								"on": true
+								"label": "a4",
+								"freq": 440,
+								"on": true,
+								"$$hashKey": "object:53"
+							},
+							{
+								"label": "c5",
+								"freq": 523.2511306011972,
+								"on": true,
+								"$$hashKey": "object:54"
+							},
+							{
+								"label": "d5",
+								"freq": 587.3295358348151,
+								"on": true,
+								"$$hashKey": "object:55"
+							},
+							{
+								"label": "d#5",
+								"freq": 622.2539674441618,
+								"on": true,
+								"$$hashKey": "object:56"
+							},
+							{
+								"label": "e5",
+								"freq": 659.2551138257398,
+								"on": true,
+								"$$hashKey": "object:57"
+							},
+							{
+								"label": "g5",
+								"freq": 783.9908719634985,
+								"on": true,
+								"$$hashKey": "object:58"
 							}
 						]
 					}
 				},
 				{
 					NoteMapInfo: {
-						"SelectedScale": "ionian",
+						"SelectedScale": "blues",
 						"baseNote": "a",
-						"octave": 4,
+						"octave": 5,
 						"availableNotes": [
 							{
-								"label": "a",
-								"freq": 440,
-								"on": true
+								"label": "a5",
+								"freq": 880,
+								"on": true,
+								"$$hashKey": "object:120"
 							},
 							{
-								"label": "b",
-								"freq": 493.8833012561241,
-								"on": true
+								"label": "c6",
+								"freq": 1046.5022612023945,
+								"on": true,
+								"$$hashKey": "object:121"
 							},
 							{
-								"label": "c#",
-								"freq": 277.1826309768721,
-								"on": true
+								"label": "d6",
+								"freq": 1174.6590716696303,
+								"on": true,
+								"$$hashKey": "object:122"
 							},
 							{
-								"label": "d",
-								"freq": 293.6647679174076,
-								"on": true
+								"label": "d#6",
+								"freq": 1244.5079348883237,
+								"on": true,
+								"$$hashKey": "object:123"
 							},
 							{
-								"label": "e",
-								"freq": 329.6275569128699,
-								"on": true
+								"label": "e6",
+								"freq": 1318.5102276514797,
+								"on": true,
+								"$$hashKey": "object:124"
 							},
 							{
-								"label": "f#",
-								"freq": 369.9944227116344,
-								"on": true
+								"label": "g6",
+								"freq": 1567.981743926997,
+								"on": true,
+								"$$hashKey": "object:125"
 							},
 							{
-								"label": "g#",
-								"freq": 415.3046975799451,
-								"on": true
+								"label": "a5",
+								"freq": 880,
+								"on": true,
+								"$$hashKey": "object:82"
+							},
+							{
+								"label": "c6",
+								"freq": 1046.5022612023945,
+								"on": true,
+								"$$hashKey": "object:83"
+							},
+							{
+								"label": "d6",
+								"freq": 1174.6590716696303,
+								"on": true,
+								"$$hashKey": "object:84"
+							},
+							{
+								"label": "d#6",
+								"freq": 1244.5079348883237,
+								"on": true,
+								"$$hashKey": "object:85"
+							},
+							{
+								"label": "e6",
+								"freq": 1318.5102276514797,
+								"on": true,
+								"$$hashKey": "object:86"
+							},
+							{
+								"label": "g6",
+								"freq": 1567.981743926997,
+								"on": true,
+								"$$hashKey": "object:87"
 							}
 						],
 						"NoteMapOn": true,
 						"FilterNoteMapOn": false,
 						"NoteMap": [
 							{
-								"label": "a",
+								"label": "a4",
 								"freq": 440,
-								"on": true
+								"on": true,
+								"$$hashKey": "object:76"
 							},
 							{
-								"label": "b",
-								"freq": 493.8833012561241,
-								"on": true
+								"label": "c5",
+								"freq": 523.2511306011972,
+								"on": true,
+								"$$hashKey": "object:77"
 							},
 							{
-								"label": "c#",
-								"freq": 277.1826309768721,
-								"on": true
+								"label": "d5",
+								"freq": 587.3295358348151,
+								"on": true,
+								"$$hashKey": "object:78"
 							},
 							{
-								"label": "d",
-								"freq": 293.6647679174076,
-								"on": true
+								"label": "d#5",
+								"freq": 622.2539674441618,
+								"on": true,
+								"$$hashKey": "object:79"
 							},
 							{
-								"label": "e",
-								"freq": 329.6275569128699,
-								"on": true
+								"label": "e5",
+								"freq": 659.2551138257398,
+								"on": true,
+								"$$hashKey": "object:80"
 							},
 							{
-								"label": "f#",
-								"freq": 369.9944227116344,
-								"on": true
+								"label": "g5",
+								"freq": 783.9908719634985,
+								"on": true,
+								"$$hashKey": "object:81"
 							},
 							{
-								"label": "g#",
-								"freq": 415.3046975799451,
-								"on": true
+								"label": "a5",
+								"freq": 880,
+								"on": true,
+								"$$hashKey": "object:82"
+							},
+							{
+								"label": "c6",
+								"freq": 1046.5022612023945,
+								"on": true,
+								"$$hashKey": "object:83"
+							},
+							{
+								"label": "d6",
+								"freq": 1174.6590716696303,
+								"on": true,
+								"$$hashKey": "object:84"
+							},
+							{
+								"label": "d#6",
+								"freq": 1244.5079348883237,
+								"on": true,
+								"$$hashKey": "object:85"
+							},
+							{
+								"label": "e6",
+								"freq": 1318.5102276514797,
+								"on": true,
+								"$$hashKey": "object:86"
+							},
+							{
+								"label": "g6",
+								"freq": 1567.981743926997,
+								"on": true,
+								"$$hashKey": "object:87"
 							}
 						]
 					}

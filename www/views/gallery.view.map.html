@@ -92,7 +92,7 @@
 			</tr>
 		</table>
 		<div id="scrollableContainer">
-			<div style="height:248px;max-height:248px;" class="scrollable">
+			<div id="noteMapSelections" style="height:248px;max-height:248px;" class="scrollable">
 				<table class="ui-map-table">
 					<tr ng-repeat="x in selectedFong.NoteMapInfo.availableNotes" class="ui-map-row">
 						<td class="ui-map-column map-note {{ x.on ? 'map-note-on' : 'map-note-off' }}" colspan="12">
@@ -104,7 +104,7 @@
 				</table>
 
 			</div>
-			<div>
+			<div id="scaleSettingsContainer">
 				<table class="ui-map-table">
 					<tr>
 						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.NoteMapOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%" colspan="2" ng-click="toggleNoteMapClick()">
@@ -142,52 +142,6 @@
 							flamenco
 						</td>
 					</tr>
-				</table>
-			</div>
-			<div style="padding-bottom:50px">
-				<table class="ui-map-table">
-					<tr>
-						<td id="loopingToggle" class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.LoopOn ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%;backround-color:#ffffff;background-opacity:0;" colspan="2" ng-click="toggleLoopingClick()">
-							Looping {{ selectedFong.NoteMapInfo.LoopOn ? '' : 'Off' }}
-						</td>
-						<td class="ui-map-note-map-toggle" colspan="1">
-							<div style="position:relative;">
-								<input id="loopDurationControl" type="text" class="dial" data-min="500" data-max="60000" data-width="80">
-							</div>
-						</td>
-						<td class="ui-map-note-map-scale" width="25%"></td>
-					</tr>
-					<tr>
-						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.makeLoopChunky ? 'map-note-on' : 'map-note-off' }}" style="height:50px;width:50%;" colspan="2" ng-click="toggleChunkyClick()">
-							In Chunky {{ selectedFong.NoteMapInfo.makeLoopChunky ? '' : 'Off' }}
-						</td>
-						<td class="ui-map-note-map-toggle" colspan="1">
-							<div style="position:relative;">
-								<input id="chunkinessControl" type="text" class="dial" data-min="1" data-max="100" data-width="80">
-							</div>
-						</td>
-						<td class="ui-map-note-map-scale" width="25%"></td>
-					</tr>
-					<tr>
-						<td class="ui-map-note-map-toggle {{ selectedFong.NoteMapInfo.pullLoopChunky ? 'map-note-on' : 'map-note-off' }}"
-							style="height:50px;width:50%;" colspan="2" ng-click="togglePullChunkyClick()">
-							Out Chunky {{ selectedFong.NoteMapInfo.pullLoopChunky ? '' : 'Off' }}
-						</td>
-						<td class="ui-map-note-map-toggle" colspan="1">
-							<div style="position:relative;">
-								<input id="pullChunkinessControl" type="text" class="dial" data-min="1" data-max="100" data-width="80">
-							</div>
-						</td>
-						<td class="ui-map-note-map-scale" width="25%"></td>
-					</tr>
-					<tr>
-						<td class="ui-map-note-map-toggle map-note-on" style="height:50px;width:50%;" colspan="2" ng-click="clearLoopClick()">
-							Clear Loop
-						</td>
-						<td class="ui-map-note-map-toggle" colspan="1">							
-						</td>
-						<td class="ui-map-note-map-scale" width="25%"></td>
-					</tr>					
 				</table>
 			</div>
 		</div>
