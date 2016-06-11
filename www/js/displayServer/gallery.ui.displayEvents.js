@@ -3,7 +3,7 @@
 		this.logicBoard = logicBoard;
 		this.pad = pad;
 		this.noteMap = noteMap;
-	}
+	};
 
 	_.extend(FongPhone.Utils.GalleryDisplayEvents.prototype, {
 		startRemoteEvents: function() {
@@ -34,9 +34,10 @@
 				if (typeof data.id === 'number')
 					fong = self.pad.fongDotsByID[data.id];
 
+				if (!fong) return console.warn('no fong for event ' + data.eventType);
+
 				switch (data.eventType) {
 					case 'osc:env:type':
-						if (!fong) return console.warn('no fong for event ' + data.eventType);
 						fong.boardInput.oscGainCtrl.type = data.value;
 						break;
 					case 'osc:type':
@@ -46,21 +47,15 @@
 						break;
 					case 'delay:feedback':
 						logicBoard.delayFeedback = data.value / 10.0;
-						for (var i = 0; i < logicBoard.fongs.length; i++) {
-							logicBoard.fongs[i].setDelayFeedback(logicBoard.delayFeedback);
-						}
+						fong.boardInput.setDelayFeedback(logicBoard.delayFeedback);
 						break;
 					case 'delay:time':
 						logicBoard.delayTime = data.value / 1000.0;
-						for (var i = 0; i < logicBoard.fongs.length; i++) {
-							logicBoard.fongs[i].setDelayTime(logicBoard.delayTime);
-						}
+						fong.boardInput.setDelayTime(logicBoard.delayTime);
 						break;
 					case 'delay:volume':
 						logicBoard.delayVolume = data.value / 100.0;
-						for (var i = 0; i < logicBoard.fongs.length; i++) {
-							logicBoard.fongs[i].setDelayVolume(logicBoard.delayVolume);
-						}
+						fong.boardInput.setDelayVolume(logicBoard.delayVolume);
 						break;
 					case 'portamento:filter':
 						logicBoard.filterPortamento = data.value;
@@ -84,18 +79,13 @@
 
 						break;
 					case 'filter:resonance':
-						for (var i = 0; i < logicBoard.fongs.length; i++) {
-							logicBoard.fongs[i].setOscFilterResonance(data.value);
-						}
-
+						fong.boardInput.setOscFilterResonance(data.value);
 						break;
 					case 'filter:on':
 						logicBoard.setFilterStatus(data.value);
 						break;
 					case 'filter:type':
-						for (var i = 0; i < logicBoard.fongs.length; i++) {
-							logicBoard.fongs[i].setFilterType(data.value);
-						}
+						fong.boardInput.setFilterType(data.value);
 						break;
 				}
 			});

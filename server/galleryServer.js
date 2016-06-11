@@ -15,8 +15,8 @@ var INTERACTION_TIMEOUT = 60000;
 var PORT = 3002;
 
 var slots = {
-	pad1: true,
-	pad2: true,
+	pad1: false,
+	pad2: false,
 	soundBoard: false,
 	noteMap: false
 };

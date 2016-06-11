@@ -83,6 +83,34 @@ var logicBoard;
 					loopChunkinessFactor: .5,
 					pullChunkiness: .5
 				})
+			},
+			{
+				id: 2,
+				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
+					SelectedScale: 'ionian',
+					baseNote: 'a',
+					octave: 4,
+					availableNotes: [],
+					NoteMapOn: false,
+					FilterNoteMapOn: false,
+					LoopDuration: 15000,
+					loopChunkinessFactor: .5,
+					pullChunkiness: .5
+				})
+			},
+			{
+				id: 3,
+				NoteMapInfo: new FongPhone.Logic.NoteMapInfo({
+					SelectedScale: 'ionian',
+					baseNote: 'a',
+					octave: 4,
+					availableNotes: [],
+					NoteMapOn: false,
+					FilterNoteMapOn: false,
+					LoopDuration: 15000,
+					loopChunkinessFactor: .5,
+					pullChunkiness: .5
+				})
 			}
 		]
 	};
@@ -119,7 +147,7 @@ var logicBoard;
 			templateUrl: 'views/gallery.view.map.html',
 			controller: 'noteMapController'
 		}).when('/sound', {
-			templateUrl: 'views/view-sound.html',
+			templateUrl: 'views/gallery.view.sound.html',
 			controller: 'soundController'
 		}).when('/states', {
 			templateUrl: 'views/view-states.html',

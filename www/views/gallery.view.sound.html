@@ -1,0 +1,153 @@
+<div class="ui-display-area" id="sound-display-area">
+    <div id="soundUI">
+        <svg width="100%" height="20" class="fong-phone-apple-status-bar">
+            <defs>
+                <linearGradient id="gradTop" x1="30%" y1="70%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity=".8">
+                        <animate attributeName="stop-opacity" values=".9;.8;.9" dur="30s" repeatCount="indefinite" />
+                    </stop>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity=".9">
+                        <animate attributeName="stop-opacity" values=".8;.9;.8" dur="33s" repeatCount="indefinite" />
+                    </stop>
+                </linearGradient>
+            </defs>
+            <rect width="100%" height="20" fill="url(#gradTop)" />
+        </svg>
+
+        <div id="soundControlsDiv" class="scrollable">
+            <table class="ui-sound-table">
+                <tr>
+                    <td class="ui-map-note-map-toggle {{ FilterOn ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleFilterClick()">
+                        Filter {{ FilterOn ? 'On' : 'Off' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" style="width:50%">Resonance</td>
+                    <td class="ui-map-note-map-toggle" colspan="2">
+                        <div style="position:relative;">
+                            <input id="filterResonanceControl" type="text" class="dial" data-min="0" data-max="100" data-width="80">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Filter Type</td>
+                    <td class="ui-map-note-map-base-note {{ IsSelectedFilterType('lowpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+                        lowpass
+                    </td>
+                    <td class="ui-map-note-map-base-note {{ IsSelectedFilterType('highpass') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+                        highpass
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-base-note {{ IsSelectedFilterType('peaking') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+                        peaking
+                    </td>
+                    <td class="ui-map-note-map-base-note {{ IsSelectedFilterType('notch') ? 'selectedScale' : '' }}" ng-click="changeFilterType($event)">
+                        notch
+                    </td>
+                </tr>
+            </table>
+            <table class="ui-sound-table">
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" rowspan="2" style="width:50%">Wave</td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)" width="25%">
+                        square
+                    </td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
+                        sine
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('triangle') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
+                        triangle
+                    </td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1Type('sawtooth') ? 'selectedScale' : '' }}" ng-click="changeOsc1Type($event)">
+                        sawtooth
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2">Envelope</td>
+                    <td class="ui-map-note-map-toggle" colspan="2">
+                        <div style="position:relative;">
+                            <input id="env1Control" type="text" class="dial" data-min="1" data-max="50" data-width="80">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" rowspan="2">Env Type</td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('square') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+                        square
+                    </td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('sine') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+                        sine
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('triangle') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+                        triangle
+                    </td>
+                    <td class="ui-map-note-map-scale {{ IsSelectedOsc1EnvType('sawtooth') ? 'selectedScale' : '' }}" ng-click="changeOsc1EnvType($event)">
+                        sawtooth
+                    </td>
+                </tr>
+            </table>
+            <table class="ui-sound-table">
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" width="50%">Glide</td>
+                    <td class="ui-map-note-map-toggle" colspan="1" width="25%">
+                        <div style="position:relative;">
+                            <input id="portamentoControl" type="text" class="dial" data-min="0" data-max="1000" data-width="80">
+                        </div>
+                    </td>
+                    <td class="ui-map-note-map-scale"></td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2">Filter Glide</td>
+                    <td class="ui-map-note-map-toggle" colspan="1">
+                        <div style="position:relative;">
+                            <input id="filterPortamentoControl" type="text" class="dial" data-min="0" data-max="10000" data-width="80">
+                        </div>
+                    </td>
+                    <td class="ui-map-note-map-scale"></td>
+                </tr>
+            </table>
+            <table class="ui-sound-table" style="padding-bottom:50px">
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2" width="50%">Delay Volume</td>
+                    <td class="ui-map-note-map-toggle" colspan="1" width="25%">
+                        <div style="position:relative;">
+                            <input id="delayVolumeControl" type="text" class="dial" data-min="0" data-max="100" data-width="80">
+                        </div>
+                    </td>
+                    <td class="ui-map-note-map-scale" width="25%"></td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2">Delay</td>
+                    <td class="ui-map-note-map-toggle" colspan="2">
+                        <div style="position:relative;">
+                            <input id="delayTimeControl" type="text" class="dial" data-min="250" data-max="10000" data-width="80">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="ui-map-note-map-toggle" colspan="2">Feedback</td>
+                    <td class="ui-map-note-map-toggle" colspan="1">
+                        <div style="position:relative;">
+                            <input id="delayFeedbackControl" type="text" class="dial" data-min="0" data-max="20" data-width="80">
+                        </div>
+                    </td>
+                    <td class="ui-map-note-map-scale" width="25%"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="fong-phone-nav-bar-container">
+        <div ng-repeat="tab in tabbedNavigationTabs"
+             class="fong-phone-button {{ tab.tabClass }}
+		 	{{ !!tab.selected ? 'fong-phone-button-selected' : '' }}">
+            <div ng-click="tabNavigationFunc(tab, this)"></div>
+            {{ tab.text }}
+        </div>
+    </div>
+</div>

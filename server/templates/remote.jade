@@ -40,7 +40,9 @@ html
 		script(src="js/remoteController/gallery.ui.map.js")
 		if subspace == '/pad2'
 			script(src="js/defaults/remote.pad2.defaults.js")
-		else
+		else if subspace == '/pad1'
 			script(src="js/defaults/remote.pad1.defaults.js")
+		else
+			script(src="js/defaults/displayServer.pad.defaults.js")
 		script(src="js/displayServer/ui.states.js")
 		script(src="js/remoteController/gallery.app.js")

@@ -1,33 +1,46 @@
 (function() {
     FongPhone.Navigation.Tabs = [
         {
-            text: 'Fongs',
-            location: '#/',
+            text: 'Fong 1',
+            location: '#',
+            selection: 0,
             tabClass: 'fong-phone-button-fong',
-            pageClass: 'view-pad'
+            pageClass: 'view-pad',
+            selected: true
         },
         {
-            text: 'Sound',
-            location: '#/sound',
-            tabClass: 'fong-phone-button-sound',
-            pageClass: 'view-sound'
+            text: 'Fong 2',
+            location: '#',
+            selection: 1,
+            tabClass: 'fong-phone-button-fong',
+            pageClass: 'view-sound',
+            selected: false
         },
         {
-            text: 'Notes/Loops',
-            location: '#/note-map',
-            tabClass: 'fong-phone-button-loops',
-            pageClass: 'view-map'
+            text: 'Fong 3',
+            location: '#',
+            selection: 2,
+            tabClass: 'fong-phone-button-fong',
+            pageClass: 'view-map',
+            selected: false
         },
         {
-            text: 'States',
-            location: '#/states',
-            tabClass: 'fong-phone-button-states',
-            pageClass: 'view-states'
+            text: 'Fong 4',
+            location: '#',
+            selection: 3,
+            tabClass: 'fong-phone-button-fong',
+            pageClass: 'view-states',
+            selected: false
         }
     ];
 
-    FongPhone.Navigation.tabNavigationFunc = function(stateController, loc) {
-        setWindow(loc);
-        stateController.saveAll();
+    FongPhone.Navigation.tabNavigationFunc = function(stateController, tab, scope) {
+        scope.setSelectedFongID(tab.selection);
+        for (var i = 0; i < FongPhone.Navigation.Tabs.length; i++) {
+            FongPhone.Navigation.Tabs[i].selected = false;
+        }
+
+        tab.selected = true;
+        scope.updateKnobs();
     };
 })();

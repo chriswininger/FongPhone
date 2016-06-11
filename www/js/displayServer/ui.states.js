@@ -267,6 +267,7 @@
 			});
 		},
 		saveAll: function (name) {
+			return console.log('not supported for gallery hop event');
 			if (_.contains(this.storedList, name)) {
 				return console.error('name already exists');
 			}
@@ -280,6 +281,7 @@
 			}
 		},
 		saveMap: function (name) {
+			return console.log('not supported for gallery hop event');
 			if (!this.uiMap) return;
 
 			name = name || '';
@@ -292,6 +294,7 @@
 			}
 		},
 		savePad: function (name) {
+			return console.log('not supported for gallery hop event');
 			if (!this.uiPad) return;
 
 			name = name || '';
@@ -304,6 +307,7 @@
 			}
 		},
 		saveSoundSettings: function (name) {
+			return console.log('not supported for gallery hop event');
 			if (!this.uiSoundSettings) return;
 
 			name = name || '';

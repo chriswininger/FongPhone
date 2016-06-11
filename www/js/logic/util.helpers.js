@@ -17,6 +17,8 @@
 					owner[attrKey] = parseInt(v);
 				}
 			});
+			
+			return ctrl;
 		}
     };	
 })();

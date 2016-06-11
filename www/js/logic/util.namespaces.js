@@ -12,7 +12,7 @@
             !!navigator.userAgent.match(/Android/) : false),
 		isGalleryHop: true
 	};
-	ctx.FongPhone.Globals.tabbedNavHeight = ctx.FongPhone.Globals.isAndroid ? 70 : 0;
+	ctx.FongPhone.Globals.tabbedNavHeight = 70;
 })(window);
 var bVersionDisplayed;
 var uiPad;
