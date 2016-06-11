@@ -153,6 +153,37 @@
 						break;
 				}
 			});
+
+			this._socket.on('server:event:pass', function(data) {
+				switch (data.eventType) {
+					case 'disconnect':
+						if (data.slot === 'pad1') {
+							self.pad.fongDotsByID[0].boardInput.setOscVol(0);
+							self.pad.fongDotsByID[0].boardInput.setDelayVolume(0);
+							self.pad.fongDotsByID[1].boardInput.setOscVol(0);
+							self.pad.fongDotsByID[1].boardInput.setDelayVolume(0);
+						} else if (data.slot === 'pad2') {
+							self.pad.fongDotsByID[2].boardInput.setOscVol(0);
+							self.pad.fongDotsByID[2].boardInput.setDelayVolume(0);
+							self.pad.fongDotsByID[3].boardInput.setOscVol(0);
+							self.pad.fongDotsByID[3].boardInput.setDelayVolume(0);
+						}
+						break;
+					case 'connect':
+						var connectedVol = 0.9949676394462585;
+						if (data.slot === 'pad1') {
+							self.pad.fongDotsByID[0].boardInput.setOscVol(connectedVol);
+							self.pad.fongDotsByID[0].boardInput.setDelayVolume(1);
+							self.pad.fongDotsByID[1].boardInput.setOscVol(connectedVol);
+							self.pad.fongDotsByID[1].boardInput.setDelayVolume(1);
+						} else if (data.slot === 'pad2') {
+							self.pad.fongDotsByID[2].boardInput.setOscVol(connectedVol);
+							self.pad.fongDotsByID[2].boardInput.setDelayVolume(1);
+							self.pad.fongDotsByID[3].boardInput.setOscVol(connectedVol);
+							self.pad.fongDotsByID[3].boardInput.setDelayVolume(1);
+						}
+				}
+			});
 		}
 	});
 })();

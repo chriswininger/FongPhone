@@ -100,6 +100,12 @@ for (var i = 0; i < slotKeys.length; i++) {
 			var _checkInterval = setInterval(_checkForInteraction, 1000);
 			var _closedSocket = false;
 
+			// TODO (CAW) Send out event to display server to start sound
+			displayNSP.emit('server:event:pass', {
+				eventType: 'connect',
+				slot: slot
+			});
+
 			socket.on(ns, function(data) {
 				debug('received event for ' + slot + ' => ' + data.eventType + ' (' +  data.id + ')');
 				// pass events to display server
@@ -135,8 +141,8 @@ for (var i = 0; i < slotKeys.length; i++) {
 				}
 
 				// TODO (CAW) Send out event to display server to stop sound
-				displayNSP.emit('fong:event:pass', {
-					type: 'disconnect',
+				displayNSP.emit('server:event:pass', {
+					eventType: 'disconnect',
 					slot: slot
 				});
 

@@ -245,6 +245,8 @@
 				fongDotsByRole[fongUI.fongRole] = fongUI;
 				fongDotsByID[fongJSON.id] = fongUI;
 
+				// initialize silent for gallery
+				//fongDots.boardInput.setOscVol(0);
 				fongDots.push(fongUI);
 			}, this);
 

@@ -1,8 +1,8 @@
 FongPhone.Logic.Defaults = {
     logicBoardDefaults: defaults = {
         mainVol: 0.3,
-        osc1Vol: 0.9949676394462585,
-        osc2Vol: 0.9949676394462585,
+        osc1Vol: 0,
+        osc2Vol: 0,
         osc1Freq: 440,
         osc2Freq: 1000,
         primaryOffset: 0.5,
