@@ -22,22 +22,23 @@
 	};
 
 	_.extend(FongPhone.UI.NoteMap.prototype, {
-		attachToDom: function($scope) {
-			var heightStatusBar = 20;
-			var heightSub = heightStatusBar;
-
-			var self = this;
-			this.$scope = $scope;
-
-
-			$('.fong-phone-apple-status-bar').hide();
-			$('.fong-phone-nav-bar-container').hide();
+		adjustHeightWidth: function() {
+			var heightSub = 20;
 			$('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
 			$('#mapUI').css('max-height', window.innerHeight + "px");
 			var noteMapSelectionCtrl = $('#noteMapSelections');
 			var scaleSettingsContainer = $('#scaleSettingsContainer');
 			noteMapSelectionCtrl.css('height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
 			noteMapSelectionCtrl.css('max-height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
+		},
+		attachToDom: function($scope) {
+			var self = this;
+			this.$scope = $scope;
+
+
+			$('.fong-phone-apple-status-bar').hide();
+			$('.fong-phone-nav-bar-container').hide();
+			this.adjustHeightWidth();
 
 			var dials = $('.dial');
 
@@ -247,6 +248,8 @@
 			if (this.$scope) {
 				this.$scope.Fong1Selected = (index === 0);
 				this.$scope.Fong2Selected = (index === 1);
+				this.$scope.Fong3Selected = (index === 2);
+				this.$scope.Fong4Selected = (index === 3);
 			}
 		},
 		generateScale: function(fong, startingNote, octave, scaleName) {

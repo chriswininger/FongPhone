@@ -9,10 +9,17 @@ var fs = require('fs');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var jade = require('jade');
+var nconf = require('nconf');
 var debug = require('debug')('server');
 
-var INTERACTION_TIMEOUT = 60000;
-var PORT = 3002;
+nconf
+	.argv()
+	.env()
+	.file({ file: './serverConfig.json' });
+
+
+var INTERACTION_TIMEOUT = nconf.get('Interaction_Timeout');
+var PORT = nconf.get('Port');
 
 var slots = {
 	pad1: false,
@@ -161,4 +168,4 @@ function _remoteRequest(req, res, next) {
 }
 
 http.listen(PORT);
-console.log('listening on port ' + PORT);
+console.log('listening on port: ' + PORT + ', interaction timeout: ' + INTERACTION_TIMEOUT);

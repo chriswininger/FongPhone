@@ -47,6 +47,12 @@
 	};
 
 	_.extend(FongPhone.UI.Pad.prototype, {
+		adjustHeightWidth: function() {
+			this.winHeight = window.innerHeight;
+			this.winWidth = window.innerWidth;
+	
+			$('#phongUIGrid').css('height', this.winHeight + "px");
+		},
 		attachToDom: function($scope) {
 			var self = this;
 			// make changes to dom to create ui
@@ -54,7 +60,7 @@
 			// set up dom events
 			this.listen();
 
-			_adjustHeightWidth();
+			this.adjustHeightWidth();
 			$('.fong-phone-apple-status-bar').hide();
 			$('.fong-phone-nav-bar-container').hide();
 
@@ -62,27 +68,6 @@
 
 			// make sure each fong gets re-attached
 			_.each(this.fongDots, function(fong) { fong.attachToDom(); });
-
-			window.addEventListener('orientationchange', function _orientationChanged() {
-				switch(window.orientation)
-				{
-					case -90:
-					case 90:
-						console.log('landscape')
-						break;
-					default:
-						console.log('portrait');
-						break;
-				}
-				setTimeout(_adjustHeightWidth, 300);
-			});
-
-			function _adjustHeightWidth() {
-				self.winHeight = window.innerHeight;
-				self.winWidth = window.innerWidth;
-
-				$('#phongUIGrid').css('height', self.winHeight + "px");
-			}
 		},
 		createComponents: function () {
 			$('#' + this.svgElementID).height(window.innerHeight - FongPhone.Globals.tabbedNavHeight);

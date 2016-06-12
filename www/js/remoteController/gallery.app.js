@@ -14,20 +14,33 @@ var logicBoard;
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 
+		var heightAdjustmentFunc;
+
 		// redirect to correct view based on subspace returned in form
 		switch (subSpace) {
 			case '/soundBoard':
 				window.location.href = '#/sound';
+				heightAdjustmentFunc = _.bind(soundUI.adjustHeightWidth, soundUI);
 				break;
 			case '/noteMap':
 				window.location.href = '#/note-map';
+				heightAdjustmentFunc = _.bind(noteMap.adjustHeightWidth, noteMap);
 				break;
 			case '/pad1':
 				// fall through
 			case '/pad2':
 				window.location.href = '#/';
+				heightAdjustmentFunc = _.bind(padUI.adjustHeightWidth, padUI);
 				break;
 		}
+
+
+		window.addEventListener('orientationchange', function _orientationChanged() {
+			if (!heightAdjustmentFunc)
+				return console.warn('no height adjustment found for sub space: ' + subSpace);
+
+			setTimeout(heightAdjustmentFunc, 300);
+		});
 	});
 
 	if (document.visibilityState === 'prerender') {

@@ -154,19 +154,22 @@
 
 			this.selectedFongID = 0;
 		},
-		attachToDom: function($scope) {
-			var self = this;
-			this.$scope = $scope;
-			var heightStatusBar = 20;
+		adjustHeightWidth: function() {
 			var heightSub = FongPhone.Globals.tabbedNavHeight;
-			var dial = $(".dial");
-
-
-			$('.fong-phone-apple-status-bar').hide();
 			$('#soundControlsDiv').css('height', (window.innerHeight - heightSub) + "px");
 			$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
 			//soundUI
 			$('.page').css('max-height', window.innerHeight + "px");
+		},
+		attachToDom: function($scope) {
+			var self = this;
+			this.$scope = $scope;
+
+			var dial = $(".dial");
+
+
+			$('.fong-phone-apple-status-bar').hide();
+			this.adjustHeightWidth();
 
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
 

@@ -15,6 +15,7 @@
     "express-sessions": "^1.0.5",
     "jade": "^1.11.0",
     "mongoose": "^4.4.14",
+    "nconf": "^0.8.4",
     "socket.io": "^1.4.5"
   }
 }
