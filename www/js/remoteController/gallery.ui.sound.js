@@ -9,6 +9,7 @@
 		this.logicBoard = logicBoard;
 		this.selectedFongID = 0;
 		this._fongStates = [{}, {}, {}, {}];
+		this._domAttached = false;
 
 		FongPhone.utils.createGetSet(this, 'osc1EnvType', getOsc1EnvType, setOsc1EnvType);
 		FongPhone.utils.createGetSet(this, 'osc1Type', getOsc1Type, setOsc1Type);
@@ -134,6 +135,15 @@
 	_.extend(Sound.prototype, {
 		sendEvent: function(fong, event, value) {
 			var self = this;
+			if (!this._domAttached) {
+				// on init don't debounce just send them straight over
+				self._socket.emit('sound:event', {
+					eventType: event,
+					value: value,
+					id: (!!fong ? fong.id : null)
+				});
+			}
+
 			if (!this._messageDebouncers[event]) {
 				this._messageDebouncers[event] = _.debounce(function(fong, event, value) {
 					self._socket.emit('sound:event', {
@@ -141,7 +151,7 @@
 						value: value,
 						id: (!!fong ? fong.id : null)
 					});
-				}, 10)
+				}, 10);
 			}
 
 			this._messageDebouncers[event](fong, event, value);
@@ -229,6 +239,9 @@
 			$scope.changeOsc1EnvType = function (event) {
 				self.osc1EnvType = $(event.target).html().trim();
 			}
+
+			FongPhone.Navigation.Tabs[0].selected = true;
+			this._domAttached = true;
 		},
 		updateKnobs: function() {
 			this.knobFilterResonanceControl.val(this.filterResonance);

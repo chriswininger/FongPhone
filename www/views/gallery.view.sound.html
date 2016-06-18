@@ -144,8 +144,7 @@
 
     <div class="fong-phone-nav-bar-container">
         <div ng-repeat="tab in tabbedNavigationTabs"
-             class="fong-phone-button {{ tab.tabClass }}
-		 	{{ !!tab.selected ? 'fong-phone-button-selected' : '' }}">
+             class="fong-phone-button {{ tab.tabClass }} {{ (tab.selected ? 'fong-phone-button-selected' : '') }}">
             <div ng-click="tabNavigationFunc(tab, this)"></div>
             {{ tab.text }}
         </div>

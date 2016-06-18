@@ -6,7 +6,7 @@
             selection: 0,
             tabClass: 'fong-phone-button-fong',
             pageClass: 'view-pad',
-            selected: true
+            selected: false
         },
         {
             text: 'Fong 2',

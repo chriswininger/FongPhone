@@ -52,6 +52,7 @@ function fong(audCtx, mainVol, x, y, board) {
 	this.feedback = audCtx.createGain();
 	this.filter = audCtx.createBiquadFilter();
 	this.delayGain = audCtx.createGain();
+	this.chainOutputGain = audCtx.createGain();
 	this.delayGain.gain.value = this.board.delayVolume;
 
 
@@ -87,10 +88,14 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.delay.connect(this.oscPanCtrl);
 	} else {
 		this.oscPanCtrl.connect(this.delay);
-		this.delay.connect(mainVol);
+		//this.delay.connect(mainVol);
+		this.delay.connect(this.chainOutputGain);
 	}	
 	
-	this.oscPanCtrl.connect(mainVol);
+	this.oscPanCtrl.connect(this.chainOutputGain);
+	this.chainOutputGain.connect(mainVol);
+
+	this.chainOutputGain.gain.value = 0;
 
 	// TODO (CAW) This should only happen once
 	mainVol.connect(audCtx.destination);
@@ -135,6 +140,14 @@ function fong(audCtx, mainVol, x, y, board) {
 		this.oscVol.gain = vol;
 		this.oscVolOffset.gain.value = vol;
 	};
+
+	this.setChainOutputVol = function(vol) {
+		this.chainOutputGain.gain.value = vol;
+	};
+
+	this.transitionToFadeOutput = function() {
+		this.chainOutputGain.gain.linearRampToValueAtTime(0, this.audCtx.currentTime);
+	}
 
 	this.setOscFreq = function (freq) {
 		if (isNaN(freq)) return;

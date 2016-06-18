@@ -15,7 +15,7 @@ var debug = require('debug')('server');
 nconf
 	.argv()
 	.env()
-	.file({ file: './serverConfig.json' });
+	.file({ file: __dirname +'/serverConfig.json' });
 
 
 var INTERACTION_TIMEOUT = nconf.get('Interaction_Timeout');
@@ -25,8 +25,14 @@ var slots = {
 	pad1: false,
 	pad2: false,
 	soundBoard: false,
-	noteMap: false
+	noteMap: true
 };
+
+// store all the bands on which we can broadcast events back to connected clients
+var slotEmitters = {};
+
+// store state of displayServer as it reports back
+var slotStates = {};
 
 var displayServers = 0;
 
@@ -54,7 +60,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 });
 
 app.get('/states.json', function(req, res) {
-	res.status(200).json({ slots: slots, displayServers: displayServers });
+	res.status(200).json({ slots: slots, displayServers: displayServers, controlStates: slotStates });
 });
 
 app.get('/', [_remoteRequest], function(req, res) {
@@ -68,10 +74,34 @@ var displayNSP = io.of('display').on('connection', function(socket) {
 	console.log('display server connected: ' + socket.id);
 
 	displayServers++;
-
 	socket.on('disconnect', function() {
 		displayServers--;
 	});
+
+	socket.on('displayserver:event:state', function(dataSets) {
+		debug('received state changes: ' + dataSets.length);
+		var i, data, len = dataSets.length;
+		for (i = 0; i < len; i++) {
+			data = dataSets[i];
+			debug('updating state ' + data.slot);
+			slotStates[data.slot] = data.state;
+		}
+	});
+
+	// if any pads are already connected send the connect event to start sound
+	if (slots['pad1']) {
+		displayNSP.emit('server:event:pass', {
+			eventType: 'connect',
+			slot: 'pad1'
+		});
+	}
+
+	if (slots['pad2']) {
+		displayNSP.emit('server:event:pass', {
+			eventType: 'connect',
+			slot: 'pad2'
+		});
+}
 });
 
 
@@ -89,7 +119,7 @@ for (var i = 0; i < slotKeys.length; i++) {
 
 		var nsPass = ns + ':pass';
 
-		io.of(slot).on('connection', function(socket) {
+		slotEmitters[slot] = io.of(slot).on('connection', function(socket) {
 			console.log('user connected on ' + slot);
 			if (slots[slot]) {
 				// a user already connected to this slot
@@ -107,7 +137,6 @@ for (var i = 0; i < slotKeys.length; i++) {
 			var _checkInterval = setInterval(_checkForInteraction, 1000);
 			var _closedSocket = false;
 
-			// TODO (CAW) Send out event to display server to start sound
 			displayNSP.emit('server:event:pass', {
 				eventType: 'connect',
 				slot: slot
@@ -118,6 +147,12 @@ for (var i = 0; i < slotKeys.length; i++) {
 				// pass events to display server
 				displayNSP.emit(nsPass, data);
 				lastInterActionTime = Date.now();
+			});
+
+			// return state of this slot to the requesting client
+			socket.on('get:state', function(cb) {
+				debug('received get:state request for ' + slot + ', returning data ' + !!slotStates[slot]);
+				cb(null, slotStates[slot]);
 			});
 
 			socket.on('disconnect', function() {

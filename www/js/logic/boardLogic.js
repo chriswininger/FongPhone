@@ -69,8 +69,8 @@ $class.createNewFongs = function(osc1Freq, osc2Freq, osc1Vol, osc2Vol) {
 	this.setPrimaryOffsetFromFong(fongPrimary);
 	this.setSecondaryOffsetFromFong(fongSecondary);
 
-	fongPrimary.start();
-	fongSecondary.start();
+	//fongPrimary.start();
+	//fongSecondary.start();
 
 	// returns index of primary
 	return (this.fongs.length - 2);

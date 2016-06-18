@@ -181,6 +181,37 @@ var logicBoard;
 		$scope.pageClass = 'view-sound';
 		$scope.tabNavigationFunc = FongPhone.Navigation.tabNavigationFunc;
 		soundUI.attachToDom($scope);
+
+		/*
+			Code that requests and updates the client state from the server, but we're not going to use this for now
+			socket.emit('get:state', function(err, state) {
+			if (err) {
+				console.warn('err');
+			} else if (state) {
+				for (var i = 0; i < soundUI._fongStates.length; i++) {
+					if (state[i]) {
+						soundUI.selectedFongID = i;
+						soundUI.filterResonance = state[i].filterResonance ||
+								soundUI.filterResonance;
+						soundUI.env1Control = state[i].env1Control ||
+								soundUI.env1Control;
+						soundUI.delayVolumeControl = state[i].delayVolumeControl ||
+							soundUI.delayVolumeControl;
+						soundUI.delayTimeControl = state[i].delayTimeControl ||
+							soundUI.delayTimeControl;
+						soundUI.delayFeedBackControl = state[i].delayFeedbackControl ||
+							soundUI.delayFeedBackControl;
+						soundUI.filterType = state[i].filterType ||
+								soundUI.filterType
+					}
+				}
+
+				soundUI.selectedFongID = 0;
+				soundUI.filterPortamento = state.filterPortamento ||
+						soundUI.filterPortamento;
+			}
+			soundUI.attachToDom($scope);
+		});*/
 	}]);
 
 	fongPhone.controller('noteMapController', function($scope) {
