@@ -54,7 +54,7 @@
 			}
 
 			out.filterPortamento = this.filterPortamento;
-			out.protamento = this.portamento;
+			out.protamentoControl = this.portamentoControl;
 
 			this.selectedFongID = originalSelection;
 
@@ -187,7 +187,7 @@
 			}
 
 			this.filterPortamento = state.filterPortamento;
-			this.portamento = state.portamento;
+			this.portamentoControl = state.portamentoControl;
 
 			this.selectedFongID = 0;
 		},
@@ -209,12 +209,8 @@
 
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
 
-			// investigate $scope values
-			$scope.FilterOn = self._logicBoard.FilterOn;
-
 			$scope.toggleFilterClick = function () {
-				$scope.FilterOn = !$scope.FilterOn;
-				self.filterOn = $scope.FilterOn;
+				self.filterOn = !self.filterOn;
 			};
 
 			dial.attr("data-fgColor", "rgba(255, 255, 255, .5)");
@@ -264,7 +260,11 @@
 
 			$scope.changeOsc1EnvType = function (event) {
 				self.osc1EnvType = $(event.target).html().trim();
-			}
+			};
+			
+			$scope.isFilterOn = function() {
+				return self.filterOn;	
+			};
 
 			FongPhone.Navigation.Tabs[0].selected = true;
 			this._domAttached = true;
@@ -288,7 +288,8 @@
 			this.knobDelayFeedbackControl.val(this.delayFeedbackControl);
 			this.knobDelayFeedbackControl.trigger('change');
 
-			// this.knobPortamentoControl.va(this.portamentoControl); (NOT NEEDED)
+			this.knobPortamentoControl.val(this.portamentoControl);
+			this.knobPortamentoControl.trigger('change');
 		}
 	});
 })();

@@ -12,7 +12,7 @@
 		FongPhone.utils.createGetSet(this, 'osc1EnvType', getOsc1EnvType, setOsc1EnvType);
 		FongPhone.utils.createGetSet(this, 'osc1Type', getOsc1Type, setOsc1Type);
 		FongPhone.utils.createGetSet(this, 'delayFeedbackControl', getDelayFeedbackControl, setDelayFeedbackControl);
-		FongPhone.utils.createGetSet(this, 'delayTime', getDelayTimeControl, setDelayTimeControl);
+		FongPhone.utils.createGetSet(this, 'delayTimeControl', getDelayTimeControl, setDelayTimeControl);
 		FongPhone.utils.createGetSet(this, 'delayVolumeControl', getDelayVolumeControl, setDelayVolumeControl);
 		FongPhone.utils.createGetSet(this, 'filterPortamento', getFilterPortamento, setFilterPortamento);
 		FongPhone.utils.createGetSet(this, 'portamentoControl', getPortamentoControl, setPortamentoControl);
@@ -54,7 +54,7 @@
 			}
 
 			out.filterPortamento = this.filterPortamento;
-			out.protamento = this.portamento;
+			out.protamentoControl = this.portamentoControl;
 
 			this.selectedFongID = originalSelection;
 
@@ -186,7 +186,7 @@
 			}
 
 			this.filterPortamento = state.filterPortamento;
-			this.portamento = state.portamento;
+			this.portamentoControl = state.portamentoControl;
 
 			this.selectedFongID = 0;
 		},
@@ -226,7 +226,7 @@
 			this.knobPortamentoControl = this.registerKnob('#portamentoControl', 'portamentoControl', this.portamentoControl, this);
 			this.knobFilterPortamentoControl = this.registerKnob('#filterPortamentoControl', 'filterPortamento', this.filterPortamento, this);
 			this.knobDelayVolumeControl = this.registerKnob('#delayVolumeControl', 'delayVolumeControl', this.delayVolumeControl, this);
-			this.knobDelayTimeControl = this.registerKnob('#delayTimeControl', 'delayTimeControl', this.delayTime, this);
+			this.knobDelayTimeControl = this.registerKnob('#delayTimeControl', 'delayTimeControl', this.delayTimeControl, this);
 			this.knobDelayFeedbackControl = this.registerKnob('#delayFeedbackControl', 'delayFeedbackControl', this.delayFeedbackControl, this);
 
 			$scope.updateKnobs = _.bind(this.updateKnobs, this);
@@ -280,13 +280,14 @@
 			this.knobDelayVolumeControl.val(this.delayVolumeControl);
 			this.knobDelayVolumeControl.trigger('change');
 
-			this.knobDelayTimeControl.val(this.delayTime);
+			this.knobDelayTimeControl.val(this.delayTimeControl);
 			this.knobDelayTimeControl.trigger('change');
 
 			this.knobDelayFeedbackControl.val(this.delayFeedbackControl);
 			this.knobDelayFeedbackControl.trigger('change');
 
-			// this.knobPortamentoControl.va(this.portamentoControl); (NOT NEEDED)
+			this.knobPortamentoControl.val(this.portamentoControl);
+			this.knobPortamentoControl.trigger('change');
 		}
 	});
 })();

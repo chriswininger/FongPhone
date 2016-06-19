@@ -17,8 +17,8 @@
         <div id="soundControlsDiv" class="scrollable">
             <table class="ui-sound-table">
                 <tr>
-                    <td class="ui-map-note-map-toggle {{ FilterOn ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleFilterClick()">
-                        Filter {{ FilterOn ? 'On' : 'Off' }}
+                    <td class="ui-map-note-map-toggle {{ isFilterOn() ? 'map-note-on' : 'map-note-off' }}" colspan="4" ng-click="toggleFilterClick()">
+                        Filter {{ isFilterOn() ? 'On' : 'Off' }}
                     </td>
                 </tr>
                 <tr>

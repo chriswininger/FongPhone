@@ -1,13 +1,10 @@
 (function() {
 	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap, soundUI) {
-		this.logicBoard = logicBoard;
 		this.pad = pad;
 		this.noteMap = noteMap;
 
 		// unused currently (see below)
 		this.soundUI = soundUI;
-
-		// this.stateChangeDebouncer = _.debounce(_.bind(this.sendState, this), 1000);
 
 		// every 10 seconds send a full state updated
 		setInterval(_.bind(this.sendState, this), 10000);
@@ -65,76 +62,37 @@
 				// self.soundState[fong.id] = self.soundState[fong.id] || {};
 				switch (data.eventType) {
 					case 'osc:env:type':
-						//self.soundState[fong.id].oscGainCtrlType = data.value;
-						// fong.boardInput.oscGainCtrl.type = data.value;
 						self.soundUI.osc1EnvType = data.value;
 						break;
 					case 'osc:type':
-						/*self.soundState[fong.id].selectedStateIndex = data.value;
-						fong.selectedStateIndex = fong.states.indexOf(data.value)
-						fong.selectedState = data.value;*/
 						self.soundUI.osc1Type = data.value;
 						break;
 					case 'delay:feedback':
-						/*self.soundState[fong.id].delayFeedbackControl = data.value;
-						logicBoard.delayFeedback = data.value / 10.0;
-						fong.boardInput.setDelayFeedback(logicBoard.delayFeedback);*/
 						self.soundUI.delayFeedbackControl = data.value;
 						break;
 					case 'delay:time':
-						/*self.soundState[fong.id].delayTime = data.value;
-						logicBoard.delayTimeControl = data.value / 1000.0;
-						fong.boardInput.setDelayTime(logicBoard.delayTime);*/
-						self.soundUI.delayTime = data.value;
+						self.soundUI.delayTimeControl = data.value;
 						break;
 					case 'delay:volume':
-						/*self.soundState[fong.id].delayVolumeControl = data.value;
-						logicBoard.delayVolume = data.value / 100.0;
-						fong.boardInput.setDelayVolume(logicBoard.delayVolume);*/
 						self.soundUI.delayVolumeControl = data.value;
 						break;
 					case 'portamento:filter':
-						/*self.soundState.filterPortamento = data.value;
-						logicBoard.filterPortamento = data.value;*/
 						self.soundUI.filterPortamento = data.value;
 						break;
 					case 'portamento':
-						/*self.soundState.portamento = data.value;
-						logicBoard.portamento = data.value;*/
 						self.soundUI.portamentoControl = data.value;
 						break;
 					case 'env':
-						/*if (fong.fongRole === 'primary') {
-							logicBoard.primaryOffsetMax = data.value;
-						} else {
-							logicBoard.secondaryOffsetMax = data.value;
-						}
-
-						for (var i = 0; i < self.pad.fongDots.length; i++) {
-							if (self.pad.fongDots[i].fongRole === 'primary')
-								logicBoard.setPrimaryOffsetFromFong(self.pad.fongDots[i]);
-							else
-								logicBoard.setSecondaryOffsetFromFong(self.pad.fongDots[i]);
-						}
-
-						self.soundState.env1Control = data.value;*/
-
 						self.soundUI.env1Control = data.value;
 
 						break;
 					case 'filter:resonance':
-						/* self.soundState[fong.id].filterResonance = data.value;
-						fong.boardInput.setOscFilterResonance(data.value); */
 						self.soundUI.filterResonance = data.value;
 						break;
 					case 'filter:on':
-						/*self.soundState[fong.id].filterStatus = data.value;
-						logicBoard.setFilterStatus(data.value);*/
 						self.soundUI.filterOn = data.value;
 						break;
 					case 'filter:type':
-						/*self.soundState[fong.id].filterType = data.value;
-						fong.boardInput.setFilterType(data.value);*/
 						self.soundUI.filterType = data.value;
 						break;
 				}

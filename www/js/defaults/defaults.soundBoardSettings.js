@@ -5,7 +5,7 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 				"env1Control": 2,
 				"osc1Type": "sine",
 				"delayFeedbackControl": 8,
-				"delayTime": 500,
+				"delayTimeControl": 500,
 				"delayVolumeControl": 100,
 				"filterResonance": 5,
 				"filterStatus": true,
@@ -17,7 +17,7 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 				"env1Control": 2,
 				"osc1Type": "sine",
 				"delayFeedbackControl": 8,
-				"delayTime": 500,
+				"delayTimeControl": 500,
 				"delayVolumeControl": 100,
 				"filterResonance": 5,
 				"filterStatus": true,
@@ -29,7 +29,7 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 				"env1Control": 2,
 				"osc1Type": "sine",
 				"delayFeedbackControl": 8,
-				"delayTime": 500,
+				"delayTimeControl": 500,
 				"delayVolumeControl": 100,
 				"filterResonance": 5,
 				"filterStatus": true,
@@ -41,7 +41,7 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 				"env1Control": 2,
 				"osc1Type": "sine",
 				"delayFeedbackControl": 8,
-				"delayTime": 500,
+				"delayTimeControl": 500,
 				"delayVolumeControl": 100,
 				"filterResonance": 5,
 				"filterStatus": true,
@@ -50,5 +50,5 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 		}
 	},
 	"filterPortamento": 0,
-	"portamento": 0
+	"portamentoControl": 0
 };
