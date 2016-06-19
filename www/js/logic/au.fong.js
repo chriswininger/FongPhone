@@ -142,7 +142,8 @@ function fong(audCtx, mainVol, x, y, board) {
 	};
 
 	this.setChainOutputVol = function(vol) {
-		this.chainOutputGain.gain.value = vol;
+		//this.chainOutputGain.gain.value = vol;
+		this.chainOutputGain.gain.linearRampToValueAtTime(vol, this.audCtx.currentTime);
 	};
 
 	this.transitionToFadeOutput = function() {

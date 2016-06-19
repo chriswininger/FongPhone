@@ -56,7 +56,7 @@ var logicBoard;
 		console.log('server dropped connection: ' + msg);
 		if (msg === 'io server disconnect') {
 			// the server has disconnected due to inactivity or because you lost connection for too long
-			window.location.href = '/thanks-for-playing.html';
+			window.location.href = '/thanks-for-playing?disconnected=true';
 		}
 	});
 	socket.on('spot:taken', function() {
@@ -76,7 +76,7 @@ var logicBoard;
 					baseNote: 'a',
 					octave: 4,
 					availableNotes: [],
-					NoteMapOn: false,
+					NoteMapOn: true,
 					FilterNoteMapOn: false,
 					LoopDuration: 15000,
 					loopChunkinessFactor: .5,
@@ -90,7 +90,7 @@ var logicBoard;
 					baseNote: 'a',
 					octave: 4,
 					availableNotes: [],
-					NoteMapOn: false,
+					NoteMapOn: true,
 					FilterNoteMapOn: false,
 					LoopDuration: 15000,
 					loopChunkinessFactor: .5,
@@ -104,7 +104,7 @@ var logicBoard;
 					baseNote: 'a',
 					octave: 4,
 					availableNotes: [],
-					NoteMapOn: false,
+					NoteMapOn: true,
 					FilterNoteMapOn: false,
 					LoopDuration: 15000,
 					loopChunkinessFactor: .5,
@@ -118,7 +118,7 @@ var logicBoard;
 					baseNote: 'a',
 					octave: 4,
 					availableNotes: [],
-					NoteMapOn: false,
+					NoteMapOn: true,
 					FilterNoteMapOn: false,
 					LoopDuration: 15000,
 					loopChunkinessFactor: .5,

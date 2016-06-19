@@ -173,7 +173,8 @@
 						break;
 					case 'note-map-change-octave':
 						fong.boardInput.NoteMapInfo.octave = data.octave;
-						self.noteMap.resetOctaveForMap(fong.boardInput);
+						self.noteMap.regenerateMap(fong.boardInput);
+						// self.noteMap.resetOctaveForMap(fong.boardInput);
 
 						break;
 					case 'note-map-change-scale':
@@ -209,7 +210,6 @@
 
 						break;
 					case 'connect':
-						var connectedVol = 0.9949676394462585;
 						if (data.slot === 'pad1') {
 							/*self.pad.fongDotsByID[0].boardInput.setOscVol(connectedVol);
 							self.pad.fongDotsByID[0].boardInput.setDelayVolume(1);

@@ -144,8 +144,9 @@
 				});
 
 				self.selectedFong.NoteMapInfo.octave = parseInt($(event.target).html().trim());
-				// self.regenerateMap(self.selectedFong);
-				self.resetOctaveForMap(self.selectedFong);
+				self.regenerateMap(self.selectedFong);
+				//self.noteMap.regenerateMap(self.selectedFong);
+				//self.resetOctaveForMap(self.selectedFong);
 			}
 			$scope.changeScale = function (event) {
 				self._socket.emit('map:event', {
@@ -280,21 +281,37 @@
 
 		},
 		changeOctaveForScale: function(fong) {
-			// change notes in splace, not complete reset
-			var n = teoria.note(fong.NoteMapInfo.baseNote + fong.NoteMapInfo.octave);
-			var scale = n.scale(fong.NoteMapInfo.SelectedScale);
+			// change notes in place, not complete reset
+			var n1 = teoria.note(fong.NoteMapInfo.baseNote + fong.NoteMapInfo.octave);
+			var scale1 = n1.scale(fong.NoteMapInfo.SelectedScale);
 
-			for (var i = 0; i < fong.NoteMapInfo.availableNotes.length; i++) {
+			var n2 = teoria.note(fong.NoteMapInfo.baseNote + fong.NoteMapInfo.octave + 1);
+			var scale2 = n2.scale(fong.NoteMapInfo.SelectedScale);
+
+			var scaleLen = scale1.scale.length;
+			var i;
+
+			// update first portion of notes
+			for (i = 0; i < scaleLen; i++) {
 				fong.NoteMapInfo.availableNotes[i] = {
-					label: scale.get(i + 1).toString(),
-					freq: scale.get(i + 1).fq(),
+					label: scale1.get(i + 1).toString(),
+					freq: scale1.get(i + 1).fq(),
 					on:  fong.NoteMapInfo.availableNotes[i].on
+				};
+			}
+
+			// udpate second portion from scale2
+			for (i = 0; i < scaleLen; i++) {
+				fong.NoteMapInfo.availableNotes[i] = {
+					label: scale2.get(i + 1).toString(),
+					freq: scale2.get(i + 1).fq(),
+					on:  fong.NoteMapInfo.availableNotes[i + scaleLen].on
 				};
 			}
 		},
 		regenerateMap: function (fong) {
 			this.generateScale(fong, fong.NoteMapInfo.baseNote, fong.NoteMapInfo.octave, fong.NoteMapInfo.SelectedScale);
-			fong.NoteMapInfo.NoteMap = this.buildMap(this.selectedFong.NoteMapInfo.availableNotes);
+			fong.NoteMapInfo.NoteMap = this.buildMap(fong.NoteMapInfo.availableNotes);
 		},
 		resetOctaveForMap: function(fong) {
 			this.changeOctaveForScale(fong);

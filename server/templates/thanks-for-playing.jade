@@ -1,0 +1,30 @@
+html
+    head
+        meta(name='format-detection', content='telephone=no')
+        meta(name='msapplication-tap-highlight', content='no')
+        meta(name='viewport', content='user-scalable=no',
+            initial-scale=1, maximum-scale=1, minimum-scale=1, width='device-width')
+        link(rel="stylesheet", href="js/lib/vex/css/vex.css")
+        link(rel="stylesheet", href="js/lib/vex/css/vex-theme-wireframe.css")
+        link(rel="stylesheet", type="text/css", href="css/index.css")
+        script(src="js/lib/jquery/dist/jquery.min.js")
+        title Fong Tron -- Thanks For Playing
+        script(type="text/javascript").
+            $(function() {
+                $('#btnPlayAgain').click(function() {
+                    window.location.href = '/';
+                });
+
+                setTimeout(function() {
+                    $('#msg').text('#{standardMainMessage}');
+                    $('#btnText').text('#{standardButtonMessage}');
+                }, 30000);
+            });
+    body(data-play-again='#{playAgain}' class="thanks-for-playing")
+        div(class="page {{ pageClass }}", ng-view)
+            div(class="ui-display-area ui-display-area-thank-you")
+                div
+                    h1(id="msg" style="font-size: xx-large;") #{mainMessage}
+                div
+                    div(id="btnPlayAgain")
+                        em(id='btnText') #{buttonMessage}

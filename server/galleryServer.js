@@ -25,7 +25,7 @@ var slots = {
 	pad1: false,
 	pad2: false,
 	soundBoard: false,
-	noteMap: true
+	noteMap: false
 };
 
 // store all the bands on which we can broadcast events back to connected clients
@@ -51,12 +51,32 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 	}
 
 	if (!selectedSubSpace) {
-		return res.status(404).send('no available slots');
+		res.redirect('/thanks-for-playing?tooManyPlayers=true')
+		//return res.status(404).send('no available slots');
 	}
 
 	res.render('remote', {
 		subspace: '/' + selectedSubSpace
 	});
+});
+app.get('/thanks-for-playing', [_remoteRequest], function(req, res) {
+	var respData = {
+		standardMainMessage: 'Welcome to the Fong Tron!',
+		standardButtonMessage: 'Click to Play'
+	};
+
+	if (req.query.disconnected) {
+		respData.mainMessage = 'Thanks for playing the Fong Tron!';
+		respData.buttonMessage = 'Play Again';
+	} else if (req.query.tooManyPlayers) {
+		respData.mainMessage = 'Sorry, only 4 players at a time.';
+		respData.buttonMessage = 'Try Again';
+	} else {
+		respData.mainMessage = respData.standardMainMessage;
+		respData.buttonMessage = respData.standardButtonMessage;
+	}
+
+	res.render('thanks-for-playing', respData);
 });
 
 app.get('/states.json', function(req, res) {
