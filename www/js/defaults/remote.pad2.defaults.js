@@ -17,6 +17,7 @@
 				"boardInputIndex": 2,
 				"dur": "10768ms",
 				"gradient": "grad3",
+				"offSetMax":  0.5,
 				"states": [
 					"sine",
 					"square",
@@ -44,6 +45,7 @@
 				"boardInputIndex": 3,
 				"dur": "17190ms",
 				"gradient": "grad4",
+				"offSetMax":  0.5,
 				"states": [
 					"sine",
 					"square",

@@ -135,9 +135,10 @@
 			// update offsets
 			try {
 				this.board.setPrimaryOffsetFromFong(fong);
-				this.board.setSecondaryOffsetFromFong(this.fongDotsByRole.secondary);
+				var fongSecondary = this.fongDotsByID[fong.secondaryFongID];
+				this.board.setSecondaryOffsetFromFong(fongSecondary, fong);
 			} catch (err) {
-				alert(err.message);
+				console.warn(err.message);
 			}
 		},
 		handlePositionChangedSecondary: function (fong) {
@@ -146,8 +147,9 @@
 			fong.boardInput.setOscFreq(freq);
 			fong.boardInput.setOscFilterFreq(ffreq);
 
+			var primaryFong = this.fongDotsByID[fong.primaryFongID];
 			// update offsets
-			this.board.setSecondaryOffsetFromFong(fong);
+			this.board.setSecondaryOffsetFromFong(fong, primaryFong);
 		},
 		getFreq: function (x, y, r, fong) {
 			var f = fong.boardInput;

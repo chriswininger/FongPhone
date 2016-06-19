@@ -133,18 +133,28 @@
 		function setEnv1Control(env) {
 			// TODO (CAW) -- We need primary and secondary offset max for each pair of fongs (or just set offset per fong)
 			self._fongStates[self.selectedFongID]._env1Ctrl = env;
-			var fong = self._pad.fongDotsByID[self.selectedFongID];
-			if (fong.fongRole === 'primary') {
+
+			/*if (fong.fongRole === 'primary') {
 				self._logicBoard.primaryOffsetMax = env;
 			} else {
 				self._logicBoard.secondaryOffsetMax = env;
-			}
+			}*/
+			var fong = self._pad.fongDotsByID[self.selectedFongID];
+			fong.offSetMax = env;
+			if (fong.fongRole === 'primary') {
+				var primaryFong = self._pad.fongDotsByID[self.selectedFongID];
+				self._logicBoard.setPrimaryOffsetFromFong(primaryFong);
 
-			for (var i = 0; i < self._pad.fongDots.length; i++) {
-				if (self._pad.fongDots[i].fongRole === 'primary')
-					self._logicBoard.setPrimaryOffsetFromFong(self._pad.fongDots[i]);
-				else
-					self._logicBoard.setSecondaryOffsetFromFong(self._pad.fongDots[i]);
+				if (fong.secondaryFongID) {
+					var secondaryFong = self._pad.fongDotsByID[fong.secondaryFongID];
+					self._logicBoard.setSecondaryOffsetFromFong(secondaryFong, primaryFong);
+				}
+			} else {
+				var secondaryFong = self._pad.fongDotsByID[self.selectedFongID];
+				if (fong.primaryFongID) {
+					var primaryFong = self._pad.fongDotsByID[fong.primaryFongID];
+					self._logicBoard.setSecondaryOffsetFromFong(secondaryFong, primaryFong);	
+				}
 			}
 		}
 
@@ -160,6 +170,7 @@
 		function getFilterOn() {
 			return self._fongStates[self.selectedFongID]._filterOn;
 		}
+
 		function setFilterOn(on) {
 			self._fongStates[self.selectedFongID]._filterOn = on;
 			self._logicBoard.setFilterStatus(on);

@@ -23,6 +23,9 @@ var loopType = 1;
 		this.elementID = state.elementID;
 		this.fadeElementID = state.elementID + 'Fade'; // temporary
 		this.fongRole = state.fongRole;
+		this.secondaryFongID = state.secondaryFongID;
+		this.primaryFongID = state.primaryFongID;
+		this.offSetMax = state.offSetMax;
 		this.id = state.id;
 
 		// TODO (CAW) Switch to extend
