@@ -251,5 +251,7 @@ FongPhone.Utils.Mixins.ToJSON.applyMixin(fong.prototype, [
 	'oscVol',
 	'oscVolOffset',
 	'noteMapChanged',
-	'oscs'
+	'oscs',
+	'primary',
+	'secondary'
 ]);

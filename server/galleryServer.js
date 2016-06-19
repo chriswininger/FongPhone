@@ -51,7 +51,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 	}
 
 	if (!selectedSubSpace) {
-		res.redirect('/thanks-for-playing?tooManyPlayers=true')
+		return res.redirect('/thanks-for-playing?tooManyPlayers=true')
 		//return res.status(404).send('no available slots');
 	}
 

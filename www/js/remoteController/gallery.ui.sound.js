@@ -5,8 +5,7 @@
 
 		this._socket = socket;
 		this._messageDebouncers = {};
-		var svgElementID = 'soundControls';
-		this.logicBoard = logicBoard;
+		this._logicBoard = logicBoard;
 		this.selectedFongID = 0;
 		this._fongStates = [{}, {}, {}, {}];
 		this._domAttached = false;
@@ -29,12 +28,35 @@
 
 		// ==== Member Methods ====
 		this.toJSON = function() {
-			var exclued = { board: true, $scope: true };
-			var out = {};
-			_.each(this, function(val, key) {
-				if (key[0] !== '_' && !_.isFunction(val) && !exclued[key])
-					out[key] = _.clone(val);
-			});
+			var exclued = { board: true, $scope: true, filterPortamento: true, protamento: true };
+			var out = {
+				fongs: {}
+			};
+
+			var myKeys = _.keys(this);
+			var key;
+			var val;
+			var myKeysLen = myKeysLen.length;
+			var fongIDS = _.keys(this._fongStates);
+			var originalSelection = this.selectedFongID;
+			var i;
+			var j;
+			for (i = 0; i < fongIDS.length; i++) {
+				this.selectedFongID = fongIDS[i];
+				// iterate through my keys for each fong selection (cheap trick fix this)
+				for (j = 0; j < myKeysLen; j++) {
+					key = myKeys[j];
+					val = this[key];
+					if (key[0] !== '_' && !_.isFunction(val) && !exclued[key])
+						out.fongs[this.selectedFongID][key] = _.clone(val);
+				}
+
+			}
+
+			out.filterPortamento = this.filterPortamento;
+			out.protamento = this.portamento;
+
+			this.selectedFongID = originalSelection;
 
 			return out;
 		};
@@ -157,10 +179,15 @@
 			this._messageDebouncers[event](fong, event, value);
 		},
 		set: function(state) {
-			for (var i = 0; i < this._fongStates.length; i++) {
-				this.selectedFongID = i;
-				_.extend(this, state);
+			var fongIDs = Object.keys(state.fongs);
+			var id;
+			for (var i = 0; i < fongIDs.length; i++) {
+				this.selectedFongID = fongIDs[i];
+				_.extend(this, state.fongs[fongIDs[i]]);
 			}
+
+			this.filterPortamento = state.filterPortamento;
+			this.portamento = state.portamento;
 
 			this.selectedFongID = 0;
 		},
@@ -177,14 +204,13 @@
 
 			var dial = $(".dial");
 
-
 			$('.fong-phone-apple-status-bar').hide();
 			this.adjustHeightWidth();
 
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
 
 			// investigate $scope values
-			$scope.FilterOn = self.logicBoard.FilterOn;
+			$scope.FilterOn = self._logicBoard.FilterOn;
 
 			$scope.toggleFilterClick = function () {
 				$scope.FilterOn = !$scope.FilterOn;

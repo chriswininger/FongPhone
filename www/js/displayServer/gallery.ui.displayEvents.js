@@ -1,10 +1,16 @@
 (function() {
-	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap) {
+	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap, soundUI) {
 		this.logicBoard = logicBoard;
 		this.pad = pad;
 		this.noteMap = noteMap;
-		this.padState = {};
-		this.stateChangeDebouncer = _.debounce(_.bind(this.sendState, this), 1000);
+
+		// unused currently (see below)
+		this.soundUI = soundUI;
+
+		// this.stateChangeDebouncer = _.debounce(_.bind(this.sendState, this), 1000);
+
+		// every 10 seconds send a full state updated
+		setInterval(_.bind(this.sendState, this), 10000);
 	};
 
 	_.extend(FongPhone.Utils.GalleryDisplayEvents.prototype, {
@@ -13,11 +19,15 @@
 			this._socket.emit('displayserver:event:state', [
 				{
 					slot: 'soundBoard',
-					state: this.padState
+					state: this.soundUI.toJSON()
 				},
 				{
 					slot: 'noteMap',
-					state: {}
+					state: this.noteMap.toJSON()
+				},
+				{
+					slot: 'padDisplay',
+					state: this.pad.toJSON()
 				}
 			]);
 		},
@@ -50,43 +60,51 @@
 					fong = self.pad.fongDotsByID[data.id];
 
 				if (!fong) return console.warn('no fong for event ' + data.eventType);
+				self.soundUI.selectedFongID = fong.id;
 
-				self.padState[fong.id] = self.padState[fong.id] || {};
+				// self.soundState[fong.id] = self.soundState[fong.id] || {};
 				switch (data.eventType) {
 					case 'osc:env:type':
-						self.padState[fong.id].oscGainCtrlType = data.value;
-						fong.boardInput.oscGainCtrl.type = data.value;
+						//self.soundState[fong.id].oscGainCtrlType = data.value;
+						// fong.boardInput.oscGainCtrl.type = data.value;
+						self.soundUI.osc1EnvType = data.value;
 						break;
 					case 'osc:type':
-						self.padState[fong.id].selectedStateIndex = data.value;
+						/*self.soundState[fong.id].selectedStateIndex = data.value;
 						fong.selectedStateIndex = fong.states.indexOf(data.value)
-						fong.selectedState = data.value;
+						fong.selectedState = data.value;*/
+						self.soundUI.osc1Type = data.value;
 						break;
 					case 'delay:feedback':
-						self.padState[fong.id].delayFeedbackControl = data.value;
+						/*self.soundState[fong.id].delayFeedbackControl = data.value;
 						logicBoard.delayFeedback = data.value / 10.0;
-						fong.boardInput.setDelayFeedback(logicBoard.delayFeedback);
+						fong.boardInput.setDelayFeedback(logicBoard.delayFeedback);*/
+						self.soundUI.delayFeedbackControl = data.value;
 						break;
 					case 'delay:time':
-						self.padState[fong.id].delayTime = data.value;
+						/*self.soundState[fong.id].delayTime = data.value;
 						logicBoard.delayTimeControl = data.value / 1000.0;
-						fong.boardInput.setDelayTime(logicBoard.delayTime);
+						fong.boardInput.setDelayTime(logicBoard.delayTime);*/
+						self.soundUI.delayTime = data.value;
 						break;
 					case 'delay:volume':
-						self.padState[fong.id].delayVolumeControl = data.value;
+						/*self.soundState[fong.id].delayVolumeControl = data.value;
 						logicBoard.delayVolume = data.value / 100.0;
-						fong.boardInput.setDelayVolume(logicBoard.delayVolume);
+						fong.boardInput.setDelayVolume(logicBoard.delayVolume);*/
+						self.soundUI.delayVolumeControl = data.value;
 						break;
 					case 'portamento:filter':
-						self.padState.filterPortamento = data.value;
-						logicBoard.filterPortamento = data.value;
+						/*self.soundState.filterPortamento = data.value;
+						logicBoard.filterPortamento = data.value;*/
+						self.soundUI.filterPortamento = data.value;
 						break;
 					case 'portamento':
-						self.padState.portamento = data.value;
-						logicBoard.portamento = data.value;
+						/*self.soundState.portamento = data.value;
+						logicBoard.portamento = data.value;*/
+						self.soundUI.portamentoControl = data.value;
 						break;
 					case 'env':
-						if (fong.fongRole === 'primary') {
+						/*if (fong.fongRole === 'primary') {
 							logicBoard.primaryOffsetMax = data.value;
 						} else {
 							logicBoard.secondaryOffsetMax = data.value;
@@ -99,24 +117,27 @@
 								logicBoard.setSecondaryOffsetFromFong(self.pad.fongDots[i]);
 						}
 
-						self.padState.env1Control = data.value;
+						self.soundState.env1Control = data.value;*/
+
+						self.soundUI.env1Control = data.value;
 
 						break;
 					case 'filter:resonance':
-						self.padState[fong.id].filterResonance = data.value;
-						fong.boardInput.setOscFilterResonance(data.value);
+						/* self.soundState[fong.id].filterResonance = data.value;
+						fong.boardInput.setOscFilterResonance(data.value); */
+						self.soundUI.filterResonance = data.value;
 						break;
 					case 'filter:on':
-						self.padState[fong.id].filterStatus = data.value;
-						logicBoard.setFilterStatus(data.value);
+						/*self.soundState[fong.id].filterStatus = data.value;
+						logicBoard.setFilterStatus(data.value);*/
+						self.soundUI.filterOn = data.value;
 						break;
 					case 'filter:type':
-						self.padState[fong.id].filterType = data.value;
-						fong.boardInput.setFilterType(data.value);
+						/*self.soundState[fong.id].filterType = data.value;
+						fong.boardInput.setFilterType(data.value);*/
+						self.soundUI.filterType = data.value;
 						break;
 				}
-
-				self.stateChangeDebouncer();
 			});
 
 			this._socket.on('map:event:pass', function(data) {
@@ -187,41 +208,22 @@
 			this._socket.on('server:event:pass', function(data) {
 				switch (data.eventType) {
 					case 'disconnect':
+						// CLIENT DISCONNECT TURN OFF APPROPRIATE FONGS BASED ON PAD
 						if (data.slot === 'pad1') {
-							/*self.pad.fongDotsByID[0].boardInput.setOscVol(0);
-							self.pad.fongDotsByID[0].boardInput.setDelayVolume(0);
-							self.pad.fongDotsByID[1].boardInput.setOscVol(0);
-							self.pad.fongDotsByID[1].boardInput.setDelayVolume(0);*/
-							//this.delay.connect(mainVol);
-							//this.oscPanCtrl.connect(mainVol);
 							self.pad.fongDotsByID[0].boardInput.transitionToFadeOutput(0, 6);
-							//.setChainOutputVol(0);
 							self.pad.fongDotsByID[1].boardInput.transitionToFadeOutput(0, 6);
-							//.setChainOutputVol(0);
 						} else if (data.slot === 'pad2') {
-							/*self.pad.fongDotsByID[2].boardInput.setOscVol(0);
-							self.pad.fongDotsByID[2].boardInput.setDelayVolume(0);
-							self.pad.fongDotsByID[3].boardInput.setOscVol(0);
-							self.pad.fongDotsByID[3].boardInput.setDelayVolume(0);*/
 							self.pad.fongDotsByID[2].boardInput.transitionToFadeOutput(0, 6);
-							//.setChainOutputVol(0);
-							self.pad.fongDotsByID[3].boardInput.transitionToFadeOutput(0, 6);//.setChainOutputVol(0);
+							self.pad.fongDotsByID[3].boardInput.transitionToFadeOutput(0, 6);
 						}
 
 						break;
 					case 'connect':
+						// CLIENT CONNECT TURN ON APPROPRIATE FONGS BASED ON PAD
 						if (data.slot === 'pad1') {
-							/*self.pad.fongDotsByID[0].boardInput.setOscVol(connectedVol);
-							self.pad.fongDotsByID[0].boardInput.setDelayVolume(1);
-							self.pad.fongDotsByID[1].boardInput.setOscVol(connectedVol);
-							self.pad.fongDotsByID[1].boardInput.setDelayVolume(1);*/
 							self.pad.fongDotsByID[0].boardInput.setChainOutputVol(1);
 							self.pad.fongDotsByID[1].boardInput.setChainOutputVol(1);
 						} else if (data.slot === 'pad2') {
-							/*self.pad.fongDotsByID[2].boardInput.setOscVol(connectedVol);
-							self.pad.fongDotsByID[2].boardInput.setDelayVolume(1);
-							self.pad.fongDotsByID[3].boardInput.setOscVol(connectedVol);
-							self.pad.fongDotsByID[3].boardInput.setDelayVolume(1);*/
 							self.pad.fongDotsByID[2].boardInput.setChainOutputVol(1);
 							self.pad.fongDotsByID[3].boardInput.setChainOutputVol(1);
 						}

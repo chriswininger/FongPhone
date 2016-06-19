@@ -52,7 +52,7 @@ var logicBoard;
 	stateController.uiPad = padUI;
 	stateController.uiSoundSettings = soundUI;
 
-	var displayEvents = new FongPhone.Utils.GalleryDisplayEvents(logicBoard, padUI, noteMap);
+	var displayEvents = new FongPhone.Utils.GalleryDisplayEvents(logicBoard, padUI, noteMap, soundUI) ;
 	displayEvents.startRemoteEvents();
 
 	FongPhone.Navigation.tabNavigationFunc = _.partial(FongPhone.Navigation.tabNavigationFunc, stateController);
