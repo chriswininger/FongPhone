@@ -195,7 +195,7 @@ div#welcomeTitleWrapper {
 }
 
 div#welcomeTitleInner {
-	width: 844px;
+	width: 754px; /* Really we should find computed width of of elements we are matching below and set in js */
 }
 
 #titleMainText {
@@ -230,6 +230,7 @@ div#welcome-qr {
 span#welcome-fong-tron-link {
 	font-weight: bolder;
 	color: #ffe300;
+	letter-spacing: 2px;
 }
 
 .ui-display-area-thank-you {
