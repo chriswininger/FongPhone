@@ -174,6 +174,35 @@ h1 {
 	/* W3C */
 }
 
+body.welcome-screen {
+	text-transform: none;
+}
+
+
+div#welcome-main-wrapper {
+	margin-left: 10%;
+	margin-right: 10%;
+	margin-top: 3em;
+	width: 100%;
+}
+
+span#welcome-fong-tron-link {
+	font-weight: bolder;
+	color: #ffe300;
+}
+
+div#welcome-lnk-outer {
+	float: left;
+	width: 50%;
+	font-size: x-large;
+	color: #77e1d3;
+}
+
+div#welcome-qr {
+	float: right;
+	width: 50%;
+}
+
 .ui-display-area-thank-you {
 	height: 100%;
 	width: 100%;

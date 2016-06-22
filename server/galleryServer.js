@@ -59,6 +59,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 		subspace: '/' + selectedSubSpace
 	});
 });
+
 app.get('/thanks-for-playing', [_remoteRequest], function(req, res) {
 	var respData = {
 		standardMainMessage: 'Welcome to the Fong Tron!',
@@ -77,6 +78,10 @@ app.get('/thanks-for-playing', [_remoteRequest], function(req, res) {
 	}
 
 	res.render('thanks-for-playing', respData);
+});
+
+app.get('/welcome-to-the-fong-tron', [_remoteRequest], function(req, res) {
+	res.render('welcome-to-the-fong-tron', {});
 });
 
 app.get('/states.json', function(req, res) {

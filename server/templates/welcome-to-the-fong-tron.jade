@@ -1,0 +1,24 @@
+html
+    head
+        meta(name='format-detection', content='telephone=no')
+        meta(name='msapplication-tap-highlight', content='no')
+        meta(name='viewport', content='user-scalable=no',
+        initial-scale=1, maximum-scale=1, minimum-scale=1, width='device-width')
+        link(rel="stylesheet", href="js/lib/vex/css/vex.css")
+        link(rel="stylesheet", href="js/lib/vex/css/vex-theme-wireframe.css")
+        link(rel="stylesheet", type="text/css", href="css/index.css")
+        script(src="js/lib/jquery/dist/jquery.min.js")
+        title Welcome to the Fong Tron
+    body(data-play-again='#{playAgain}' class="welcome-screen")
+        div(class="page {{ pageClass }}", ng-view)
+            div(class="ui-display-area ui-display-area-thank-you")
+                div
+                    h1(id="msg" style="font-size: xx-large;") Fong Tron -- Create Collaborative Sound Scapes
+                div(id="welcome-main-wrapper")
+                    div(id="welcome-lnk-outer")
+                        em(id='btnText')
+                            span Connect to the Fong Tron with your phone or tablet by visiting
+                        span(id="welcome-fong-tron-link").
+                            &nbsp;art.fongphone.com
+                    div(id="welcome-qr")
+                        img(src="/img/art.fongphone.qrcode.jpg")
