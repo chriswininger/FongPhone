@@ -178,29 +178,58 @@ body.welcome-screen {
 	text-transform: none;
 }
 
-
 div#welcome-main-wrapper {
-	margin-left: 10%;
-	margin-right: 10%;
 	margin-top: 3em;
 	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+
+div#welcomeTitleWrapper {
+	display: flex;
+	justify-content: center;
+	color: #77e1d3;
+	width: 100%;
+}
+
+div#welcomeTitleInner {
+	width: 844px;
+}
+
+#titleMainText {
+	color: white;
+}
+
+#titleDescText {
+	vertical-align: sub;
+	letter-spacing: 6px;
+}
+
+#welcomeTitleText {
+	font-size: xx-large;
+	text-align: left;
+}
+
+#welcomeTitleText>em {
+	/*font-size: smaller;*/
+}
+
+div#welcome-lnk-outer {
+	/*float: left;*/
+	width: 50%;
+	font-size: x-large;
+	margin-right: 24px;
+}
+
+div#welcome-qr {
+	margin-top: 0.5em;
 }
 
 span#welcome-fong-tron-link {
 	font-weight: bolder;
 	color: #ffe300;
-}
-
-div#welcome-lnk-outer {
-	float: left;
-	width: 50%;
-	font-size: x-large;
-	color: #77e1d3;
-}
-
-div#welcome-qr {
-	float: right;
-	width: 50%;
 }
 
 .ui-display-area-thank-you {

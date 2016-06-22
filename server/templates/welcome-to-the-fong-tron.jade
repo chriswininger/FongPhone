@@ -12,12 +12,14 @@ html
     body(data-play-again='#{playAgain}' class="welcome-screen")
         div(class="page {{ pageClass }}", ng-view)
             div(class="ui-display-area ui-display-area-thank-you")
-                div
-                    h1(id="msg" style="font-size: xx-large;") Fong Tron -- Create Collaborative Sound Scapes
+                div(id="welcomeTitleWrapper")
+                    div(id="welcomeTitleInner")
+                        h1(id="welcomeTitleText")
+                            span(id="titleMainText") Fong Tron
+                            span(id="titleDescText") &nbsp;Collaborative Soundscapes
                 div(id="welcome-main-wrapper")
                     div(id="welcome-lnk-outer")
-                        em(id='btnText')
-                            span Connect to the Fong Tron with your phone or tablet by visiting
+                        span Connect to the Fong Tron with your phone or tablet by visiting
                         span(id="welcome-fong-tron-link").
                             &nbsp;art.fongphone.com
                     div(id="welcome-qr")
