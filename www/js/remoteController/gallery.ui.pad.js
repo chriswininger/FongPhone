@@ -50,8 +50,19 @@
 		adjustHeightWidth: function() {
 			this.winHeight = window.innerHeight;
 			this.winWidth = window.innerWidth;
-	
+
 			$('#phongUIGrid').css('height', this.winHeight + "px");
+			var fong;
+			for (var i = 0; i < this.fongDots.length; i++) {
+				fong = this.fongDots[i];
+				if (fong.x + fong.radius > this.winWidth) {
+					fong.x = 100;
+				}
+
+				if (fong.y + fong.radius > this.winHeight) {
+					fong.y = 100;
+				}
+			}
 		},
 		attachToDom: function($scope) {
 			var self = this;

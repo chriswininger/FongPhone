@@ -21,6 +21,10 @@ nconf
 var INTERACTION_TIMEOUT = nconf.get('Interaction_Timeout');
 var PORT = nconf.get('Port');
 
+console.log('===server starting');
+console.log('interaction timeout set to: ' + INTERACTION_TIMEOUT);
+console.log('port set to: ' + PORT);
+
 var slots = {
 	pad1: false,
 	pad2: false,

@@ -41,6 +41,33 @@ var logicBoard;
 
 			setTimeout(heightAdjustmentFunc, 300);
 		});
+
+		$(window).resize(function() {
+			setTimeout(heightAdjustmentFunc, 300);
+		});
+
+
+		// Need to prompt user and then do this on button press
+		swal({
+				title: "Allow Full Screen",
+				text: "Allow Full Screen Fongs?",
+				type: "info",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Allow",
+				closeOnConfirm: false
+			},
+			_tryGetFullOnClick
+		);
+
+		function _tryGetFullOnClick() {
+			try {
+				swal.close();
+				launchIntoFullscreen(document.documentElement);
+			} catch (ex) {
+				console.warn('error getting full screen: ' + ex);
+			}
+		}
 	});
 
 	if (document.visibilityState === 'prerender') {
@@ -255,6 +282,19 @@ var logicBoard;
 		console.log(JSON.stringify(noteMap.toJSON(), null, 4));
 		console.log('--------------------------');
 	}
+
+	function launchIntoFullscreen(element) {
+		if (element.requestFullscreen) {
+			element.requestFullscreen();
+		} else if (element.mozRequestFullScreen) {
+			element.mozRequestFullScreen();
+		} else if (element.webkitRequestFullscreen) {
+			element.webkitRequestFullscreen();
+		} else if (element.msRequestFullscreen) {
+			element.msRequestFullscreen();
+		}
+	}
+
 })();
 
 // TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)

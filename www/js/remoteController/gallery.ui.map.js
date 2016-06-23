@@ -30,6 +30,8 @@
 			var scaleSettingsContainer = $('#scaleSettingsContainer');
 			noteMapSelectionCtrl.css('height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
 			noteMapSelectionCtrl.css('max-height', (window.innerHeight - scaleSettingsContainer.height() - 75) + 'px');
+
+			//$('.ui-map-fong-select').css('font-size', 'large');
 		},
 		attachToDom: function($scope) {
 			var self = this;

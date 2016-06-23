@@ -23,21 +23,22 @@
 		</svg>
 	</div>
 	<div id="mapSubUI" class="scrollable">
+
+		<div class="fong-select-flex" style="opacity: .7; font-size: large; display: flex; flex-direction: row; justify-content: space-around; margin-top: 1em;">
+			<div style="" class="ui-map-fong-select ui-map-note-map-toggle {{ Fong1Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(0)">
+				Fong 1
+			</div>
+			<div class="ui-map-fong-select ui-map-note-map-toggle {{ Fong2Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(1)">
+				Fong 2
+			</div>
+			<div class="ui-map-fong-select ui-map-note-map-toggle {{ Fong3Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(2)">
+				Fong 3
+			</div>
+			<div class="ui-map-fong-select ui-map-note-map-toggle {{ Fong4Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(3)">
+				Fong 4
+			</div>
+		</div>
 		<table class="ui-map-table">
-			<tr>
-				<td class="ui-map-note-map-toggle {{ Fong1Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(0)">
-					Fong 1
-				</td>
-				<td class="ui-map-note-map-toggle {{ Fong2Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(1)">
-					Fong 2
-				</td>
-				<td class="ui-map-note-map-toggle {{ Fong3Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(2)">
-					Fong 3
-				</td>
-				<td class="ui-map-note-map-toggle {{ Fong4Selected ? 'map-note-on' : 'map-note-off' }}" colspan="6" ng-click="toggleSelectedFong(3)">
-					Fong 4
-				</td>
-			</tr>
 			<tr>
 				<td class="ui-map-note-map-base-note {{ IsSelectedBaseNote('a') ? 'selectedScale' : '' }}" ng-click="changeBaseNote($event)">
 					a
