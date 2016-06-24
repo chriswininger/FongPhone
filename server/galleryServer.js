@@ -20,10 +20,12 @@ nconf
 
 var INTERACTION_TIMEOUT = nconf.get('Interaction_Timeout');
 var PORT = nconf.get('Port');
+var SETTINGS_TIMEOUT = nconf.get('Settings_Timeout');
 
 console.log('===server starting');
 console.log('interaction timeout set to: ' + INTERACTION_TIMEOUT);
 console.log('port set to: ' + PORT);
+console.log('settings timeout: ' + SETTINGS_TIMEOUT);
 
 var slots = {
 	pad1: false,
@@ -133,13 +135,16 @@ var displayNSP = io.of('display').on('connection', function(socket) {
 }
 });
 
-
+// wire up socket io events for all slots
 var slotKeys = Object.keys(slots);
 for (var i = 0; i < slotKeys.length; i++) {
 	// wrap current slotKey into scope
 	(function(slot) {
 		console.log('listen under name space: ' + slot);
 		var lastInterActionTime;
+		var _settingsSoundRestart;
+		var _noteMapSoundRestart;
+
 		var ns = 'fong:event';
 		if (slot === 'soundBoard')
 			ns = 'sound:event';
@@ -162,6 +167,17 @@ for (var i = 0; i < slotKeys.length; i++) {
 			slots[slot] = true;
 
 			lastInterActionTime = Date.now();
+
+			// clear any existing reset counts on settings because a new user has taken control
+			if (_settingsSoundRestart) {
+				console.log('new user connected stop count down for sound pad restart');
+				clearTimeout(_settingsSoundRestart);
+			}
+
+			if (_noteMapSoundRestart) {
+				console.log('new user connected stop count down for note map restart');
+				clearTimeout(_noteMapSoundRestart);
+			}
 
 			var _checkInterval = setInterval(_checkForInteraction, 1000);
 			var _closedSocket = false;
@@ -202,6 +218,28 @@ for (var i = 0; i < slotKeys.length; i++) {
 
 				_closedSocket = true;
 				clearInterval(_checkInterval);
+
+				if (slot === 'soundBoard') {
+					console.log('begin count down to sound board reset: ' + SETTINGS_TIMEOUT);
+					_settingsSoundRestart = setTimeout(function() {
+						console.log('send signal to restore defaults for ' + slot);
+						displayNSP.emit('server:event:pass', {
+							eventType: 'reset',
+							slot: slot
+						});
+
+					}, SETTINGS_TIMEOUT);
+				} else if (slot === 'noteMap') {
+					console.log('begin count down to note map reset: ' + SETTINGS_TIMEOUT);
+					_noteMapSoundRestart = setTimeout(function() {
+						console.log('send signal to restore defaults for ' + slot);
+						displayNSP.emit('server:event:pass', {
+							eventType: 'reset',
+							slot: slot
+						});
+
+					}, SETTINGS_TIMEOUT);
+				}
 
 				// free slot
 				slots[slot] = false;

@@ -1,7 +1,8 @@
 (function() {
-	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap, soundUI) {
+	FongPhone.Utils.GalleryDisplayEvents = function(logicBoard, pad, noteMap, soundUI, stateController) {
 		this.pad = pad;
 		this.noteMap = noteMap;
+		this.stateController = stateController;
 
 		// unused currently (see below)
 		this.soundUI = soundUI;
@@ -184,6 +185,14 @@
 						} else if (data.slot === 'pad2') {
 							self.pad.fongDotsByID[2].boardInput.setChainOutputVol(1);
 							self.pad.fongDotsByID[3].boardInput.setChainOutputVol(1);
+						}
+					case 'reset':
+						if (data.slot === 'soundBoard') {
+							console.log('resetting sound board');
+							self.soundUI.set(self.stateController.getSoundState());
+						} else if (data.slot === 'noteMap') {
+							console.log('resetting note map');
+							self.noteMap.set(self.stateController.getMapState());
 						}
 				}
 			});
