@@ -50,5 +50,5 @@ window.FongPhone.UI.Defaults.soundBoardSettings = {
 		}
 	},
 	"filterPortamento": 0,
-	"portamentoControl": 0
+	"portamentoControl": 53
 };
