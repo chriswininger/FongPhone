@@ -13,6 +13,7 @@
 		var self = this;
 		this._positionDebouncers = {};
 		this._fadeDebouncers = {};
+		this._radiusChangeDebouncer = {};
 		this.subSpace = subSpace;
 
 		// TODO (CAW) This is being assigned to a global declared in ns file (let's clean this up)
@@ -145,8 +146,8 @@
 		},
 		handleFadeChanged: function (fong) {
 			var self = this;
-			if (!this._fadeDebouncers[fong.x]) {
-				this._fadeDebouncers[fong.x] = _.debounce(function(fong) {
+			if (!this._fadeDebouncers[fong.id]) {
+				this._fadeDebouncers[fong.id] = _.debounce(function(fong) {
 					self._socket.emit('fong:event', {
 						eventType: 'fade',
 						fadeOffset: fong.fadeOffset,
@@ -156,7 +157,7 @@
 				}, 10)
 			}
 
-			this._fadeDebouncers[fong.x](fong);
+			this._fadeDebouncers[fong.id](fong);
 		},
 		sendChangeEvent: function(fong) {
 
@@ -185,6 +186,19 @@
 		},
 		radiusChangeHandler: function(fong) {
 			//fong.boardInput.setOscVol(map(fong.radius, 60, 100, 0.9949676394462585, 5));
+			var self = this;
+			if (!this._radiusChangeDebouncer[fong.id]) {
+				this._fadeDebouncers[fong.id] = _.debounce(function(fong) {
+					self._socket.emit('fong:event', {
+						eventType: 'radius',
+						radius: fong.radius,
+						id: fong.id,
+						fongRole: fong.fongRole
+					});
+				}, 10)
+			}
+
+			this._fadeDebouncers[fong.id](fong);
 		},
 		set: function(json, keepLoop) {
 			var fongDots = [];

@@ -48,6 +48,9 @@
 					case 'fade':
 						self.pad.fongDotsByID[data.id].fadeOffset = data.fadeOffset;
 						break;
+					case 'radius':
+						self.pad.fongDotsByID[data.id].radius = data.radius;
+						break;
 				};
 			});
 
