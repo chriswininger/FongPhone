@@ -11,6 +11,15 @@ var logicBoard;
 	console.log('using sub space: ' + subSpace);
 	$(function _deviceReady(id) {
 		console.log('device ready');
+
+		/*if (document.visibilityState === 'prerender') {
+			// don't connect to sockets, this is chrome trying to pre-load the page
+			console.log('device ready fake');
+			return;
+		} else {
+			console.log('device ready real');
+		}*/
+
 		var domElement = document.querySelector('body');
 		angular.bootstrap(domElement, ['fongPhone']);
 
@@ -70,10 +79,17 @@ var logicBoard;
 		}
 	});
 
+	/*
+		use to halt on pre-render here to avoid pre-render connecting to server and filling slot, but
+			in new chrome this causes problems because the code after this never gets ran at all, the original
+			problem is no longer an issue because we don't fill the slot untill socket connects rather than
+			on the http request
+  	*/
 	if (document.visibilityState === 'prerender') {
 		// don't connect to sockets, this is chrome trying to pre-load the page
-		console.log('short circuit for preview mode');
-		return;
+		console.log('pre-render mode');
+	} else {
+		console.log('non-pre-render');
 	}
 
 	// connect to websocket over the specified subspace

@@ -192,11 +192,15 @@
 			this.selectedFongID = 0;
 		},
 		adjustHeightWidth: function() {
-			var heightSub = FongPhone.Globals.tabbedNavHeight;
-			$('#soundControlsDiv').css('height', (window.innerHeight - heightSub) + "px");
-			$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
-			//soundUI
-			$('.page').css('max-height', window.innerHeight + "px");
+			try {
+				var heightSub = FongPhone.Globals.tabbedNavHeight;
+				$('#soundControlsDiv').css('height', (window.innerHeight - heightSub) + "px");
+				$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
+				//soundUI
+				$('.page').css('max-height', window.innerHeight + "px");
+			} catch (ex) {
+				console.log('err: ' + ex);
+			}
 		},
 		attachToDom: function($scope) {
 			var self = this;
