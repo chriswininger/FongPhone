@@ -188,7 +188,7 @@
 			//fong.boardInput.setOscVol(map(fong.radius, 60, 100, 0.9949676394462585, 5));
 			var self = this;
 			if (!this._radiusChangeDebouncer[fong.id]) {
-				this._fadeDebouncers[fong.id] = _.debounce(function(fong) {
+				this._radiusChangeDebouncer[fong.id] = _.debounce(function(fong) {
 					self._socket.emit('fong:event', {
 						eventType: 'radius',
 						radius: fong.radius,
@@ -198,7 +198,7 @@
 				}, 10)
 			}
 
-			this._fadeDebouncers[fong.id](fong);
+			this._radiusChangeDebouncer[fong.id](fong);
 		},
 		set: function(json, keepLoop) {
 			var fongDots = [];
