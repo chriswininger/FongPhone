@@ -5,7 +5,7 @@ var logicBoard;
 	var subSpace = $('body').data('subspace');
 
 	// special parameter we pass if this comes from our kiosk info screen
-	var welcomeScreen = $('body').data('subspace');
+	var welcomeScreen = $('body').data('welcomescreen');
 	console.log('starting...');
 	vex.defaultOptions.className = 'vex-theme-wireframe';
 

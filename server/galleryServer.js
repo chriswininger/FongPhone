@@ -62,6 +62,7 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 	}
 
 	var welcomeScreen = !!req.query.welcomeScreen;
+	console.log('log rendering response with welcomeScreen: ' + welcomeScreen);
 	res.render('remote', {
 		subspace: '/' + selectedSubSpace,
 		welcomeScreen: welcomeScreen
