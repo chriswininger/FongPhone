@@ -61,8 +61,10 @@ app.get('/remote', [_remoteRequest], function(req, res) {
 		//return res.status(404).send('no available slots');
 	}
 
+	var welcomeScreen = !!req.query.welcomeScreen;
 	res.render('remote', {
-		subspace: '/' + selectedSubSpace
+		subspace: '/' + selectedSubSpace,
+		welcomeScreen: welcomeScreen
 	});
 });
 

@@ -1,7 +1,11 @@
 // TODO (CAW) Namespace these
 var logicBoard;
 (function () {
+	// the subspace we want to attempt to use
 	var subSpace = $('body').data('subspace');
+
+	// special parameter we pass if this comes from our kiosk info screen
+	var welcomeScreen = $('body').data('subspace');
 	console.log('starting...');
 	vex.defaultOptions.className = 'vex-theme-wireframe';
 
@@ -99,7 +103,13 @@ var logicBoard;
 		console.log('server dropped connection: ' + msg);
 		if (msg === 'io server disconnect') {
 			// the server has disconnected due to inactivity or because you lost connection for too long
-			window.location.href = '/thanks-for-playing?disconnected=true';
+			if (welcomeScreen) {
+				// this is welcome kiosk take it back to it's main screen
+				window.location.href =  '/welcome-to-the-fong-tron'
+			} else {
+				// thanks for playing with disconnected message
+				window.location.href = '/thanks-for-playing?disconnected=true';
+			}
 		}
 	});
 	socket.on('spot:taken', function() {

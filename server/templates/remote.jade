@@ -27,7 +27,7 @@ html
 		script(src="js/lib/teoria/teoria.js")
 		link(rel="stylesheet", type="text/css", href="css/index.css")
 		title Fong Phone
-	body(data-subspace='#{subspace}',)
+	body(data-subspace="#{subspace}", data-welcomescreen="#{welcomeScreen}")
 		div(class="page {{ pageClass }}", ng-view)
 		script(src="js/logic/util.namespaces.js")
 		script(src="js/logic/ui.navigation.tabs.js")

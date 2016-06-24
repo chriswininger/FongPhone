@@ -8,6 +8,12 @@ html
         link(rel="stylesheet", href="js/lib/vex/css/vex-theme-wireframe.css")
         link(rel="stylesheet", type="text/css", href="css/index.css")
         script(src="js/lib/jquery/dist/jquery.min.js")
+        script(type="text/javascript").
+            $(function () {
+                $('#welcome-fong-tron-link').click(function () {
+                    window.location.href = '/?welcomeScreen=true';
+                });
+            });
         title Welcome to the Fong Tron
     body(data-play-again='#{playAgain}' class="welcome-screen")
         div(class="page {{ pageClass }}", ng-view)
