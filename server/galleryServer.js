@@ -21,11 +21,29 @@ nconf
 var INTERACTION_TIMEOUT = nconf.get('Interaction_Timeout');
 var PORT = nconf.get('Port');
 var SETTINGS_TIMEOUT = nconf.get('Settings_Timeout');
+var SHOW_PLACE_HOLDER = nconf.get('Show_Place_Holder') || false;
 
 console.log('===server starting');
 console.log('interaction timeout set to: ' + INTERACTION_TIMEOUT);
 console.log('port set to: ' + PORT);
 console.log('settings timeout: ' + SETTINGS_TIMEOUT);
+console.log('show event place holder: ' + SHOW_PLACE_HOLDER);
+
+app.set('view engine', 'jade');
+app.set('views', __dirname + '/templates');
+
+http.listen(PORT);
+console.log('listening on port: ' + PORT + ', interaction timeout: ' + INTERACTION_TIMEOUT);
+
+// a screen that can be used between events to park the domain but no allow interaction
+if (SHOW_PLACE_HOLDER) {
+	app.get('/', function(req, res) {
+		res.render('event-place-holder', {});
+	});
+	app.use(express.static(__dirname + '/../www'));
+	// short circuit all other paths
+	return;
+}
 
 var slots = {
 	pad1: false,
@@ -42,8 +60,7 @@ var slotStates = {};
 
 var displayServers = 0;
 
-app.set('view engine', 'jade');
-app.set('views', __dirname + '/templates');
+
 app.get('/remote', [_remoteRequest], function(req, res) {
 	var slotKeys = Object.keys(slots);
 	var selectedSubSpace;
@@ -271,6 +288,3 @@ function _remoteRequest(req, res, next) {
 	res.setHeader('Expires', 0);
 	next();
 }
-
-http.listen(PORT);
-console.log('listening on port: ' + PORT + ', interaction timeout: ' + INTERACTION_TIMEOUT);

@@ -174,8 +174,57 @@ h1 {
 	/* W3C */
 }
 
-body.welcome-screen {
+div#placeholder-main-wrapper {
+	margin-top: 3em;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+
+div#placeholderTitleWrapper {
+	display: flex;
+	justify-content: center;
+	color: #77e1d3;
+	width: 100%;
+}
+
+div#placeholderTitleInner {
+	width: 754px; /* Really we should find computed width of of elements we are matching below and set in js */
+}
+
+body.placeholder-screen {
 	text-transform: none;
+}
+
+div#placeholderMessageOuter {
+	font-size: large;
+	margin-top: 3em;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: -moz-box;
+	display: flex;
+	justify-content: center;
+}
+
+div#placeholderMessageInner {
+	width: 30%;
+}
+
+div#placeHolderImage {
+	width: 40%
+}
+
+div#placeHolderImage>img {
+	width: 100%;
+}
+
+span#placeholderLinkText {
+	font-weight: bolder;
+	color: #ffe300;
+	letter-spacing: 2px;
+	cursor: pointer
 }
 
 div#welcome-main-wrapper {
