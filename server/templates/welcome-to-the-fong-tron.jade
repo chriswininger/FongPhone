@@ -11,11 +11,10 @@ html
         script(type="text/javascript").
             $(function () {
                 $('#welcome-fong-tron-link').click(function () {
-                    // temporarily disabled due to touch issue
                     // window.location.href = '/remote?welcomeScreen=true';
                 });
             });
-        title Welcome to Othe Fong Tron
+        title Welcome to the Fong Tron
     body(data-play-again='#{playAgain}' class="welcome-screen")
         div(class="page {{ pageClass }}", ng-view)
             div(class="ui-display-area ui-display-area-thank-you")
@@ -24,3 +23,12 @@ html
                         h1(id="welcomeTitleText")
                             span(id="titleMainText") Fong Tron
                             span(id="titleDescText") &nbsp;Collaborative Soundscapes
+                div(id="welcome-main-wrapper")
+                    div(id="welcome-lnk-outer")
+                        span Connect to the Fong Tron with your phone or tablet by visiting
+                        br
+                        br
+                        span(id="welcome-fong-tron-link").
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;art.fongphone.com
+                    div(id="welcome-qr")
+                        img(src="/img/art.fongphone.qrcode.jpg")
