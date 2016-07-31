@@ -2,5 +2,5 @@
   "Port": 3002,
   "Interaction_Timeout": 60000,
   "Settings_Timeout": 60000,
-  "Show_Place_Holder": true
+  "Show_Place_Holder": false
 }
