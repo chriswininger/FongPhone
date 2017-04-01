@@ -7,7 +7,7 @@
     <author email="chris.wininger@gmail.com" href="https://github.com/chriswininger">
         Chris Wininger
     </author>
-	<author email="andrew.r.allred@gmail.com" href="https://github.com/trouscaillon">
+    <author email="andrew.r.allred@gmail.com" href="https://github.com/trouscaillon">
 		Andrew Allred
 	</author>
     <content src="index.html" />
@@ -21,64 +21,58 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
-        <icon src="res/android/ldpi.png" density="ldpi" />
-        <icon src="res/android/mdpi.png" density="mdpi" />
-        <icon src="res/android/hdpi.png" density="hdpi" />
-        <icon src="res/android/xhdpi.png" density="xhdpi" />
-
-		<splash src="res/android/android-ldpi-splash.png" density="ldpi" />
-		<splash src="res/android/android-mdpi-splash.png" density="mdpi" />
-		<splash src="res/android/android-hdpi-splash.png" density="hdpi" />
-		<splash src="res/android/android-xhdpi-splash.png" density="xhdpi" />
+        <icon density="ldpi" src="res/android/ldpi.png" />
+        <icon density="mdpi" src="res/android/mdpi.png" />
+        <icon density="hdpi" src="res/android/hdpi.png" />
+        <icon density="xhdpi" src="res/android/xhdpi.png" />
+        <splash density="ldpi" src="res/android/android-ldpi-splash.png" />
+        <splash density="mdpi" src="res/android/android-mdpi-splash.png" />
+        <splash density="hdpi" src="res/android/android-hdpi-splash.png" />
+        <splash density="xhdpi" src="res/android/android-xhdpi-splash.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-		<!-- iOS 8.0+ -->
-		<!-- iPhone 6 Plus  -->
-		<icon src="res/ios/icon-60@3x.png" width="180" height="180" />
-		<!-- iOS 7.0+ -->
-		<!-- iPhone / iPod Touch  -->
-		<icon src="res/ios/icon-60.png" width="60" height="60" />
-		<icon src="res/ios/icon-60@2x.png" width="120" height="120" />
-		<!-- iPad -->
-		<icon src="res/ios/icon-76.png" width="76" height="76" />
-		<icon src="res/ios/icon-76@2x.png" width="152" height="152" />
-		<!-- iOS 6.1 -->
-		<!-- Spotlight Icon -->
-		<icon src="res/ios/icon-40.png" width="40" height="40" />
-		<icon src="res/ios/icon-40@2x.png" width="80" height="80" />
-		<!-- iPhone / iPod Touch -->
-		<icon src="res/ios/icon.png" width="57" height="57" />
-		<icon src="res/ios/icon@2x.png" width="114" height="114" />
-		<!-- iPad -->
-		<icon src="res/ios/icon-72.png" width="72" height="72" />
-		<icon src="res/ios/icon-72@2x.png" width="144" height="144" />
-		<!-- iPhone Spotlight and Settings Icon -->
-		<icon src="res/ios/icon-small.png" width="29" height="29" />
-		<icon src="res/ios/icon-small@2x.png" width="58" height="58" />
-		<!-- iPad Spotlight and Settings Icon -->
-		<icon src="res/ios/icon-50.png" width="50" height="50" />
-		<icon src="res/ios/icon-50@2x.png" width="100" height="100" />
-		 <!-- images are determined by width and height. The following are supported -->
-		<splash src="res/screen/ios/Default~iphone.png" width="320" height="480"/>
-		<splash src="res/screen/ios/Default@2x~iphone.png" width="640" height="960"/>
-		<splash src="res/screen/ios/Default-Portrait~ipad.png" width="768" height="1024"/>
-		<splash src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" height="2048"/>
-		<splash src="res/screen/ios/Default-Landscape~ipad.png" width="1024" height="768"/>
-		<splash src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" height="1536"/>
-		<splash src="res/screen/ios/Default-568h@2x~iphone.png" width="640" height="1136"/>
-		<splash src="res/screen/ios/Default-667h.png" width="750" height="1334"/>
-		<splash src="res/screen/ios/Default-736h.png" width="1242" height="2208"/>
-		<splash src="res/screen/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
-	</platform>
+        <icon height="180" src="res/ios/icon-60@3x.png" width="180" />
+        <icon height="60" src="res/ios/icon-60.png" width="60" />
+        <icon height="120" src="res/ios/icon-60@2x.png" width="120" />
+        <icon height="76" src="res/ios/icon-76.png" width="76" />
+        <icon height="152" src="res/ios/icon-76@2x.png" width="152" />
+        <icon height="40" src="res/ios/icon-40.png" width="40" />
+        <icon height="80" src="res/ios/icon-40@2x.png" width="80" />
+        <icon height="57" src="res/ios/icon.png" width="57" />
+        <icon height="114" src="res/ios/icon@2x.png" width="114" />
+        <icon height="72" src="res/ios/icon-72.png" width="72" />
+        <icon height="144" src="res/ios/icon-72@2x.png" width="144" />
+        <icon height="29" src="res/ios/icon-small.png" width="29" />
+        <icon height="58" src="res/ios/icon-small@2x.png" width="58" />
+        <icon height="50" src="res/ios/icon-50.png" width="50" />
+        <icon height="100" src="res/ios/icon-50@2x.png" width="100" />
+        <splash height="480" src="res/screen/ios/Default~iphone.png" width="320" />
+        <splash height="960" src="res/screen/ios/Default@2x~iphone.png" width="640" />
+        <splash height="1024" src="res/screen/ios/Default-Portrait~ipad.png" width="768" />
+        <splash height="2048" src="res/screen/ios/Default-Portrait@2x~ipad.png" width="1536" />
+        <splash height="768" src="res/screen/ios/Default-Landscape~ipad.png" width="1024" />
+        <splash height="1536" src="res/screen/ios/Default-Landscape@2x~ipad.png" width="2048" />
+        <splash height="1136" src="res/screen/ios/Default-568h@2x~iphone.png" width="640" />
+        <splash height="1334" src="res/screen/ios/Default-667h.png" width="750" />
+        <splash height="2208" src="res/screen/ios/Default-736h.png" width="1242" />
+        <splash height="1242" src="res/screen/ios/Default-Landscape-736h.png" width="2208" />
+    </platform>
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="orientation" value="portrait" />	
-	<hook type="before_build" src="hooks/sha.sh" />
-	<hook type="before_emulate" src="hooks/sha.sh" />
-	<preference name="AutoHideSplashScreen" value="false" />  
-	<preference name="ShowSplashScreenSpinner" value="false" />  
-	<preference name="FadeSplashScreen" value="true" />  
-	<preference name="FadeSplashScreenDuration" value=".5" />  
+    <preference name="orientation" value="portrait" />
+    <hook src="hooks/sha.sh" type="before_build" />
+    <hook src="hooks/sha.sh" type="before_emulate" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
+    <preference name="FadeSplashScreen" value="true" />
+    <preference name="FadeSplashScreenDuration" value=".5" />
+    <plugin name="cordova-plugin-crosswalk-webview" spec="~2.3.0">
+        <variable name="XWALK_VERSION" value="23+" />
+        <variable name="XWALK_LITEVERSION" value="xwalk_core_library_canary:17+" />
+        <variable name="XWALK_COMMANDLINE" value="--disable-pull-to-refresh-effect" />
+        <variable name="XWALK_MODE" value="embedded" />
+        <variable name="XWALK_MULTIPLEAPK" value="true" />
+    </plugin>
 </widget>
