@@ -1,8 +1,9 @@
 window.FongPhone = window.FongPhone || {};
-window.FongPhone.Utils = window.FongPhone.Utils || {};
-window.FongPhone.Utils.Mixins = window.FongPhone.Utils.Mixins || {};
 
-window.FongPhone.Utils.Mixins.ToJSON = {
+FongPhone.Utils = window.FongPhone.Utils || {};
+FongPhone.Utils.Mixins = window.FongPhone.Utils.Mixins || {};
+
+FongPhone.Utils.Mixins.ToJSON = {
 	/**
 	 * applyMixin
 	 * @param obj -> The object to extend
@@ -26,29 +27,46 @@ window.FongPhone.Utils.Mixins.ToJSON = {
 						if (_.isArray(val)) {
 							obj[key] = [];
 							_.each(val, function(entry) {
-							   obj[key].push(entry.toJSON ? entry.toJSON() : entry);
+							   obj[key].push(entry.toJSON ? entry.toJSON() : _stripExcluded(entry));
 							});
 						} else {
-							obj[key] = (val && val.toJSON) ? val.toJSON() : val;
+							obj[key] = (val && val.toJSON) ? val.toJSON() : _stripExcluded(val);
 						}
 					}
 				});
 
-				/*
-					exclude angular attributes prefixed with $,
-					exclude private members prefixed with underscore
-					exclude anything explicitly specified
-					exclude functions
-				 */
-				function _excluded(val, key) {
-					return (key[0] === '$') ||
-						(key[0] === '_') ||
-						!!(exclusionMap[key]) ||
-						_.isFunction(val);
-				}
-
 				return obj;
 			}
 		});
+
+		function _stripExcluded(obj) {
+			if (!(typeof obj === 'object'))
+				return obj;
+			if (obj instanceof String)
+				return obj;
+
+			var objKeys = Object.keys(obj);
+			var objKeysLen = objKeys.length;
+			var key;
+			var val;
+			var rtn = {};
+
+			for (var i = 0; i < objKeysLen; i++) {
+				key = objKeys[i];
+				val = obj[key];
+				if (!_excluded(val, key)) {
+					rtn[key] = val;
+				}
+			}
+
+			return rtn;
+		}
+
+		function _excluded (val, key) {
+			return (key[0] === '$') ||
+				(key[0] === '_') ||
+				!!(exclusionMap[key]) ||
+				_.isFunction(val);
+		}
 	}
 };

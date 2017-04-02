@@ -176,9 +176,10 @@
 			var stateList = this.getStateList();
 			var rtn = {};
 			_.each(stateList, function _sndStateItr(stateKey) {
+				rtn[stateKey] ={};
 				rtn[stateKey] = {
-					soundSettings: this.getSoundState(stateKey),
 					padSettings: this.getPadState(stateKey),
+					soundSettings: this.getSoundState(stateKey),
 					noteSettings: this.getMapState(stateKey)
 				};
 			}, this);
@@ -193,7 +194,7 @@
 		getPadState: function (name) {
 			name = name || '';
 			if (name) name = name + '_';
-			return _getStoredState(name + _padKey, FongPhone.UI.Defaults);
+			return _getStoredState(name + _padKey, FongPhone.UI.Defaults.padSettings);
 		},
 		getSelectedState: function () {
 			return this._selectedState;
