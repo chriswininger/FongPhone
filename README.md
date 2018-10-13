@@ -33,3 +33,25 @@ cordova plugins add org.apache.cordova.dialogs
 - While intended for use as a mobile app, this can be testing locally in a browser such as Chrome, using the server.js file in [project dir]/server
 - Simply run node ./server/server.js
 - Open chrome and navigate to http://localhost:3000. Use develper tools to enable mobile emulation in order to interact with the app.
+
+### Cordova Build
+
+- Install corova cli tools: `npm install -g cordova`
+
+- To **test on emulator** run `cordova run --emulator`
+	- This assumes you have cordova and android sdk configured, if so an Android emulator will be launched (https://cordova.apache.org/docs/en/latest/guide/platforms/android/).
+
+- To **test on phone** run: `cordova run --device`
+
+- To **build for production** run:
+
+```
+cordova build android --release -- --keystore="/home/chris/key_stores/android_release_key_Store.keystore" --alias=android_release_key_store --storePassword={storePassword} --password={keyPassword-Same-As-Store}
+```
+
+### NOTES:
+* https://stackoverflow.com/questions/24978166/unable-to-export-signed-apk-in-android-studio
+
+* Change password for keystore file: ` keytool -storepasswd -alias android_release_key_store -keystore ~/key_stores/android_release_key_Store.keystore`
+
+* Testing key store: `keytool -list -v -alias android_release_key_store -keystore ~/key_stores/android_release_key_Store.keystore`
