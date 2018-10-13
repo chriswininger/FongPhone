@@ -74,6 +74,12 @@
 					}
 				} catch (err) {}
 			}, delay);
-		}
+		},
+        getVersion: function () {
+            return localStorage.getItem('fong_phone_version') || '1.0.0';
+        },
+        setVersion: function(version) {
+            localStorage.setItem('fong_phone_version', '1.1.0');
+        }
 	};
 })();

@@ -43,6 +43,12 @@ var logicBoard;
 	}
 
 	var stateController = new FongPhone.UI.StatesController();
+    if (FongPhone.UI.Helper.getVersion() !== '1.1.0') {
+        console.log('clearing states for pre 1.1.0 release');
+		localStorage.clear()
+        FongPhone.UI.Helper.setVersion('1.1.0');
+    }
+
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
 	var padUI = new FongPhone.UI.Pad(logicBoard, stateController.getPadState());
 	var soundUI = new FongPhone.UI.Sound(logicBoard, padUI, stateController.getSoundState());
