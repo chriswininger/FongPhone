@@ -11,14 +11,14 @@ gulp.task('initialize', initialize);
 
 var clientDependencies = [
 	'angularjs#1.4.x',
-	'angular-animate#1.4.x',
-	'angular-route#1.4.x',
+	'angular-animate#1.4.7',
+	'angular-route#1.4.7',
 	'async#1.4.x',
 	'jquery#2.1.x',
 	'lodash#3.10.x',
 	'hammerjs#2.0.x',
-	'jquery-touch-events#1.0.x',
-    'teoria',
+	'jquery-touch-events#1.0.8',
+    'teoria#2.1.1',
 	'localforage#1.2.x',
 	'jquery-knob',
 	'ngDraggable',
