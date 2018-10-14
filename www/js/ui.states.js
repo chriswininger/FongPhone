@@ -27,6 +27,7 @@
 			}
 		},
 		attachToDom: function ($scope) {
+			console.log('attaching states to dom')
 			var self = this;
 			this.$scope = $scope;
 			$scope.pageClass = 'view-states';
@@ -205,6 +206,7 @@
 				this.$scope.selectedState = state;
 		},
 		getStateList: function () {
+			console.trace('getting list of state items')
 			var lst = this.storedList || [];
 			var lstStore = localStorage.getItem(_stateListKey);
 			var newList = [];
