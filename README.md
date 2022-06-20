@@ -8,17 +8,21 @@ For those wanting more than an app store purchase, this project is available her
 
 #### Requirements
 1. nodejs (dev/testing)
-2. npm
-3. gulp
-4. bower
-5. cordova
-6. appropriate sdk
+2. npm (v10.19.0)
+3. Java (1.8 oracle)
+5. gradle
+4. gulp
+5. bower
+6. cordova
+7. appropriate sdk
 
 #### Installation
 
 npm install -g gulp
 
 npm install -g bower
+
+pm install -g cordova
 
 npm install
 
@@ -55,3 +59,17 @@ cordova build android --release -- --keystore="/home/chris/key_stores/android_re
 * Change password for keystore file: ` keytool -storepasswd -alias android_release_key_store -keystore ~/key_stores/android_release_key_Store.keystore`
 
 * Testing key store: `keytool -list -v -alias android_release_key_store -keystore ~/key_stores/android_release_key_Store.keystore`
+
+
+
+/v1/
+
+/v2/
+
+
+/api/versions
+
+{
+ currentVersion: 'v1'
+ supperotedVersion: ['v1', 'v2]
+}
