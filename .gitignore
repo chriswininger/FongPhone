@@ -6,18 +6,9 @@
 platforms/
 plugins/
 node_modules/
-www/js/lib/angularjs/
-www/js/lib/angular/
-www/js/lib/angular-route
-www/js/lib/angular-animate
-www/js/lib/async
-www/js/lib/jquery
-www/js/lib/lodash
-www/js/lib/hammerjs
 .idea/
 
-www/js/lib/teoria
-www/js/lib
+
 
 www/cordova.js
 

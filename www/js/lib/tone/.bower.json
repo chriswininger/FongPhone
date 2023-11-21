@@ -1,0 +1,30 @@
+{
+  "name": "tone",
+  "description": "A Web Audio framework for making interactive music in the browser.",
+  "main": "build/Tone.js",
+  "keywords": [
+    "tone",
+    "tonejs",
+    "web audio"
+  ],
+  "ignore": [
+    "examples",
+    "test",
+    "grunt"
+  ],
+  "authors": [
+    "Yotam Mann",
+    "Yotam Mann <yotammann@gmail.com>"
+  ],
+  "homepage": "https://github.com/TONEnoTONE/Tone.js",
+  "_release": "5c92595d86",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "5c92595d86236fccbf772907d62bdb4fd2e31fe2"
+  },
+  "_source": "git://github.com/TONEnoTONE/Tone.js.git",
+  "_target": "*",
+  "_originalSource": "tone",
+  "_direct": true
+}

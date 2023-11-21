@@ -1,0 +1,15 @@
+{
+  "name": "teoria",
+  "homepage": "https://github.com/saebekassebil/teoria",
+  "version": "2.1.1",
+  "_release": "2.1.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "2.1.1",
+    "commit": "8b58021594886f03622b753f8f4f324c031a6ea8"
+  },
+  "_source": "https://github.com/saebekassebil/teoria.git",
+  "_target": "2.1.1",
+  "_originalSource": "teoria",
+  "_direct": true
+}
