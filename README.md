@@ -12,7 +12,7 @@ For those wanting more than an app store purchase, this project is available her
 
 #### Requirements
 1. nodejs (dev/testing)
-2. npm (v10.19.0)
+2. npm (lts/hydrogen)
 3. Java (1.8 oracle)
 5. gradle
 4. gulp
