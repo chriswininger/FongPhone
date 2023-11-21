@@ -37,13 +37,9 @@
 
 			var heightStatusBar = 20;
 			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight - 15;
-			if (FongPhone.Globals.isAndroid) {
-				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - heightStatusBar + 15;
-			}
 
-			statesUI.css('max-height', (window.innerHeight - heightSub) + "px");
-			statesUI.css('height', (window.innerHeight - heightSub) + "px");
+			// statesUI.css('max-height', (window.innerHeight - heightSub) + "px");
+			// statesUI.css('height', (window.innerHeight - heightSub) + "px");
 
 			// build state selection board
 			var a = [];

@@ -32,13 +32,8 @@
 			var heightSub = heightStatusBar + FongPhone.Globals.tabbedNavHeight + 8;
 			var dial = $(".dial");
 
-			if (FongPhone.Globals.isAndroid) {
-				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - heightStatusBar - 8;
-			}
-
-			$('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
-			$('.page').css('max-height', window.innerHeight + "px");
+			// $('#soundControlsDiv').css('max-height', (window.innerHeight - heightSub) + "px");
+			// $('.page').css('max-height', window.innerHeight + "px");
 			FongPhone.UI.Helper.registerAlertOnFirstView("soundMessage", 'The controls on this view allow you to change the sonic properties of each Fong including filter, wave types, delay and more. Got it?', 'Sound');
 			
 			// investigate $scope values

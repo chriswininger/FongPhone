@@ -138,10 +138,6 @@ h1 {
 /* being my code */
 
 .page {
-	margin: 0;
-	padding: 0;
-	/*background-color: #f9e7e7;*/
-	width: 100%;
 	background: -webkit-linear-gradient(top, #360033 10%, #0b8793 90%);
 	/* Chrome 10+, Saf5.1+ */
 	background: -moz-linear-gradient(top, #360033 10%, #0b8793 90%);
@@ -152,6 +148,24 @@ h1 {
 	/* Opera 11.10+ */
 	background: linear-gradient(top, #360033 10%, #0b8793 90%);
 	/* W3C */
+}
+
+.page, .ui-display-area {
+	display: flex;
+	flex-direction: column;
+
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#phongUIGrid {
+	flex-grow: 1;
+}
+#soundUI, #statesUI {
+	flex-grow: 1;
+	overflow: scroll;
 }
 
 .swiper {
@@ -172,10 +186,6 @@ h1 {
 	/* Opera 11.10+ */
 	background: linear-gradient(top, #360033 10%, #0b8793 90%);
 	/* W3C */
-}
-
-svg.ui-display-area {
-	display: block;
 }
 
 table,

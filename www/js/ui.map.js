@@ -28,12 +28,8 @@
 			var self = this;
 			this.$scope = $scope;
 
-			if (FongPhone.Globals.isAndroid) {
-				$('.fong-phone-apple-status-bar').hide();
-				heightSub = heightSub - heightStatusBar - 8;
-			}
-			$('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
-			$('#mapUI').css('max-height', window.innerHeight + "px");
+			// $('#mapSubUI').css('height', (window.innerHeight - heightSub) + "px");
+			// $('#mapUI').css('max-height', window.innerHeight + "px");
 
 			var loopDurationControl = $('#loopDurationControl');
 			var chunkinessControl = $('#chunkinessControl');

@@ -100,7 +100,11 @@ var loopType = 1;
 			var cx = targetFong.getAttribute('cx');
 			var cy = targetFong.getAttribute('cy');
 			var r = targetFong.getAttribute('r');
-			
+
+			if (audioContext.state === 'suspended') {
+				audioContext.resume();
+			}
+
 			// If there's exactly one finger inside this element
 			if (targetTouches.length == 1) {
 				var touch = targetTouches[0];

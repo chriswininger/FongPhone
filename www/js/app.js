@@ -1,6 +1,9 @@
 // TODO (CAW) Namespace these
 var logicBoard;
-(function () {
+
+var audioContext;
+
+function startApp() {
 	console.log('starting...');
 	vex.defaultOptions.className = 'vex-theme-wireframe';
 
@@ -42,11 +45,13 @@ var logicBoard;
 		return console.error(new Error('AudioContext not supported.'));
 	}
 
-    if (FongPhone.UI.Helper.getVersion() !== '1.1.0') {
-        console.log('clearing states for pre 1.1.0 release');
-		localStorage.clear()
-        FongPhone.UI.Helper.setVersion('1.1.0');
-    }
+	audioContext = context;
+
+    // if (FongPhone.UI.Helper.getVersion() !== '1.1.0') {
+    //     console.log('clearing states for pre 1.1.0 release');
+	// 	localStorage.clear()
+    //     FongPhone.UI.Helper.setVersion('1.1.0');
+    // }
 
     var stateController = new FongPhone.UI.StatesController();
 	logicBoard = new FongPhone.Logic.BoardLogic(context, FongPhone.Logic.Defaults.logicBoardDefaults);
@@ -61,7 +66,7 @@ var logicBoard;
 
 	FongPhone.Navigation.tabNavigationFunc = _.partial(FongPhone.Navigation.tabNavigationFunc, stateController);
 
-		// start the oscillators after all other settings have been initialized to avoid hiccup
+	// start the oscillators after all other settings have been initialized to avoid hiccup
 	setTimeout(function() {
 		logicBoard.start();
 	}, 1000);
@@ -147,7 +152,9 @@ var logicBoard;
 	FongPhone.Debugging.dumpAllStateToConsole = function() {
 		console.log(JSON.stringify(stateController.getAllStates(), null, 4));
 	}
-})();
+}
+
+startApp();
 
 // TODO -- Stick inside closure and give name space like Fong.log (prevents library conflicts)
 function log(message) {
