@@ -1,7 +1,7 @@
 # FongPhone
 
 #### Now Available In App Store
-[Android](https://play.google.com/store/apps/details?id=com.fongphone), [ios](https://itunes.apple.com/us/app/fongphone/id1073371447?ls=1&mt=8)
+[Android](https://play.google.com/store/apps/details?id=com.fongphone), [iOS](https://itunes.apple.com/us/app/fongphone/id1073371447?ls=1&mt=8)
 
 ### Looking for Fong Tron
 
