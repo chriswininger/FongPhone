@@ -13,6 +13,13 @@ simple node. I'm presently running it in version v24.14.0.
 
 This branch is currently being deployed to Netlify and is available at https://fongphone-app.netlify.app/#/.
 
+## Desktop Controls
+
+Fongs can be clicked and dragged with a mouse just like touch on mobile.
+
+To resize a fong (which controls volume), click the font, then use the scroll wheel, or pinch on a trackpad. Two finger
+scroll also works on MacBook.
+
 ## Archive
 
 Most of what follows is out of date. I'm leaving it until I can finish getting this up to date

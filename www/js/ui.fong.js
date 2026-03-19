@@ -211,6 +211,13 @@ var loopType = 1;
 			document.removeEventListener('mousemove', this._fadeMouseMoveListener);
 			document.removeEventListener('mouseup', this._fadeMouseUpListener);
 		},
+		handleWheel: function(event) {
+			event.preventDefault();
+			var delta = event.deltaY > 0 ? -2 : 2;
+			var newRadius = this.radius + delta;
+			if (newRadius >= 62 && newRadius <= MAX_RADIUS)
+				this.radius = newRadius;
+		},
 		fireAllHandlers: function() {
 			this.positionChangedHandler(this, this.x, this.y);
 			this.fadeChangedHandler(this);
@@ -247,6 +254,8 @@ var loopType = 1;
 				this.domElement.removeEventListener('mousedown', this._mouseDownListener);
 			if (this._fadeMouseDownListener)
 				this.fadeElement.removeEventListener('mousedown', this._fadeMouseDownListener);
+			if (this._wheelListener)
+				this.domElement.removeEventListener('wheel', this._wheelListener);
 
 			// clear any event listeners registered through jquery
 			$(this.domElement).off();
@@ -268,8 +277,11 @@ var loopType = 1;
 			this._fadeMouseUpListener = _.bind(this.handleFadeMouseUp, this);
 			this._fadeMouseDownListener = _.bind(this.handleFadeMouseDown, this);
 
+			this._wheelListener = _.bind(this.handleWheel, this);
+
 			this.domElement.addEventListener('mousedown', this._mouseDownListener);
 			this.fadeElement.addEventListener('mousedown', this._fadeMouseDownListener);
+			this.domElement.addEventListener('wheel', this._wheelListener, { passive: false });
 
 			$(this.domElement).on('doubletap', _.bind(this.handleDoubleTap, this));
 			$(this.domElement).on('taphold', _.bind(this.handleLongTouch, this));
