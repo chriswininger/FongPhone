@@ -81,6 +81,7 @@
 			// store the function wrapper returned from bind so we can clean up after dom is refreshed
 			this._handleBackGroundTouchStart = _.bind(this.handleBackGroundTouchStart, this);
 			this._handleTouchEnd = _.bind(this.handleBackGroundTouchEnd, this);
+			this._handleBackGroundMouseDown = _.bind(this.handleBackGroundMouseDown, this);
 
 			// remove any listeners attached to dead dom nodes
 			svgElem.removeEventListener('touchmove', _stopDefault);
@@ -88,10 +89,13 @@
 				this.backgroundPad.removeEventListener('touchstart', this._handleBackGroundTouchStart);
 			if (this._handleTouchEnd)
 				this.backgroundPad.removeEventListener('touchend', this._handleTouchEnd);
+			if (this._handleBackGroundMouseDown)
+				this.backgroundPad.removeEventListener('mousedown', this._handleBackGroundMouseDown);
 
 			svgElem.addEventListener('touchmove', _stopDefault, false);
 			this.backgroundPad.addEventListener('touchstart', this._handleBackGroundTouchStart);
 			this.backgroundPad.addEventListener('touchend', this._handleTouchEnd);
+			this.backgroundPad.addEventListener('mousedown', this._handleBackGroundMouseDown);
 
 			function _stopDefault(e) {
 				// Cancel the event
@@ -186,6 +190,13 @@
 
 				this.lastSelectedFong.x = touch.pageX;
 				this.lastSelectedFong.y = touch.pageY;
+			}
+		},
+		handleBackGroundMouseDown: function (event) {
+			if (event.target !== this.backgroundPad) return;
+			if (this.lastSelectedFong) {
+				this.lastSelectedFong.x = event.pageX;
+				this.lastSelectedFong.y = event.pageY;
 			}
 		},
 		classTypeChangeHandler: function (fong, index, pulse) {

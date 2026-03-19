@@ -176,6 +176,41 @@ var loopType = 1;
 			if (this.handleFongSelected)
 				this.handleFongSelected(this);
 		},
+		handleMouseDown: function(event) {
+			this._isMouseDown = true;
+			document.addEventListener('mousemove', this._mouseMoveListener);
+			document.addEventListener('mouseup', this._mouseUpListener);
+			event.preventDefault();
+		},
+		handleMouseMove: function(event) {
+			var fakeTouches = [{ pageX: event.pageX, pageY: event.pageY }];
+			this.handleTouchMoveHelper(fakeTouches, this.domElement, true);
+			event.preventDefault();
+		},
+		handleMouseUp: function(event) {
+			this._isMouseDown = false;
+			this.handleTouchEnd(event);
+			document.removeEventListener('mousemove', this._mouseMoveListener);
+			document.removeEventListener('mouseup', this._mouseUpListener);
+		},
+		handleFadeMouseDown: function(event) {
+			this._isFadeMouseDown = true;
+			document.addEventListener('mousemove', this._fadeMouseMoveListener);
+			document.addEventListener('mouseup', this._fadeMouseUpListener);
+			event.preventDefault();
+			event.stopPropagation();
+		},
+		handleFadeMouseMove: function(event) {
+			var fakeEvent = {
+				targetTouches: [{ pageX: event.pageX, pageY: event.pageY }]
+			};
+			this.handleFadeMove(fakeEvent);
+		},
+		handleFadeMouseUp: function(event) {
+			this._isFadeMouseDown = false;
+			document.removeEventListener('mousemove', this._fadeMouseMoveListener);
+			document.removeEventListener('mouseup', this._fadeMouseUpListener);
+		},
 		fireAllHandlers: function() {
 			this.positionChangedHandler(this, this.x, this.y);
 			this.fadeChangedHandler(this);
@@ -208,6 +243,10 @@ var loopType = 1;
 				this.domElement.removeEventListener('touchend', this._touchEndListener);
 			if (this._touchMoveFadeListener)
 				this.fadeElement.removeEventListener('touchmove', this._touchMoveFadeListener);
+			if (this._mouseDownListener)
+				this.domElement.removeEventListener('mousedown', this._mouseDownListener);
+			if (this._fadeMouseDownListener)
+				this.fadeElement.removeEventListener('mousedown', this._fadeMouseDownListener);
 
 			// clear any event listeners registered through jquery
 			$(this.domElement).off();
@@ -221,8 +260,20 @@ var loopType = 1;
 			this.domElement.addEventListener('touchend', this._touchEndListener);
 			this.fadeElement.addEventListener('touchmove', this._touchMoveFadeListener);
 
+			// mouse events for desktop support (drag, fade drag, double-click)
+			this._mouseMoveListener = _.bind(this.handleMouseMove, this);
+			this._mouseUpListener = _.bind(this.handleMouseUp, this);
+			this._mouseDownListener = _.bind(this.handleMouseDown, this);
+			this._fadeMouseMoveListener = _.bind(this.handleFadeMouseMove, this);
+			this._fadeMouseUpListener = _.bind(this.handleFadeMouseUp, this);
+			this._fadeMouseDownListener = _.bind(this.handleFadeMouseDown, this);
+
+			this.domElement.addEventListener('mousedown', this._mouseDownListener);
+			this.fadeElement.addEventListener('mousedown', this._fadeMouseDownListener);
+
 			$(this.domElement).on('doubletap', _.bind(this.handleDoubleTap, this));
 			$(this.domElement).on('taphold', _.bind(this.handleLongTouch, this));
+			this.domElement.addEventListener('dblclick', _.bind(this.handleDoubleTap, this));
 		},
 		getFadeOffSet: function() {
 			return this._fadeOffset;
